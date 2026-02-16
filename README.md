@@ -26,6 +26,17 @@ AQUIPLANTS gère manuellement l'arrivée et le stockage de graines fournies par 
 | J5 | Mai 2026 | Développement, Sécurité & Tests | ⏳ À venir |
 | J6 | Juin 2026 | Déploiement & Livrable final | ⏳ À venir |
 
+
+## Maquettes
+
+Wireframes et maquettes haute fidélité disponibles sur Figma :
+[Voir les maquettes](https://www.figma.com/design/ywbMZtE731MNfb0sqrdyYH/Figma-Graine-Fournie-AQUIPLANTS?node-id=54-8033&t=UNuvO2izCszRlxVN-1)
+```
+
+Commit avec :
+```
+docs: ajout lien maquettes Figma
+
 ## Lancer le projet
 
 *Instructions à venir au Jalon 5 avec la mise en place de Docker.*
