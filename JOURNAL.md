@@ -24,4 +24,14 @@
 - Livraison du Jalon 2
 
 ## Semaine du 2 mars 2026
-*(à remplir)*
+- Début du Jalon 3
+- Révision de la méthode MERISE vu en cours
+- Réalisation du MCD sur draw.io
+- Réalisation du MLD sur draw.io
+
+## Semaine du 16 mars 2026
+- Rédaction du MPD (script SQL MySQL 8.0)
+- Test du script dans phpMyAdmin : 10 tables validées
+- Rédaction du document Jalon 3
+- Livraison du Jalon 3
+
