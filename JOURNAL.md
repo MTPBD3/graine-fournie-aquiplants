@@ -35,3 +35,18 @@
 - Rédaction du document Jalon 3
 - Livraison du Jalon 3
 
+## Semaine du 30 mars 2026
+- Début du Jalon 4
+- Réalisation du diagramme de cas d'utilisation UML 2.5 sur draw.io
+- 2 acteurs identifiés (Employé, Admin) avec relation de généralisation
+- 10 cas d'utilisation couvrant toutes les fonctionnalités du CDCF
+
+## Semaine du 13 avril 2026
+- Réalisation des 3 diagrammes de séquence sur draw.io :
+  - Enregistrer une arrivée de sachet (fragment alt JWT + données invalides)
+  - Connexion JWT (fragment alt identifiants incorrects)
+  - Changer le statut d'un sachet (PATCH + INSERT LOG)
+- Réalisation du diagramme de classes UML 2.5 (9 classes + 3 enums)
+- Rédaction du document Jalon 4 (chapitres VII et VIII)
+- Livraison du Jalon 4
+
