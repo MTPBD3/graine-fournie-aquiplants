@@ -33,9 +33,9 @@
 - Rédaction du MPD (script SQL MySQL 8.0)
 - Test du script dans phpMyAdmin : 10 tables validées
 - Rédaction du document Jalon 3
-- Livraison du Jalon 3
 
 ## Semaine du 30 mars 2026
+- Livraison du Jalon 3
 - Début du Jalon 4
 - Réalisation du diagramme de cas d'utilisation UML 2.5 sur draw.io
 - 2 acteurs identifiés (Employé, Admin) avec relation de généralisation
@@ -47,6 +47,6 @@
   - Connexion JWT (fragment alt identifiants incorrects)
   - Changer le statut d'un sachet (PATCH + INSERT LOG)
 - Réalisation du diagramme de classes UML 2.5 (9 classes + 3 enums)
-- Rédaction du document Jalon 4 (chapitres VII et VIII)
-- Livraison du Jalon 4
+- Rédaction du document Jalon 4
+
 
