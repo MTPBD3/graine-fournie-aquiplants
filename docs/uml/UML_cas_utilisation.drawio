@@ -1,0 +1,97 @@
+<mxfile host="app.diagrams.net" modified="2026-04-16T00:00:00.000Z" agent="Claude" version="24.0.0">
+  <diagram name="Cas d'utilisation AQUIPLANTS" id="uc-aquiplants">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Diagramme de cas d'utilisation — Graine Fournie AQUIPLANTS" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="150" y="20" width="550" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sys" value="Système Graine Fournie" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;verticalAlign=top;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="230" y="70" width="400" height="820" as="geometry" />
+        </mxCell>
+        <mxCell id="uc1" value="Se connecter" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="340" y="110" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc2" value="Consulter le tableau de bord" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="340" y="180" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc3" value="Enregistrer une arrivée de sachet" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="340" y="260" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc4" value="Valider les infos du sachet" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="260" y="360" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc5" value="Générer un log de traçabilité" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="460" y="360" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="inc" style="endArrow=open;html=1;dashed=1;endSize=8;" edge="1" parent="1" source="uc3" target="uc4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="incLbl" value="«include»" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="270" y="320" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ext" style="endArrow=open;html=1;dashed=1;endSize=8;" edge="1" parent="1" source="uc5" target="uc3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="extLbl" value="«extend»" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="520" y="320" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="uc6" value="Changer le statut d'un sachet" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="340" y="450" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc7" value="Consulter / gérer les stocks" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="340" y="520" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc8" value="Consulter les statistiques" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="340" y="590" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc9" value="Gérer les alertes stock" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="340" y="680" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc10" value="Gérer les utilisateurs" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="340" y="760" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="empl" value="Employé" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="80" y="380" width="40" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="admin" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="80" y="720" width="40" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gen" style="endArrow=block;endFill=0;html=1;endSize=12;" edge="1" parent="1" source="admin" target="empl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="genLbl" value="hérite de" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="130" y="550" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" style="endArrow=none;html=1;" edge="1" parent="1" source="empl" target="uc1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="endArrow=none;html=1;" edge="1" parent="1" source="empl" target="uc2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="endArrow=none;html=1;" edge="1" parent="1" source="empl" target="uc3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="endArrow=none;html=1;" edge="1" parent="1" source="empl" target="uc6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="endArrow=none;html=1;" edge="1" parent="1" source="empl" target="uc7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="endArrow=none;html=1;" edge="1" parent="1" source="empl" target="uc8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a9" style="endArrow=none;html=1;" edge="1" parent="1" source="admin" target="uc9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a10" style="endArrow=none;html=1;" edge="1" parent="1" source="admin" target="uc10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" value="Légende :&#10;• «include» : obligatoire (la validation fait partie de l'enregistrement)&#10;• «extend» : optionnel (le log étend l'enregistrement)&#10;• Flèche triangle vide : héritage entre acteurs" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="230" y="910" width="400" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
