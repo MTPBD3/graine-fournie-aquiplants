@@ -24,4 +24,29 @@
 - Livraison du Jalon 2
 
 ## Semaine du 2 mars 2026
-*(à remplir)*
+- Début du Jalon 3
+- Révision de la méthode MERISE vu en cours
+- Réalisation du MCD sur draw.io
+- Réalisation du MLD sur draw.io
+
+## Semaine du 16 mars 2026
+- Rédaction du MPD (script SQL MySQL 8.0)
+- Test du script dans phpMyAdmin : 10 tables validées
+- Rédaction du document Jalon 3
+
+## Semaine du 30 mars 2026
+- Livraison du Jalon 3
+- Début du Jalon 4
+- Réalisation du diagramme de cas d'utilisation UML 2.5 sur draw.io
+- 2 acteurs identifiés (Employé, Admin) avec relation de généralisation
+- 10 cas d'utilisation couvrant toutes les fonctionnalités du CDCF
+
+## Semaine du 13 avril 2026
+- Réalisation des 3 diagrammes de séquence sur draw.io :
+  - Enregistrer une arrivée de sachet (fragment alt JWT + données invalides)
+  - Connexion JWT (fragment alt identifiants incorrects)
+  - Changer le statut d'un sachet (PATCH + INSERT LOG)
+- Réalisation du diagramme de classes UML 2.5 (9 classes + 3 enums)
+- Rédaction du document Jalon 4
+
+
