@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php bin/console doctrine:schema:update --force)",
+      "Bash(ls backend/tests/)",
+      "Bash(ls .github/workflows/)",
+      "Bash(ls backend/phpunit.xml.dist)",
+      "Bash(ls docker-compose.yml docker-compose.yaml compose.yml compose.yaml)",
+      "Bash(ls backend/vendor/phpunit)",
+      "Read(//c/Users/Aquiplants_DEV/Desktop/Valentin_PROJETS/Graine_fournie_AQUIPLANTS_projets_fil_rouge//**)",
+      "Read(//c/Users/Aquiplants_DEV/Desktop/**)",
+      "Read(//c/Users/Aquiplants_DEV/**)",
+      "Bash(git rm *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
+    ]
+  }
+}
