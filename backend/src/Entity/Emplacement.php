@@ -22,6 +22,10 @@ class Emplacement
     #[ORM\Column(name: 'numero_etage', type: 'integer')]
     private int $numeroEtage;
 
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'emplacements')]
+    #[ORM\JoinColumn(name: 'id_client', referencedColumnName: 'id_client', nullable: true)]
+    private ?Client $client = null;
+
     #[ORM\OneToMany(mappedBy: 'emplacement', targetEntity: GfClient::class)]
     private Collection $sachets;
 
@@ -37,6 +41,9 @@ class Emplacement
 
     public function getNumeroEtage(): int { return $this->numeroEtage; }
     public function setNumeroEtage(int $numeroEtage): static { $this->numeroEtage = $numeroEtage; return $this; }
+
+    public function getClient(): ?Client { return $this->client; }
+    public function setClient(?Client $client): static { $this->client = $client; return $this; }
 
     public function getSachets(): Collection { return $this->sachets; }
 }
