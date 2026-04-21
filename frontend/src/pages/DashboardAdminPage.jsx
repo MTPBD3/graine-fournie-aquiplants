@@ -1,37 +1,96 @@
-import { Box, Grid, Paper, Typography, Chip, Divider, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
+import { useState, useMemo } from 'react';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell, Legend,
+  Box, Grid, Paper, Typography, Chip, Divider, CircularProgress,
+  IconButton, Avatar, LinearProgress, ToggleButtonGroup, ToggleButton,
+  InputBase, Badge, Collapse, useMediaQuery, useTheme,
+} from '@mui/material';
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid,
+  Tooltip as RTooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, Legend,
 } from 'recharts';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import SettingsIcon from '@mui/icons-material/Settings';
+import RemoveIcon from '@mui/icons-material/Remove';
+import SearchIcon from '@mui/icons-material/Search';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
-import ScheduleIcon from '@mui/icons-material/Schedule';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import BlockIcon from '@mui/icons-material/Block';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import GrassIcon from '@mui/icons-material/Grass';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { useApi } from '../hooks/useApi';
 import { useAuth } from '../context/AuthContext';
+import { formatDate } from '../utils/formatDate';
 
-const DONUT_COLORS = ['#2E7D32', '#D4E157', '#FF8F00', '#388E3C'];
+const DONUT_COLORS = ['#1B5E20', '#D4E157', '#FF8F00', '#388E3C', '#81C784', '#E53935'];
 
-function KpiCard({ icon, label, value, color }) {
+const WIDGET_SX = {
+  borderRadius: '12px',
+  boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+  border: '1px solid rgba(27,94,32,0.08)',
+  overflow: 'hidden',
+  mb: 2.5,
+  bgcolor: '#fff',
+};
+
+// ── Widget avec collapse ──────────────────────────────────────────────────────
+function Widget({ title, badge, extra, children, loading = false }) {
+  const [open, setOpen] = useState(true);
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        p: { xs: 1.5, md: 2.5 },
-        border: '1px solid',
-        borderColor: 'divider',
-        borderLeft: `4px solid ${color}`,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 1.5,
-      }}
-    >
-      <Box sx={{ color, display: { xs: 'none', sm: 'flex' } }}>{icon}</Box>
-      <Box>
-        <Typography variant="h5" sx={{ fontWeight: 700, fontFamily: '"DM Mono", monospace', fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
-          {value ?? '—'}
-        </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' } }}>
+    <Paper elevation={0} sx={WIDGET_SX}>
+      <Box sx={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        px: 2.5, py: 1.75,
+        borderBottom: open ? '1px solid rgba(0,0,0,0.05)' : 'none',
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+          <Typography sx={{ fontWeight: 700, fontSize: '0.875rem' }}>{title}</Typography>
+          {badge}
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          {extra}
+          <IconButton size="small" onClick={() => setOpen(v => !v)} sx={{ color: 'text.disabled', p: 0.5 }}>
+            <RemoveIcon sx={{ fontSize: 16 }} />
+          </IconButton>
+        </Box>
+      </Box>
+      <Collapse in={open}>
+        <Box sx={{ p: 2.5 }}>
+          {loading
+            ? <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}><CircularProgress size={22} sx={{ color: '#1B5E20' }} /></Box>
+            : children}
+        </Box>
+      </Collapse>
+    </Paper>
+  );
+}
+
+// ── KPI Card ──────────────────────────────────────────────────────────────────
+function KpiCard({ icon, label, value, color, loading, badge }) {
+  return (
+    <Paper elevation={0} sx={{
+      p: 2.5, borderRadius: '12px',
+      boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+      border: '1px solid rgba(27,94,32,0.08)',
+      display: 'flex', alignItems: 'flex-start', gap: 2,
+      bgcolor: '#fff', height: '100%',
+    }}>
+      <Box sx={{
+        width: 44, height: 44, borderRadius: '10px',
+        bgcolor: `${color}1A`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0, color,
+      }}>
+        {icon}
+      </Box>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, flexWrap: 'wrap', mb: 0.25 }}>
+          <Typography sx={{ fontWeight: 800, fontSize: '1.75rem', fontFamily: '"DM Mono", monospace', lineHeight: 1, color: '#1a1a1a' }}>
+            {loading ? '—' : (value ?? '—')}
+          </Typography>
+          {!loading && badge}
+        </Box>
+        <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.8rem' }}>
           {label}
         </Typography>
       </Box>
@@ -39,181 +98,431 @@ function KpiCard({ icon, label, value, color }) {
   );
 }
 
-function EmptyState({ message }) {
+function Empty({ text = 'Aucune donnée disponible' }) {
   return (
-    <Typography variant="body2" color="text.disabled" sx={{ py: 2, textAlign: 'center' }}>
-      {message}
+    <Typography variant="body2" sx={{ color: 'text.disabled', textAlign: 'center', py: 2 }}>
+      {text}
     </Typography>
   );
 }
 
+// ── Page principale ───────────────────────────────────────────────────────────
 export default function DashboardAdminPage() {
+  const { user } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { user } = useAuth();
+
+  const { data: stats,    loading: lStats  } = useApi('/api/statistiques');
+  const { data: alertes,  loading: lAlertes } = useApi('/api/alertes');
+  const { data: histoRaw, loading: lHisto  } = useApi('/api/histo-gf-deposees');
+  const { data: sachets,  loading: lSachets } = useApi('/api/gf-clients');
+
+  const [period, setPeriod] = useState('3M');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchMode, setSearchMode] = useState('client');
+
+  const sessionCode = useMemo(() =>
+    Array.from({ length: 6 }, () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'[Math.floor(Math.random() * 36)]).join(''), []);
+
+  const today = useMemo(() =>
+    new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }), []);
 
   const displayName = user?.prenom
-    ? `${user.prenom}${user.nom ? ' ' + user.nom.charAt(0).toUpperCase() + '.' : ''}`
+    ? `${user.prenom}${user.nom ? ' ' + user.nom[0].toUpperCase() + '.' : ''}`
     : (user?.email ?? '');
 
-  const { data: sachets, loading: lSachets, error: eSachets } = useApi('/api/gf-clients');
-  const { data: stats } = useApi('/api/statistiques');
+  // ── KPI values ──────────────────────────────────────────────────────────────
+  const totalEnStock  = stats?.parStatut?.en_stock ?? null;
+  const alertesCount  = Array.isArray(alertes) ? alertes.length : null;
+  const aValiderCount = stats?.parStatut?.en_attente ?? null;
 
-  const allSachets     = Array.isArray(sachets) ? sachets : [];
-  const totalSachets   = lSachets ? null : allSachets.length;
-  const nbATraiter     = lSachets ? null : allSachets.filter((s) => s.statut === 'en_attente').length;
-  const nbRanges       = lSachets ? null : allSachets.filter((s) => s.statut === 'en_stock').length;
-  const nbEpuises      = lSachets ? null : allSachets.filter((s) => s.statut === 'epuise').length;
-  const aTraiterList   = allSachets.filter((s) => s.statut === 'en_attente').slice(0, 5);
-  const arrivees       = allSachets.filter((s) => s.statut !== 'epuise').slice(0, 5);
-  const evolutionData = stats?.evolutionMensuelle ?? [];
-  const categoriesData = stats?.categories ?? [];
+  const totalUnites = useMemo(() => {
+    if (lSachets || !Array.isArray(sachets)) return null;
+    return sachets
+      .filter(s => s.statut === 'en_stock')
+      .reduce((acc, s) => acc + (s.quantiteDisponible ?? 0), 0);
+  }, [sachets, lSachets]);
 
-  const chartHeight = isMobile ? 160 : 200;
+  // ── Evolution chart ─────────────────────────────────────────────────────────
+  const evolutionData = useMemo(() => {
+    const raw = stats?.evolutionMensuelle ?? [];
+    const n   = period === '1M' ? 1 : period === '3M' ? 3 : 6;
+    const now  = new Date();
+    const cut  = new Date(now.getFullYear(), now.getMonth() - n + 1, 1);
+    const cs   = `${cut.getFullYear()}-${String(cut.getMonth() + 1).padStart(2, '0')}`;
+    return raw
+      .filter(d => d.mois >= cs)
+      .map(d => ({ label: d.mois.slice(5) + '/' + d.mois.slice(2, 4), dépôts: d.total }));
+  }, [stats, period]);
+
+  // ── Arrivals ────────────────────────────────────────────────────────────────
+  const arrivees = useMemo(() => {
+    if (!Array.isArray(histoRaw)) return [];
+    return [...histoRaw].sort((a, b) => b.id - a.id).slice(0, 5);
+  }, [histoRaw]);
+
+  // ── Categories ──────────────────────────────────────────────────────────────
+  const categories = stats?.categories ?? [];
+  const maxVal = Math.max(...categories.map(c => c.value), 1);
+
+  // ── Search filtering ────────────────────────────────────────────────────────
+  const filterByQuery = (items, clientKey, graineKey) => {
+    if (!searchQuery.trim()) return items;
+    const q = searchQuery.toLowerCase();
+    return items.filter(a => {
+      const target = searchMode === 'client'
+        ? (typeof clientKey === 'function' ? clientKey(a) : a[clientKey] ?? '')
+        : (typeof graineKey === 'function' ? graineKey(a) : a[graineKey] ?? '');
+      return target.toLowerCase().includes(q);
+    });
+  };
+
+  const filteredAlertes = useMemo(() =>
+    filterByQuery(
+      Array.isArray(alertes) ? alertes : [],
+      a => `${a.client?.prenom ?? ''} ${a.client?.nom ?? ''}`,
+      a => a.plant?.nomPlant ?? ''
+    ),
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [alertes, searchQuery, searchMode]);
+
+  const filteredArrivees = useMemo(() =>
+    filterByQuery(
+      arrivees,
+      a => a.gfClient?.nomClient ?? '',
+      a => a.gfClient?.plant?.nomPlant ?? ''
+    ),
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [arrivees, searchQuery, searchMode]);
+
+  const statutColor = s => s === 'en_stock' ? '#2E7D32' : s === 'epuise' ? '#E53935' : '#FF8F00';
+  const statutLabel = s => s === 'en_stock' ? 'Rangé' : s === 'epuise' ? 'Épuisé' : 'En attente';
 
   return (
-    <Box>
-      <Typography sx={{ fontWeight: 700, mb: 0.5, fontSize: { xs: '1.1rem', md: '1.5rem' } }}>
-        Bonjour, {displayName}
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-        Tableau de bord — Administration
-      </Typography>
+    <Box sx={{ bgcolor: '#F7FAF3', minHeight: '100%' }}>
 
-      {/* KPI Cards — xs=6 (2/ligne), md=3 (4/ligne) */}
-      <Grid container spacing={{ xs: 1, md: 2 }} sx={{ mb: { xs: 2, md: 3 } }}>
+      {/* ── HEADER ──────────────────────────────────────────────────────── */}
+      <Paper elevation={0} sx={{
+        mb: 3, p: { xs: 2, md: 2.5 }, borderRadius: '12px',
+        bgcolor: '#fff', border: '1px solid rgba(27,94,32,0.08)',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+      }}>
+        <Box sx={{ display: 'flex', alignItems: { md: 'center' }, gap: 2, flexDirection: { xs: 'column', md: 'row' } }}>
+          {/* Titre */}
+          <Box sx={{ flex: '0 0 auto' }}>
+            <Typography sx={{ fontWeight: 800, fontSize: { xs: '1.2rem', md: '1.35rem' }, color: '#1B5E20', lineHeight: 1.2 }}>
+              Tableau de bord
+            </Typography>
+            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+              Vue d'ensemble · {displayName}
+            </Typography>
+          </Box>
+
+          {/* Recherche + toggle */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1, flexWrap: 'wrap' }}>
+            <Box sx={{
+              display: 'flex', alignItems: 'center',
+              bgcolor: '#F7FAF3', border: '1px solid rgba(0,0,0,0.1)',
+              borderRadius: '8px', px: 1.5, py: 0.5, flex: 1, maxWidth: 340,
+            }}>
+              <SearchIcon sx={{ color: 'text.disabled', fontSize: 18, mr: 1 }} />
+              <InputBase
+                placeholder="Rechercher par client..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                sx={{ fontSize: '0.875rem', flex: 1 }}
+              />
+            </Box>
+            <ToggleButtonGroup
+              value={searchMode}
+              exclusive
+              onChange={(_, v) => v && setSearchMode(v)}
+              size="small"
+              sx={{
+                '& .MuiToggleButton-root': {
+                  py: 0.5, px: 1.5, fontSize: '0.75rem', textTransform: 'none',
+                  border: '1px solid rgba(0,0,0,0.12)',
+                  '&.Mui-selected': { bgcolor: '#1B5E20', color: '#fff', '&:hover': { bgcolor: '#2E7D32' } },
+                },
+              }}
+            >
+              <ToggleButton value="client">Client</ToggleButton>
+              <ToggleButton value="graine">Graine</ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
+
+          {/* Icônes + date */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
+            <Badge badgeContent={alertesCount ?? 0} color="error" max={99}>
+              <IconButton size="small" sx={{ color: '#FF8F00', bgcolor: '#FF8F001A', borderRadius: '8px', p: 0.75 }}>
+                <NotificationsIcon fontSize="small" />
+              </IconButton>
+            </Badge>
+            <IconButton size="small" sx={{ color: 'text.secondary', bgcolor: 'rgba(0,0,0,0.04)', borderRadius: '8px', p: 0.75 }}>
+              <SettingsIcon fontSize="small" />
+            </IconButton>
+            {!isMobile && (
+              <Box sx={{ ml: 0.5, textAlign: 'right' }}>
+                <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary', fontSize: '0.72rem' }}>
+                  {today}
+                </Typography>
+                <Typography variant="caption" sx={{ display: 'block', color: 'text.disabled', fontSize: '0.68rem', fontFamily: '"DM Mono", monospace' }}>
+                  SESSION #{sessionCode}
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        </Box>
+      </Paper>
+
+      {/* ── KPI CARDS ───────────────────────────────────────────────────── */}
+      <Grid container spacing={2} sx={{ mb: 2.5 }}>
         <Grid size={{ xs: 6, md: 3 }}>
-          <KpiCard icon={<Inventory2Icon />} label="Total sachets" value={lSachets ? '…' : totalSachets} color="#1565C0" />
+          <KpiCard
+            icon={<Inventory2Icon />}
+            label="Sachets en stock"
+            value={totalEnStock}
+            color="#1B5E20"
+            loading={lStats}
+          />
         </Grid>
         <Grid size={{ xs: 6, md: 3 }}>
-          <KpiCard icon={<ScheduleIcon />} label="À traiter" value={lSachets ? '…' : nbATraiter} color="#FF8F00" />
+          <KpiCard
+            icon={<WarningAmberIcon />}
+            label="Alertes stock bas"
+            value={alertesCount}
+            color="#FF8F00"
+            loading={lAlertes}
+            badge={alertesCount > 0 && (
+              <Chip
+                label="Urgent"
+                size="small"
+                sx={{ height: 18, fontSize: '0.62rem', bgcolor: '#FF8F00', color: '#fff', '& .MuiChip-label': { px: 0.75 } }}
+              />
+            )}
+          />
         </Grid>
         <Grid size={{ xs: 6, md: 3 }}>
-          <KpiCard icon={<CheckCircleIcon />} label="Rangés" value={lSachets ? '…' : nbRanges} color="#2E7D32" />
+          <KpiCard
+            icon={<HourglassEmptyIcon />}
+            label="Arrivées à valider"
+            value={aValiderCount}
+            color="#D4A017"
+            loading={lStats}
+            badge={aValiderCount > 0 && (
+              <Chip
+                label="Attente"
+                size="small"
+                sx={{ height: 18, fontSize: '0.62rem', bgcolor: '#D4E157', color: '#1B5E20', '& .MuiChip-label': { px: 0.75 } }}
+              />
+            )}
+          />
         </Grid>
         <Grid size={{ xs: 6, md: 3 }}>
-          <KpiCard icon={<BlockIcon />} label="Épuisés" value={lSachets ? '…' : nbEpuises} color="#E53935" />
+          <KpiCard
+            icon={<GrassIcon />}
+            label="Total unités en stock"
+            value={totalUnites !== null ? totalUnites.toLocaleString('fr-FR') : null}
+            color="#388E3C"
+            loading={lSachets}
+          />
         </Grid>
       </Grid>
 
-      <Grid container spacing={{ xs: 1, md: 2 }} sx={{ mb: { xs: 2, md: 3 } }}>
-        {/* Graphique évolution */}
-        <Grid size={{ xs: 12, md: 8 }}>
-          <Paper elevation={0} sx={{ p: { xs: 1.5, md: 2.5 }, border: '1px solid', borderColor: 'divider' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1.5, fontSize: { xs: '0.875rem', md: '1rem' } }}>
-              Évolution des sachets traités
-            </Typography>
+      {/* ── WIDGETS ─────────────────────────────────────────────────────── */}
+      <Grid container spacing={2.5}>
+
+        {/* ── Colonne gauche ── */}
+        <Grid size={{ xs: 12, md: 7 }}>
+
+          {/* Évolution des stocks */}
+          <Widget
+            title="Évolution des dépôts"
+            loading={lStats}
+            extra={
+              <ToggleButtonGroup
+                value={period}
+                exclusive
+                onChange={(_, v) => v && setPeriod(v)}
+                size="small"
+                sx={{ '& .MuiToggleButton-root': { py: 0.25, px: 1, fontSize: '0.7rem', textTransform: 'none' } }}
+              >
+                {['1M', '3M', '6M'].map(p => <ToggleButton key={p} value={p}>{p}</ToggleButton>)}
+              </ToggleButtonGroup>
+            }
+          >
             {evolutionData.length === 0 ? (
-              <EmptyState message="Données non disponibles" />
+              <Empty text="Aucune donnée sur cette période" />
             ) : (
-              <ResponsiveContainer width="100%" height={chartHeight}>
-                <LineChart data={evolutionData}>
+              <ResponsiveContainer width="100%" height={200}>
+                <LineChart data={evolutionData} margin={{ top: 4, right: 8, bottom: 0, left: -20 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E8F5E9" />
-                  <XAxis dataKey="mois" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11, fontFamily: '"DM Mono", monospace' }} />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="sachets" stroke="#2E7D32" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                  <XAxis dataKey="label" tick={{ fontSize: 11, fill: '#888' }} />
+                  <YAxis tick={{ fontSize: 11, fill: '#888', fontFamily: '"DM Mono", monospace' }} />
+                  <RTooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #E8F5E9' }} />
+                  <Line
+                    type="monotone" dataKey="dépôts"
+                    stroke="#1B5E20" strokeWidth={2.5}
+                    dot={{ r: 3, fill: '#1B5E20', strokeWidth: 0 }}
+                    activeDot={{ r: 5, fill: '#D4E157', stroke: '#1B5E20', strokeWidth: 2 }}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             )}
-          </Paper>
+          </Widget>
+
+          {/* Arrivées récentes */}
+          <Widget title="Arrivées récentes" loading={lHisto}>
+            {filteredArrivees.length === 0 ? (
+              <Empty text="Aucune arrivée enregistrée" />
+            ) : (
+              <Box>
+                {filteredArrivees.map((a, i) => {
+                  const nomPlant  = a.gfClient?.plant?.nomPlant ?? '?';
+                  const initials  = nomPlant.slice(0, 2).toUpperCase();
+                  const nomClient = a.gfClient?.nomClient ?? '—';
+                  const sc = statutColor(a.statut);
+                  return (
+                    <Box key={a.id}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, py: 1.25 }}>
+                        <Avatar sx={{ width: 36, height: 36, bgcolor: '#D4E157', color: '#1B5E20', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0 }}>
+                          {initials}
+                        </Avatar>
+                        <Box sx={{ flex: 1, minWidth: 0 }}>
+                          <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.85rem' }} noWrap>
+                            {nomPlant}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: 'text.secondary' }} noWrap>
+                            {nomClient} · {formatDate(a.dateReception)}
+                          </Typography>
+                        </Box>
+                        <Chip
+                          label={statutLabel(a.statut)}
+                          size="small"
+                          sx={{
+                            height: 20, fontSize: '0.65rem', flexShrink: 0,
+                            bgcolor: `${sc}18`, color: sc,
+                            border: `1px solid ${sc}40`,
+                            '& .MuiChip-label': { px: 0.75 },
+                          }}
+                        />
+                      </Box>
+                      {i < filteredArrivees.length - 1 && <Divider />}
+                    </Box>
+                  );
+                })}
+              </Box>
+            )}
+          </Widget>
         </Grid>
 
-        {/* Donut */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Paper elevation={0} sx={{ p: { xs: 1.5, md: 2.5 }, border: '1px solid', borderColor: 'divider' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1, fontSize: { xs: '0.875rem', md: '1rem' } }}>
-              Répartition catégories
-            </Typography>
-            {categoriesData.length === 0 ? (
-              <EmptyState message="Données non disponibles" />
+        {/* ── Colonne droite ── */}
+        <Grid size={{ xs: 12, md: 5 }}>
+
+          {/* Alertes stock bas */}
+          <Widget
+            title="Alertes stock bas"
+            loading={lAlertes}
+            badge={alertesCount > 0 && (
+              <Chip
+                label={alertesCount}
+                size="small"
+                sx={{ height: 18, fontSize: '0.65rem', bgcolor: '#FF8F0018', color: '#FF8F00', border: '1px solid #FF8F0040', '& .MuiChip-label': { px: 0.75 } }}
+              />
+            )}
+          >
+            {filteredAlertes.length === 0 ? (
+              <Empty text="Aucune alerte active" />
             ) : (
-              <ResponsiveContainer width="100%" height={isMobile ? 180 : 220}>
+              <Box>
+                {filteredAlertes.slice(0, 5).map((a, i) => (
+                  <Box key={a.id}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, py: 1 }}>
+                      <FiberManualRecordIcon sx={{
+                        fontSize: 10, flexShrink: 0,
+                        color: a.joursAttente > 7 ? '#E53935' : '#FF8F00',
+                      }} />
+                      <Box sx={{ flex: 1, minWidth: 0 }}>
+                        <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.82rem' }} noWrap>
+                          {a.plant?.nomPlant ?? '—'}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: 'text.secondary' }} noWrap>
+                          {a.client?.prenom} {a.client?.nom} · {a.joursAttente}j d'attente
+                        </Typography>
+                      </Box>
+                      <Typography variant="caption" sx={{
+                        fontFamily: '"DM Mono", monospace', fontWeight: 700,
+                        color: '#FF8F00', flexShrink: 0, fontSize: '0.75rem',
+                      }}>
+                        {a.quantiteDeposee} u.
+                      </Typography>
+                    </Box>
+                    {i < Math.min(filteredAlertes.length, 5) - 1 && <Divider />}
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </Widget>
+
+          {/* Répartition catégories */}
+          <Widget title="Répartition catégories" loading={lStats}>
+            {categories.length === 0 ? (
+              <Empty />
+            ) : (
+              <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
-                  <Pie data={categoriesData} cx="50%" cy="45%" innerRadius={isMobile ? 40 : 55} outerRadius={isMobile ? 65 : 80} dataKey="value">
-                    {categoriesData.map((_, i) => (
+                  <Pie
+                    data={categories} cx="50%" cy="45%"
+                    innerRadius={50} outerRadius={75}
+                    dataKey="value" paddingAngle={2}
+                  >
+                    {categories.map((_, i) => (
                       <Cell key={i} fill={DONUT_COLORS[i % DONUT_COLORS.length]} />
                     ))}
                   </Pie>
                   <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
-                  <Tooltip />
+                  <RTooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
                 </PieChart>
               </ResponsiveContainer>
             )}
-          </Paper>
-        </Grid>
-      </Grid>
+          </Widget>
 
-      <Grid container spacing={{ xs: 1, md: 2 }}>
-        {/* Sachets à traiter */}
-        <Grid size={{ xs: 12, md: 5 }}>
-          <Paper elevation={0} sx={{ p: { xs: 1.5, md: 2.5 }, border: '1px solid', borderColor: 'divider' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1.5, fontSize: { xs: '0.875rem', md: '1rem' } }}>
-              Sachets à traiter
-            </Typography>
-            {lSachets ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}><CircularProgress size={24} /></Box>
-            ) : aTraiterList.length === 0 ? (
-              <EmptyState message="Aucun sachet en attente" />
+          {/* Niveau de stock par plante */}
+          <Widget title="Niveau de stock par plante" loading={lStats}>
+            {categories.length === 0 ? (
+              <Empty />
             ) : (
-              aTraiterList.map((s, i) => (
-                <Box key={s.id}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 1 }}>
-                    <Box sx={{ minWidth: 0 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 500 }} noWrap>{s.plant?.nomPlant ?? '—'}</Typography>
-                      <Typography variant="caption" color="text.secondary" noWrap sx={{ display: 'block' }}>
-                        {s.numeroLot ?? '—'} · {s.client?.nom ?? '—'}
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                {categories.slice(0, 6).map((cat, i) => (
+                  <Box key={cat.name}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ fontWeight: 600, fontSize: '0.78rem' }} noWrap>
+                        {cat.name}
+                      </Typography>
+                      <Typography variant="caption" sx={{
+                        fontFamily: '"DM Mono", monospace', fontSize: '0.75rem',
+                        color: 'text.secondary', flexShrink: 0, ml: 1,
+                      }}>
+                        {cat.value}
                       </Typography>
                     </Box>
-                    <Chip
-                      label="À traiter"
-                      size="small"
-                      sx={{ fontSize: '0.7rem', ml: 1, flexShrink: 0, bgcolor: '#FFF3E0', color: '#FF8F00', border: '1px solid #FFB74D' }}
+                    <LinearProgress
+                      variant="determinate"
+                      value={(cat.value / maxVal) * 100}
+                      sx={{
+                        height: 6, borderRadius: 3,
+                        bgcolor: 'rgba(0,0,0,0.06)',
+                        '& .MuiLinearProgress-bar': {
+                          bgcolor: DONUT_COLORS[i % DONUT_COLORS.length],
+                          borderRadius: 3,
+                        },
+                      }}
                     />
                   </Box>
-                  {i < aTraiterList.length - 1 && <Divider />}
-                </Box>
-              ))
+                ))}
+              </Box>
             )}
-          </Paper>
-        </Grid>
-
-        {/* Arrivées récentes */}
-        <Grid size={{ xs: 12, md: 7 }}>
-          <Paper elevation={0} sx={{ p: { xs: 1.5, md: 2.5 }, border: '1px solid', borderColor: 'divider' }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1.5, fontSize: { xs: '0.875rem', md: '1rem' } }}>
-              Arrivées récentes
-            </Typography>
-            {lSachets ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}><CircularProgress size={24} /></Box>
-            ) : eSachets ? (
-              <EmptyState message="Données non disponibles" />
-            ) : arrivees.length === 0 ? (
-              <EmptyState message="Aucune arrivée enregistrée" />
-            ) : (
-              arrivees.map((a, i) => (
-                <Box key={a.id}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 1 }}>
-                    <Box sx={{ minWidth: 0 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 500 }} noWrap>
-                        {a.plant?.nomPlant ?? '—'}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary" noWrap sx={{ display: 'block' }}>
-                        {a.numeroLot ?? '—'} · {a.client?.nom ?? '—'}
-                      </Typography>
-                    </Box>
-                    <Chip
-                      label={a.statut === 'en_stock' ? 'Rangé' : a.statut === 'epuise' ? 'Épuisé' : 'À traiter'}
-                      size="small"
-                      color={a.statut === 'en_stock' ? 'success' : a.statut === 'epuise' ? 'error' : 'default'}
-                      sx={{ fontSize: '0.7rem', ml: 1, flexShrink: 0 }}
-                    />
-                  </Box>
-                  {i < arrivees.length - 1 && <Divider />}
-                </Box>
-              ))
-            )}
-          </Paper>
+          </Widget>
         </Grid>
       </Grid>
     </Box>
