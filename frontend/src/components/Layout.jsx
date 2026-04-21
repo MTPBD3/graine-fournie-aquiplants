@@ -231,44 +231,32 @@ export default function Layout() {
 
       <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
 
-        {/* Topbar */}
-        <AppBar
-          position="sticky"
-          elevation={0}
-          sx={{ bgcolor: '#FFFFFF', borderBottom: '1px solid #E8F5E9', color: 'text.primary' }}
-        >
-          <Toolbar sx={{ minHeight: 56, gap: 1, px: { xs: 1.5, md: 2 } }}>
-
-            {isMobile && (
+        {/* Topbar — mobile uniquement (hamburger + titre) */}
+        {isMobile && (
+          <AppBar
+            position="sticky"
+            elevation={0}
+            sx={{ bgcolor: '#FFFFFF', borderBottom: '1px solid #E8F5E9', color: 'text.primary' }}
+          >
+            <Toolbar sx={{ minHeight: 56, gap: 1, px: 1.5 }}>
               <IconButton edge="start" onClick={() => setDrawerOpen(true)} sx={{ color: 'text.primary' }}>
                 <MenuIcon />
               </IconButton>
-            )}
-
-            {isMobile && (
               <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#1B5E20', fontSize: '0.9rem' }}>
                 Graine Fournie
               </Typography>
-            )}
-
-            <Box sx={{ flexGrow: 1 }} />
-
-            {!isMobile && (
-              <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1, fontSize: '0.8rem' }}>
-                {user?.email}
-              </Typography>
-            )}
-
-            <Tooltip title="Déconnexion">
-              <Avatar
-                sx={{ width: 34, height: 34, bgcolor: '#1B5E20', fontSize: '0.85rem', cursor: 'pointer' }}
-                onClick={handleLogout}
-              >
-                {user?.email?.[0]?.toUpperCase() ?? 'U'}
-              </Avatar>
-            </Tooltip>
-          </Toolbar>
-        </AppBar>
+              <Box sx={{ flexGrow: 1 }} />
+              <Tooltip title="Déconnexion">
+                <Avatar
+                  sx={{ width: 34, height: 34, bgcolor: '#1B5E20', fontSize: '0.85rem', cursor: 'pointer' }}
+                  onClick={handleLogout}
+                >
+                  {user?.email?.[0]?.toUpperCase() ?? 'U'}
+                </Avatar>
+              </Tooltip>
+            </Toolbar>
+          </AppBar>
+        )}
 
         {/* Contenu de la page */}
         <Box

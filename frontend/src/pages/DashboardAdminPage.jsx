@@ -1,8 +1,9 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box, Grid, Paper, Typography, Chip, Divider, CircularProgress,
   IconButton, Avatar, LinearProgress, ToggleButtonGroup, ToggleButton,
-  InputBase, Badge, Collapse, useMediaQuery, useTheme,
+  InputBase, Badge, Collapse, Tooltip, useMediaQuery, useTheme,
 } from '@mui/material';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
@@ -265,9 +266,11 @@ function SmartSearch({ searchMode, onModeChange, onSelect }) {
 
 // ── Page principale ───────────────────────────────────────────────────────────
 export default function DashboardAdminPage() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const theme    = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const handleLogout = () => { logout(); navigate('/'); };
 
   const { data: stats,    loading: lStats  } = useApi('/api/statistiques');
   const { data: alertes,  loading: lAlertes } = useApi('/api/alertes');
@@ -355,39 +358,43 @@ export default function DashboardAdminPage() {
   return (
     <Box sx={{ bgcolor: '#F7FAF3', minHeight: '100%' }}>
 
-      {/* ── HEADER STICKY ───────────────────────────────────────────────── */}
+      {/* ── HEADER UNIQUE ───────────────────────────────────────────────── */}
       <Box sx={{
         position: 'sticky',
-        top: 56,
-        zIndex: 10,
+        top: { xs: 56, md: 0 },
+        zIndex: 100,
         bgcolor: '#fff',
         borderBottom: '1px solid #E8F5E9',
         mx: { xs: -1.5, md: -3 },
         px: { xs: 1.5, md: 3 },
-        py: { xs: 1.25, md: 1.5 },
+        py: 0,
         mb: 3,
       }}>
-        <Box sx={{ display: 'flex', alignItems: { md: 'center' }, gap: 2, flexDirection: { xs: 'column', md: 'row' } }}>
+        <Box sx={{
+          display: 'flex', alignItems: 'center', gap: 2,
+          minHeight: 56,
+          flexWrap: { xs: 'wrap', md: 'nowrap' },
+        }}>
 
-          {/* Titre */}
+          {/* Titre — gauche */}
           <Box sx={{ flex: '0 0 auto' }}>
-            <Typography sx={{ fontWeight: 800, fontSize: { xs: '1rem', md: '1.1rem' }, color: '#1B5E20', lineHeight: 1.2 }}>
+            <Typography sx={{ fontWeight: 800, fontSize: '1rem', color: '#1B5E20', lineHeight: 1.2 }}>
               Tableau de bord
             </Typography>
-            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+            <Typography variant="caption" sx={{ color: 'text.secondary', display: { xs: 'none', md: 'block' } }}>
               Vue d'ensemble · {displayName}
             </Typography>
           </Box>
 
-          {/* SmartSearch */}
+          {/* SmartSearch — centre */}
           <SmartSearch
             searchMode={searchMode}
             onModeChange={v => { setSearchMode(v); setSearchQuery(''); }}
             onSelect={label => setSearchQuery(label)}
           />
 
-          {/* Icônes + date */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
+          {/* Droite : cloche + engrenage + date + email + avatar */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 'auto', flexShrink: 0 }}>
             <Badge badgeContent={alertesCount ?? 0} color="error" max={99}>
               <IconButton size="small" sx={{ color: '#FF8F00', bgcolor: '#FF8F001A', borderRadius: '8px', p: 0.75 }}>
                 <NotificationsIcon fontSize="small" />
@@ -397,10 +404,23 @@ export default function DashboardAdminPage() {
               <SettingsIcon fontSize="small" />
             </IconButton>
             {!isMobile && (
-              <Typography variant="caption" sx={{ ml: 0.5, color: 'text.secondary', fontSize: '0.72rem' }}>
+              <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem', mx: 0.5 }}>
                 {today}
               </Typography>
             )}
+            {!isMobile && (
+              <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.8rem', mr: 0.5 }}>
+                {user?.email}
+              </Typography>
+            )}
+            <Tooltip title="Déconnexion">
+              <Avatar
+                sx={{ width: 32, height: 32, bgcolor: '#1B5E20', fontSize: '0.8rem', cursor: 'pointer' }}
+                onClick={handleLogout}
+              >
+                {user?.email?.[0]?.toUpperCase() ?? 'U'}
+              </Avatar>
+            </Tooltip>
           </Box>
         </Box>
       </Box>
