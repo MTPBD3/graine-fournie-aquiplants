@@ -21,8 +21,10 @@
         "doctrine/orm": "^3.6",
         "lexik/jwt-authentication-bundle": "^3.2",
         "nelmio/cors-bundle": "^2.6",
+        "phpunit/phpunit": "^11.5",
+        "symfony/browser-kit": "7.4.*",
+        "symfony/css-selector": "7.4.*",
         "symfony/maker-bundle": "^1.67",
-        "symfony/test-pack": "^1.1",
         "symfony/security-bundle": "7.4.*",
         "symfony/validator": "7.4.*"
     },
