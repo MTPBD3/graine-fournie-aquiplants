@@ -30,7 +30,7 @@ jobs:
 
       - name: Install Composer dependencies
         working-directory: backend
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        run: composer update --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Generate JWT keys (for functional tests)
         working-directory: backend
