@@ -1,56 +1,98 @@
-import { Box, Typography, Paper, Chip, CircularProgress, Alert } from '@mui/material';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import { Box, Grid, Paper, Typography, Chip, Divider, CircularProgress } from '@mui/material';
+import { useAuth } from '../context/AuthContext';
 import { useApi } from '../hooks/useApi';
-import { formatDate } from '../utils/formatDate';
+
+function EmptyState({ message }) {
+  return (
+    <Typography variant="body2" color="text.disabled" sx={{ py: 2, textAlign: 'center' }}>
+      {message}
+    </Typography>
+  );
+}
 
 export default function DashboardEmployePage() {
-  const { data: alertes, loading, error } = useApi('/api/alertes');
+  const { user } = useAuth();
+  const { data: sachets, loading, error } = useApi('/api/gf-clients');
+
+  const displayName = user?.prenom
+    ? `${user.prenom}${user.nom ? ' ' + user.nom.charAt(0).toUpperCase() + '.' : ''}`
+    : (user?.email ?? '');
+
+  const arrivees = Array.isArray(sachets) ? sachets.filter((s) => s.statut !== 'epuise').slice(0, 5) : [];
+  const aTraiter = Array.isArray(sachets) ? sachets.filter(s => s.statut === 'en_attente') : [];
 
   return (
     <Box>
-      <Typography sx={{ fontWeight: 700, fontSize: { xs: '1.1rem', md: '1.5rem' }, mb: 3 }}>
-        Tableau de bord
+      <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
+        Bonjour, {displayName}
       </Typography>
 
-      <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', p: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-          <NotificationsActiveIcon sx={{ color: '#E65100' }} />
-          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-            Alertes en attente
-          </Typography>
-          {Array.isArray(alertes) && (
-            <Chip label={alertes.length} size="small" color={alertes.length > 0 ? 'warning' : 'default'} />
-          )}
-        </Box>
-
-        {loading && <CircularProgress size={24} />}
-        {error && <Alert severity="error">{error}</Alert>}
-
-        {!loading && Array.isArray(alertes) && alertes.length === 0 && (
-          <Typography variant="body2" color="text.secondary">Aucune alerte en attente.</Typography>
-        )}
-
-        {!loading && Array.isArray(alertes) && alertes.length > 0 && (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            {alertes.map(a => (
-              <Box key={a.id} sx={{
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                p: 1.5, borderRadius: 1, bgcolor: '#FFF3E0', border: '1px solid #FFB74D',
-              }}>
-                <Box>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {a.plant?.nomPlant ?? '—'} — {a.client?.prenomClient} {a.client?.nomClient}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    N° de lot : {a.numeroLot ?? '—'} · Reçu le {formatDate(a.dateReception)}
-                  </Typography>
-                </Box>
-                <Chip label="En attente" size="small" sx={{ bgcolor: '#E65100', color: '#fff' }} />
+      <Grid container spacing={2}>
+        {/* Arrivées récentes */}
+        <Grid size={{ xs: 12, md: 7 }}>
+          <Paper elevation={0} sx={{ p: 2.5, border: '1px solid', borderColor: 'divider' }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2 }}>
+              Arrivées récentes
+            </Typography>
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+                <CircularProgress size={24} />
               </Box>
-            ))}
-          </Box>
-        )}
-      </Paper>
+            ) : error ? (
+              <EmptyState message="Aucune donnée disponible" />
+            ) : arrivees.length === 0 ? (
+              <EmptyState message="Aucune arrivée enregistrée" />
+            ) : (
+              arrivees.map((a, i) => (
+                <Box key={a.id}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 1 }}>
+                    <Box>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        {a.plant?.nomPlant ?? '—'}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {a.numeroLot ?? '—'} · {a.client?.nom ?? '—'}
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label={a.statut === 'en_stock' ? 'Rangé' : a.statut === 'epuise' ? 'Épuisé' : 'À traiter'}
+                      size="small"
+                      color={a.statut === 'en_stock' ? 'success' : a.statut === 'epuise' ? 'error' : 'default'}
+                      sx={{ fontSize: '0.75rem' }}
+                    />
+                  </Box>
+                  {i < arrivees.length - 1 && <Divider />}
+                </Box>
+              ))
+            )}
+          </Paper>
+        </Grid>
+
+        {/* À traiter */}
+        <Grid size={{ xs: 12, md: 5 }}>
+          <Paper elevation={0} sx={{ p: 2.5, border: '1px solid', borderColor: 'divider' }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2 }}>
+              Sachets à traiter
+            </Typography>
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+                <CircularProgress size={24} />
+              </Box>
+            ) : aTraiter.length === 0 ? (
+              <EmptyState message="Aucun sachet à traiter" />
+            ) : (
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                {aTraiter.slice(0, 5).map((s) => (
+                  <Box key={s.id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="body2">{s.plant?.nomPlant ?? '—'}</Typography>
+                    <Chip label="À traiter" size="small" color="warning" sx={{ fontSize: '0.7rem' }} />
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </Paper>
+        </Grid>
+      </Grid>
     </Box>
   );
 }

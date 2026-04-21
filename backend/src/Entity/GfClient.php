@@ -26,7 +26,7 @@ class GfClient
     private int $quantiteDisponible;
 
     #[ORM\Column(name: 'seuil_alerte', type: 'integer')]
-    private int $seuilAlerte = 0;
+    private int $seuilAlerte;
 
     #[ORM\Column(name: 'nom_client', type: 'string', length: 150)]
     private string $nomClient;

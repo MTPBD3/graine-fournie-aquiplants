@@ -11,9 +11,9 @@ function handleUnauthorized() {
 
 export function useApi(path, { skip = false } = {}) {
   const { token } = useAuth();
-  const [data,    setData]    = useState(null);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(!skip);
-  const [error,   setError]   = useState(null);
+  const [error, setError] = useState(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -24,7 +24,8 @@ export function useApi(path, { skip = false } = {}) {
       });
       if (res.status === 401) { handleUnauthorized(); return; }
       if (!res.ok) throw new Error(`Erreur ${res.status}`);
-      setData(await res.json());
+      const json = await res.json();
+      setData(json);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -42,7 +43,10 @@ export function useApi(path, { skip = false } = {}) {
 export async function apiRequest(path, method, body, token) {
   const res = await fetch(`${API_BASE}${path}`, {
     method,
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
     body: body ? JSON.stringify(body) : undefined,
   });
   if (res.status === 401) { handleUnauthorized(); return; }

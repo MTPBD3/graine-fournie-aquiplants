@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AlertesController extends AbstractController
 {
+    /** Nombre de jours d'attente au-delà duquel un sachet est considéré en alerte. */
     private const DELAI_JOURS = 3;
 
     #[Route('/api/alertes', methods: ['GET'])]
@@ -16,22 +17,31 @@ class AlertesController extends AbstractController
     {
         $limite = new \DateTime('-' . self::DELAI_JOURS . ' days');
         $items  = $repo->findEnAttenteSince($limite);
-        $today  = new \DateTime('today');
+
+        $today = new \DateTime('today');
 
         $data = array_map(function ($h) use ($today) {
-            $joursAttente = (int) $today->diff($h->getDateReception())->days;
+            $dateReception = $h->getDateReception();
+            $joursAttente  = (int) $today->diff($dateReception)->days;
+
             $gf     = $h->getGfClient();
             $client = $gf->getClient();
+
             return [
                 'id'              => $h->getIdHistoDepot(),
-                'dateReception'   => $h->getDateReception()->format('Y-m-d'),
+                'dateReception'   => $dateReception->format('Y-m-d'),
                 'joursAttente'    => $joursAttente,
                 'quantiteDeposee' => $h->getQuantiteDeposee(),
                 'statut'          => $h->getStatut(),
                 'numeroLot'       => $gf->getNumeroLot(),
                 'nomClient'       => $gf->getNomClient(),
-                'plant'           => ['nomPlant' => $gf->getPlant()->getNomPlant()],
-                'client'          => ['nom' => $client->getNomClient(), 'prenom' => $client->getPrenomClient()],
+                'plant'           => [
+                    'nomPlant' => $gf->getPlant()->getNomPlant(),
+                ],
+                'client'          => [
+                    'nom'    => $client->getNomClient(),
+                    'prenom' => $client->getPrenomClient(),
+                ],
             ];
         }, $items);
 

@@ -7,22 +7,31 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/api/logs')]
 class LogController extends AbstractController
 {
-    #[Route('', methods: ['GET'])]
+    #[Route('/api/logs', methods: ['GET'])]
     public function index(LogRepository $repo): JsonResponse
     {
-        $logs = $repo->findBy([], ['dateAction' => 'DESC'], 200);
-        return $this->json(array_map(fn($l) => [
-            'id'          => $l->getIdLog(),
-            'action'      => $l->getAction(),
-            'detail'      => $l->getDetail(),
-            'dateAction'  => $l->getDateAction()->format('Y-m-d H:i:s'),
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $logs = $repo->createQueryBuilder('l')
+            ->orderBy('l.dateAction', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        $data = array_map(fn($l) => [
+            'id'         => $l->getIdLog(),
+            'action'     => $l->getAction(),
+            'detail'     => $l->getDetail(),
+            'dateAction' => $l->getDateAction()->format('Y-m-d H:i:s'),
             'utilisateur' => [
+                'id'     => $l->getUtilisateur()->getId(),
                 'nom'    => $l->getUtilisateur()->getNom(),
                 'prenom' => $l->getUtilisateur()->getPrenom(),
+                'email'  => $l->getUtilisateur()->getEmail(),
             ],
-        ], $logs));
+        ], $logs);
+
+        return $this->json($data);
     }
 }

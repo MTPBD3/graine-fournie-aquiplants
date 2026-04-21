@@ -4,40 +4,47 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem('jwt_token'));
-  const [user,  setUser]  = useState(() => {
-    const s = localStorage.getItem('user');
-    return s ? JSON.parse(s) : null;
+  const [user, setUser] = useState(() => {
+    const stored = localStorage.getItem('user');
+    return stored ? JSON.parse(stored) : null;
   });
 
   const login = useCallback(async (email, password) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
-    if (!res.ok) {
-      const d = await res.json().catch(() => ({}));
-      throw new Error(d.message || 'Identifiants incorrects');
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.message || 'Identifiants incorrects');
     }
-    const { token: jwt } = await res.json();
-    const payload  = JSON.parse(atob(jwt.split('.')[1]));
-    const meRes    = await fetch(`${import.meta.env.VITE_API_URL}/api/me`, {
+
+    const data = await response.json();
+    const jwt = data.token;
+
+    // Décoder le payload JWT pour les rôles
+    const payload = JSON.parse(atob(jwt.split('.')[1]));
+
+    // Récupérer prenom + nom depuis /api/me
+    const meRes = await fetch(`${import.meta.env.VITE_API_URL}/api/me`, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
     const me = meRes.ok ? await meRes.json() : {};
 
     const userData = {
-      email:  me.email  ?? payload.username ?? email,
-      roles:  payload.roles ?? [],
+      email: me.email ?? payload.username ?? payload.email ?? email,
+      roles: payload.roles ?? [],
       prenom: me.prenom ?? '',
-      nom:    me.nom    ?? '',
-      role:   me.role   ?? 'employe',
+      nom: me.nom ?? '',
     };
 
     localStorage.setItem('jwt_token', jwt);
     localStorage.setItem('user', JSON.stringify(userData));
     setToken(jwt);
     setUser(userData);
+
     return userData;
   }, []);
 

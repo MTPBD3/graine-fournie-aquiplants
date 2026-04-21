@@ -16,7 +16,7 @@ class Emplacement
     #[ORM\Column(name: 'id_emplacement', type: 'integer')]
     private ?int $idEmplacement = null;
 
-    #[ORM\Column(name: 'lettre_etagere', type: 'string', columnDefinition: "ENUM('A','B','C','D') NOT NULL")]
+    #[ORM\Column(name: 'lettre_etagere', type: 'string', columnDefinition: "ENUM('A','B','C','D','E','F') NOT NULL")]
     private string $lettreEtagere;
 
     #[ORM\Column(name: 'numero_etage', type: 'integer')]

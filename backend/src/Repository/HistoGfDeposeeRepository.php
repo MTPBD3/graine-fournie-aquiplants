@@ -13,13 +13,17 @@ class HistoGfDeposeeRepository extends ServiceEntityRepository
         parent::__construct($registry, HistoGfDeposee::class);
     }
 
-    public function findEnAttenteSince(\DateTimeInterface $limite): array
+    /**
+     * Retourne tous les HistoGfDeposee en attente dont la date de réception
+     * est strictement antérieure à $limiteDate.
+     */
+    public function findEnAttenteSince(\DateTimeInterface $limiteDate): array
     {
         return $this->createQueryBuilder('h')
             ->where('h.statut = :statut')
-            ->andWhere('h.dateReception <= :limite')
+            ->andWhere('h.dateReception < :limite')
             ->setParameter('statut', 'en_attente')
-            ->setParameter('limite', $limite)
+            ->setParameter('limite', $limiteDate)
             ->orderBy('h.dateReception', 'ASC')
             ->getQuery()
             ->getResult();
