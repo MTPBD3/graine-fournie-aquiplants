@@ -3,7 +3,7 @@ import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import {
   Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText,
   AppBar, Toolbar, Typography, IconButton, Avatar, Divider,
-  Tooltip, InputBase, Badge, Chip,
+  Tooltip, Chip,
   useMediaQuery, useTheme,
 } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -15,8 +15,6 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import PeopleIcon from '@mui/icons-material/People';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../context/AuthContext';
 import { useApi } from '../hooks/useApi';
 
@@ -25,7 +23,6 @@ const SIDEBAR_BG     = '#1B5E20';
 const SIDEBAR_TEXT   = '#FFFFFF';
 const SIDEBAR_ACTIVE = 'rgba(212,225,87,0.18)';
 
-// ── Menu structuré en sections ────────────────────────────────────────────────
 const MENU_SECTIONS = [
   {
     label: 'PRINCIPALE',
@@ -51,7 +48,6 @@ const MENU_SECTIONS = [
   },
 ];
 
-// ── Contenu de la sidebar ─────────────────────────────────────────────────────
 function SidebarContent({ onNavigate }) {
   const { user, logout } = useAuth();
   const navigate  = useNavigate();
@@ -195,14 +191,12 @@ function SidebarContent({ onNavigate }) {
   );
 }
 
-// ── Layout principal ──────────────────────────────────────────────────────────
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate  = useNavigate();
   const theme     = useTheme();
   const isMobile  = useMediaQuery(theme.breakpoints.down('md'));
-  const [drawerOpen,  setDrawerOpen]  = useState(false);
-  const [searchOpen,  setSearchOpen]  = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleLogout = () => { logout(); navigate('/'); };
 
@@ -251,41 +245,13 @@ export default function Layout() {
               </IconButton>
             )}
 
-            {isMobile && !searchOpen && (
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#1B5E20', flexGrow: 1, fontSize: '0.9rem' }}>
+            {isMobile && (
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#1B5E20', fontSize: '0.9rem' }}>
                 Graine Fournie
               </Typography>
             )}
 
-            {!isMobile && (
-              <Box sx={{
-                display: 'flex', alignItems: 'center',
-                bgcolor: '#F7FAF3', border: '1px solid #E8F5E9',
-                borderRadius: 3, px: 1.5, py: 0.5, flexGrow: 1, maxWidth: 380,
-              }}>
-                <SearchIcon sx={{ color: 'text.disabled', fontSize: 18, mr: 1 }} />
-                <InputBase placeholder="Rechercher..." sx={{ fontSize: '0.875rem', width: '100%' }} />
-              </Box>
-            )}
-
-            {isMobile && searchOpen && (
-              <Box sx={{
-                display: 'flex', alignItems: 'center',
-                bgcolor: '#F7FAF3', border: '1px solid #E8F5E9',
-                borderRadius: 3, px: 1.5, py: 0.5, flexGrow: 1,
-              }}>
-                <SearchIcon sx={{ color: 'text.disabled', fontSize: 18, mr: 1 }} />
-                <InputBase placeholder="Rechercher..." sx={{ fontSize: '0.875rem', width: '100%' }} autoFocus />
-              </Box>
-            )}
-
-            <Box sx={{ flexGrow: isMobile && !searchOpen ? 0 : 1 }} />
-
-            {isMobile && (
-              <IconButton onClick={() => setSearchOpen(v => !v)} sx={{ color: 'text.secondary' }} size="small">
-                {searchOpen ? <CloseIcon /> : <SearchIcon />}
-              </IconButton>
-            )}
+            <Box sx={{ flexGrow: 1 }} />
 
             {!isMobile && (
               <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1, fontSize: '0.8rem' }}>

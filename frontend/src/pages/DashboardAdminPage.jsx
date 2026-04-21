@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import {
   Box, Grid, Paper, Typography, Chip, Divider, CircularProgress,
   IconButton, Avatar, LinearProgress, ToggleButtonGroup, ToggleButton,
@@ -13,6 +13,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
@@ -23,6 +24,7 @@ import { useAuth } from '../context/AuthContext';
 import { formatDate } from '../utils/formatDate';
 
 const DONUT_COLORS = ['#1B5E20', '#D4E157', '#FF8F00', '#388E3C', '#81C784', '#E53935'];
+const API_BASE = import.meta.env.VITE_API_URL;
 
 const WIDGET_SX = {
   borderRadius: '12px',
@@ -106,10 +108,165 @@ function Empty({ text = 'Aucune donnée disponible' }) {
   );
 }
 
+// ── Barre de recherche intelligente Client / Graine ───────────────────────────
+function SmartSearch({ searchMode, onModeChange, onSelect }) {
+  const { token } = useAuth();
+  const [query, setQuery]     = useState('');
+  const [results, setResults] = useState([]);
+  const [open, setOpen]       = useState(false);
+  const containerRef          = useRef(null);
+  const debounceRef           = useRef(null);
+
+  const placeholder = searchMode === 'client'
+    ? 'Rechercher par client...'
+    : 'Rechercher par numéro de lot / nom du plant';
+
+  // Fermer la liste au clic en dehors
+  useEffect(() => {
+    const handler = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const handleInput = useCallback((value) => {
+    setQuery(value);
+    clearTimeout(debounceRef.current);
+    if (value.length < 2) { setResults([]); setOpen(false); return; }
+    debounceRef.current = setTimeout(async () => {
+      const endpoint = searchMode === 'client'
+        ? `${API_BASE}/api/clients?search=${encodeURIComponent(value)}`
+        : `${API_BASE}/api/gf-clients?search=${encodeURIComponent(value)}`;
+      try {
+        const res = await fetch(endpoint, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setResults(Array.isArray(data) ? data : []);
+          setOpen(true);
+        }
+      } catch { /* ignore */ }
+    }, 300);
+  }, [searchMode, token]);
+
+  const handleSelect = (item) => {
+    const label = searchMode === 'client'
+      ? `${item.prenomClient ?? ''} ${item.nomClient ?? ''}`.trim()
+      : `${item.referenceGf ?? ''} · ${item.plant?.nomPlant ?? ''}`.trim();
+    setQuery(label);
+    setOpen(false);
+    onSelect(label);
+  };
+
+  const handleClear = () => {
+    setQuery('');
+    setResults([]);
+    setOpen(false);
+    onSelect('');
+  };
+
+  const handleModeChange = (mode) => {
+    onModeChange(mode);
+    handleClear();
+  };
+
+  return (
+    <Box ref={containerRef} sx={{ position: 'relative', flex: 1, maxWidth: 420 }}>
+      <Box sx={{ display: 'flex', alignItems: 'stretch' }}>
+
+        {/* Toggle Client / Graine */}
+        <Box sx={{
+          display: 'flex',
+          border: '1px solid rgba(0,0,0,0.12)',
+          borderRight: 'none',
+          borderRadius: '8px 0 0 8px',
+          overflow: 'hidden',
+          flexShrink: 0,
+        }}>
+          {[['client', 'Client'], ['graine', 'Graine']].map(([val, lbl], idx) => (
+            <Box
+              key={val}
+              onClick={() => handleModeChange(val)}
+              sx={{
+                px: 1.5, display: 'flex', alignItems: 'center',
+                cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600,
+                bgcolor: searchMode === val ? '#1B5E20' : '#fff',
+                color: searchMode === val ? '#fff' : 'text.secondary',
+                transition: 'background 0.15s',
+                userSelect: 'none',
+                borderRight: idx === 0 ? '1px solid rgba(0,0,0,0.12)' : 'none',
+              }}
+            >
+              {lbl}
+            </Box>
+          ))}
+        </Box>
+
+        {/* Champ de saisie */}
+        <Box sx={{
+          display: 'flex', alignItems: 'center',
+          bgcolor: '#F7FAF3', border: '1px solid rgba(0,0,0,0.12)',
+          borderRadius: '0 8px 8px 0', px: 1.5, py: 0.5, flex: 1,
+        }}>
+          <SearchIcon sx={{ color: 'text.disabled', fontSize: 18, mr: 1, flexShrink: 0 }} />
+          <InputBase
+            placeholder={placeholder}
+            value={query}
+            onChange={e => handleInput(e.target.value)}
+            sx={{ fontSize: '0.875rem', flex: 1 }}
+          />
+          {query && (
+            <IconButton size="small" onClick={handleClear} sx={{ p: 0.25, ml: 0.5 }}>
+              <CloseIcon sx={{ fontSize: 14 }} />
+            </IconButton>
+          )}
+        </Box>
+      </Box>
+
+      {/* Liste déroulante */}
+      {open && (
+        <Paper elevation={6} sx={{
+          position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 1400,
+          mt: 0.5, borderRadius: '8px', overflow: 'hidden',
+          maxHeight: 220, overflowY: 'auto',
+        }}>
+          {results.length === 0 ? (
+            <Typography sx={{ px: 2, py: 1.5, fontSize: '0.85rem', color: 'text.secondary' }}>
+              Aucun résultat
+            </Typography>
+          ) : (
+            results.map((item, i) => {
+              const label = searchMode === 'client'
+                ? `${item.prenomClient ?? ''} ${item.nomClient ?? ''}`.trim()
+                : `${item.referenceGf ?? ''} · ${item.plant?.nomPlant ?? ''}`;
+              return (
+                <Box
+                  key={item.idGfClient ?? item.idClient ?? i}
+                  onMouseDown={e => e.preventDefault()}
+                  onClick={() => handleSelect(item)}
+                  sx={{
+                    px: 2, py: 1.25, cursor: 'pointer', fontSize: '0.85rem',
+                    '&:hover': { bgcolor: '#F7FAF3' },
+                    borderBottom: i < results.length - 1 ? '1px solid rgba(0,0,0,0.06)' : 'none',
+                  }}
+                >
+                  {label}
+                </Box>
+              );
+            })
+          )}
+        </Paper>
+      )}
+    </Box>
+  );
+}
+
 // ── Page principale ───────────────────────────────────────────────────────────
 export default function DashboardAdminPage() {
   const { user } = useAuth();
-  const theme = useTheme();
+  const theme    = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const { data: stats,    loading: lStats  } = useApi('/api/statistiques');
@@ -117,9 +274,9 @@ export default function DashboardAdminPage() {
   const { data: histoRaw, loading: lHisto  } = useApi('/api/histo-gf-deposees');
   const { data: sachets,  loading: lSachets } = useApi('/api/gf-clients');
 
-  const [period, setPeriod] = useState('3M');
+  const [period, setPeriod]           = useState('3M');
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchMode, setSearchMode] = useState('client');
+  const [searchMode, setSearchMode]   = useState('client');
 
   const sessionCode = useMemo(() =>
     Array.from({ length: 6 }, () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'[Math.floor(Math.random() * 36)]).join(''), []);
@@ -163,7 +320,7 @@ export default function DashboardAdminPage() {
 
   // ── Categories ──────────────────────────────────────────────────────────────
   const categories = stats?.categories ?? [];
-  const maxVal = Math.max(...categories.map(c => c.value), 1);
+  const maxVal     = Math.max(...categories.map(c => c.value), 1);
 
   // ── Search filtering ────────────────────────────────────────────────────────
   const filterByQuery = (items, clientKey, graineKey) => {
@@ -201,16 +358,23 @@ export default function DashboardAdminPage() {
   return (
     <Box sx={{ bgcolor: '#F7FAF3', minHeight: '100%' }}>
 
-      {/* ── HEADER ──────────────────────────────────────────────────────── */}
-      <Paper elevation={0} sx={{
-        mb: 3, p: { xs: 2, md: 2.5 }, borderRadius: '12px',
-        bgcolor: '#fff', border: '1px solid rgba(27,94,32,0.08)',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+      {/* ── HEADER STICKY ───────────────────────────────────────────────── */}
+      <Box sx={{
+        position: 'sticky',
+        top: 56,
+        zIndex: 10,
+        bgcolor: '#fff',
+        borderBottom: '1px solid #E8F5E9',
+        mx: { xs: -1.5, md: -3 },
+        px: { xs: 1.5, md: 3 },
+        py: { xs: 1.25, md: 1.5 },
+        mb: 3,
       }}>
         <Box sx={{ display: 'flex', alignItems: { md: 'center' }, gap: 2, flexDirection: { xs: 'column', md: 'row' } }}>
+
           {/* Titre */}
           <Box sx={{ flex: '0 0 auto' }}>
-            <Typography sx={{ fontWeight: 800, fontSize: { xs: '1.2rem', md: '1.35rem' }, color: '#1B5E20', lineHeight: 1.2 }}>
+            <Typography sx={{ fontWeight: 800, fontSize: { xs: '1rem', md: '1.1rem' }, color: '#1B5E20', lineHeight: 1.2 }}>
               Tableau de bord
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.secondary' }}>
@@ -218,38 +382,12 @@ export default function DashboardAdminPage() {
             </Typography>
           </Box>
 
-          {/* Recherche + toggle */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1, flexWrap: 'wrap' }}>
-            <Box sx={{
-              display: 'flex', alignItems: 'center',
-              bgcolor: '#F7FAF3', border: '1px solid rgba(0,0,0,0.1)',
-              borderRadius: '8px', px: 1.5, py: 0.5, flex: 1, maxWidth: 340,
-            }}>
-              <SearchIcon sx={{ color: 'text.disabled', fontSize: 18, mr: 1 }} />
-              <InputBase
-                placeholder="Rechercher par client..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                sx={{ fontSize: '0.875rem', flex: 1 }}
-              />
-            </Box>
-            <ToggleButtonGroup
-              value={searchMode}
-              exclusive
-              onChange={(_, v) => v && setSearchMode(v)}
-              size="small"
-              sx={{
-                '& .MuiToggleButton-root': {
-                  py: 0.5, px: 1.5, fontSize: '0.75rem', textTransform: 'none',
-                  border: '1px solid rgba(0,0,0,0.12)',
-                  '&.Mui-selected': { bgcolor: '#1B5E20', color: '#fff', '&:hover': { bgcolor: '#2E7D32' } },
-                },
-              }}
-            >
-              <ToggleButton value="client">Client</ToggleButton>
-              <ToggleButton value="graine">Graine</ToggleButton>
-            </ToggleButtonGroup>
-          </Box>
+          {/* SmartSearch */}
+          <SmartSearch
+            searchMode={searchMode}
+            onModeChange={v => { setSearchMode(v); setSearchQuery(''); }}
+            onSelect={label => setSearchQuery(label)}
+          />
 
           {/* Icônes + date */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
@@ -273,7 +411,7 @@ export default function DashboardAdminPage() {
             )}
           </Box>
         </Box>
-      </Paper>
+      </Box>
 
       {/* ── KPI CARDS ───────────────────────────────────────────────────── */}
       <Grid container spacing={2} sx={{ mb: 2.5 }}>
