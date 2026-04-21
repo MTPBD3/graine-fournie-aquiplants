@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Client;
 use App\Entity\GfClient;
+use App\Entity\Client;
 use App\Entity\GfHistoClient;
 use App\Entity\Plant;
 use App\Entity\Uv;
@@ -21,7 +21,9 @@ class GfClientController extends AbstractController
     private function getLatestHistoDepot(GfClient $g): ?object
     {
         $depots = $g->getHistoDepots()->toArray();
-        if (empty($depots)) return null;
+        if (empty($depots)) {
+            return null;
+        }
         usort($depots, fn($a, $b) => $b->getIdHistoDepot() - $a->getIdHistoDepot());
         return $depots[0];
     }
@@ -29,6 +31,7 @@ class GfClientController extends AbstractController
     private function serialize(GfClient $g): array
     {
         $latest = $this->getLatestHistoDepot($g);
+
         return [
             'id'                 => $g->getIdGfClient(),
             'numeroLot'          => $g->getNumeroLot(),
@@ -59,74 +62,104 @@ class GfClientController extends AbstractController
     #[Route('/alertes', methods: ['GET'])]
     public function alertes(GfClientRepository $repo): JsonResponse
     {
-        $data = array_filter($repo->findAll(), fn(GfClient $g) =>
+        $all = $repo->findAll();
+
+        $data = array_filter($all, fn(GfClient $g) =>
             $g->getQuantiteDisponible() <= $g->getSeuilAlerte()
         );
-        return $this->json(array_values(array_map(fn(GfClient $g) => [
-            'id'        => $g->getIdGfClient(),
-            'plante'    => $g->getPlant()->getNomPlant(),
-            'numeroLot' => $g->getNumeroLot(),
-            'client'    => ['nom' => $g->getClient()->getNomClient()],
-            'quantite'  => $g->getQuantiteDisponible(),
-            'seuil'     => $g->getSeuilAlerte(),
-            'statut'    => ($this->getLatestHistoDepot($g) ? $this->getLatestHistoDepot($g)->getStatut() : 'en_attente'),
-        ], $data)));
+
+        $result = array_map(fn(GfClient $g) => [
+            'id'         => $g->getIdGfClient(),
+            'plante'     => $g->getPlant()->getNomPlant(),
+            'numeroLot'  => $g->getNumeroLot(),
+            'client'     => ['nom' => $g->getClient()->getNomClient()],
+            'emplacement' => null, // résolu via EmplacementController si besoin
+            'quantite'   => $g->getQuantiteDisponible(),
+            'seuil'      => $g->getSeuilAlerte(),
+            'statut'     => ($this->getLatestHistoDepot($g) ? $this->getLatestHistoDepot($g)->getStatut() : 'en_attente'),
+        ], $data);
+
+        return $this->json(array_values($result));
     }
 
     #[Route('/{id}/sachets-compatibles', methods: ['GET'])]
     public function sachetsCompatibles(int $id, GfClientRepository $repo): JsonResponse
     {
         $g = $repo->find($id);
-        if (!$g) return $this->json(['message' => 'Sachet introuvable'], 404);
+        if (!$g) {
+            return $this->json(['message' => 'Sachet introuvable'], 404);
+        }
 
-        $compatibles = array_filter($repo->findAll(), function (GfClient $c) use ($g) {
+        $all = $repo->findAll();
+        $compatibles = array_filter($all, function (GfClient $c) use ($g) {
             if ($c->getIdGfClient() === $g->getIdGfClient()) return false;
             if ($c->getClient()->getIdClient() !== $g->getClient()->getIdClient()) return false;
             if ($c->getPlant()->getIdPlant() !== $g->getPlant()->getIdPlant()) return false;
             $latest = $this->getLatestHistoDepot($c);
-            if ($latest && $latest->getStatut() === 'epuise') return false;
+            $statut = $latest ? $latest->getStatut() : 'en_attente';
+            if ($statut === 'epuise') return false;
             if ($c->getQuantiteDisponible() <= 0) return false;
             return true;
         });
 
-        usort($compatibles, fn($a, $b) => $a->getQuantiteDisponible() - $b->getQuantiteDisponible());
+        $compatibles = array_values($compatibles);
+        usort($compatibles, fn ($a, $b) => $a->getQuantiteDisponible() - $b->getQuantiteDisponible());
 
-        return $this->json(array_values(array_map(function (GfClient $c) {
+        $result = array_map(function (GfClient $c) {
             $empl = $c->getEmplacement();
             return [
                 'id'                 => $c->getIdGfClient(),
                 'numeroLot'          => $c->getNumeroLot(),
                 'quantiteDisponible' => $c->getQuantiteDisponible(),
-                'emplacement'        => $empl ? ['id' => $empl->getIdEmplacement(), 'code' => $empl->getLettreEtagere() . '-' . $empl->getNumeroEtage()] : null,
+                'emplacement'        => $empl ? [
+                    'id'   => $empl->getIdEmplacement(),
+                    'code' => $empl->getLettreEtagere() . '-' . $empl->getNumeroEtage(),
+                ] : null,
             ];
-        }, $compatibles)));
+        }, $compatibles);
+
+        return $this->json($result);
     }
 
     #[Route('/{id}/utiliser', methods: ['POST'])]
     public function utiliser(int $id, Request $request, GfClientRepository $repo, EntityManagerInterface $em, LogService $logService): JsonResponse
     {
         $g = $repo->find($id);
-        if (!$g) return $this->json(['message' => 'Sachet introuvable'], 404);
+        if (!$g) {
+            return $this->json(['message' => 'Sachet introuvable'], 404);
+        }
 
-        $data  = json_decode($request->getContent(), true);
-        $idUv  = (int) ($data['idUv'] ?? 0);
-        $nbGpm = (int) ($data['nbGraineParMotte'] ?? 0);
-        $uv    = $em->getRepository(Uv::class)->find($idUv);
-        if (!$uv) return $this->json(['message' => 'UV introuvable'], 400);
+        $data = json_decode($request->getContent(), true);
+        $idUv = (int) ($data['idUv'] ?? 0);
+        $nbGraineParMotteForce = (int) ($data['nbGraineParMotte'] ?? 0);
 
-        $nb = $nbGpm ?: $uv->getNbGraineParMotte();
+        $uv = $em->getRepository(Uv::class)->find($idUv);
+        if (!$uv) {
+            return $this->json(['message' => 'UV introuvable'], 400);
+        }
 
-        $utilisations = isset($data['utilisations']) && is_array($data['utilisations'])
-            ? $data['utilisations']
-            : [['idGfClient' => $id, 'quantite' => (int) ($data['quantiteUtilisee'] ?? 0)]];
+        $nb = $nbGraineParMotteForce ?: $uv->getNbGraineParMotte();
+
+        // Format multi-sachets (utilisations[]) ou legacy (quantiteUtilisee)
+        if (isset($data['utilisations']) && is_array($data['utilisations'])) {
+            $utilisations = $data['utilisations'];
+        } else {
+            $quantiteUtilisee = (int) ($data['quantiteUtilisee'] ?? 0);
+            if ($quantiteUtilisee <= 0) {
+                return $this->json(['message' => 'Quantité utilisée invalide'], 400);
+            }
+            $utilisations = [['idGfClient' => $id, 'quantite' => $quantiteUtilisee]];
+        }
 
         /** @var \App\Entity\Utilisateur $user */
         $user = $this->getUser();
 
-        foreach ($utilisations as $u) {
-            $qte    = (int) ($u['quantite'] ?? 0);
+        foreach ($utilisations as $utilisation) {
+            $sachetId = (int) ($utilisation['idGfClient'] ?? 0);
+            $qte = (int) ($utilisation['quantite'] ?? 0);
             if ($qte <= 0) continue;
-            $sachet = $repo->find((int) ($u['idGfClient'] ?? 0));
+
+            $sachet = $repo->find($sachetId);
             if (!$sachet) continue;
 
             $nouvelleQte = max(0, $sachet->getQuantiteDisponible() - $qte);
@@ -143,27 +176,31 @@ class GfClientController extends AbstractController
 
             if ($nouvelleQte <= 0) {
                 $latest = $this->getLatestHistoDepot($sachet);
-                if ($latest) $latest->setStatut('epuise');
+                if ($latest !== null) {
+                    $latest->setStatut('epuise');
+                }
                 $emplacement = $sachet->getEmplacement();
-                if ($emplacement) {
+                if ($emplacement !== null) {
                     $sachet->setEmplacement(null);
                     $em->flush();
                     $em->refresh($emplacement);
-                    if ($emplacement->getSachets()->isEmpty()) $em->remove($emplacement);
+                    if ($emplacement->getSachets()->isEmpty()) {
+                        $em->remove($emplacement);
+                    }
                 }
             }
         }
 
         $em->flush();
 
-        foreach ($utilisations as $u) {
-            $qte    = (int) ($u['quantite'] ?? 0);
-            $sachet = $repo->find((int) ($u['idGfClient'] ?? 0));
-            if ($qte > 0 && $sachet) {
-                $logService->log($em, $user, 'utilisation_sachet',
-                    $qte . ' graines utilisées sur sachet lot ' . $sachet->getNumeroLot()
-                );
-            }
+        foreach ($utilisations as $utilisation) {
+            $qte = (int) ($utilisation['quantite'] ?? 0);
+            if ($qte <= 0) continue;
+            $sachet = $repo->find((int) ($utilisation['idGfClient'] ?? 0));
+            if (!$sachet) continue;
+            $logService->log($em, $user, 'utilisation_sachet',
+                $qte . ' graines utilisées sur sachet lot ' . $sachet->getNumeroLot()
+            );
         }
 
         return $this->json($this->serialize($g));
@@ -173,30 +210,50 @@ class GfClientController extends AbstractController
     public function show(int $id, GfClientRepository $repo): JsonResponse
     {
         $g = $repo->find($id);
-        if (!$g) return $this->json(['message' => 'Sachet introuvable'], 404);
+        if (!$g) {
+            return $this->json(['message' => 'Sachet introuvable'], 404);
+        }
         return $this->json($this->serialize($g));
     }
 
     #[Route('', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em, LogService $logService): JsonResponse
     {
-        $data        = json_decode($request->getContent(), true);
+        $data = json_decode($request->getContent(), true);
+
+        // ── Validation des entrées ────────────────────────────────────────────
         $referenceGf = trim($data['referenceGf'] ?? '');
         $numeroLot   = trim($data['numeroLot'] ?? '');
         $quantiteRaw = $data['quantiteDisponible'] ?? null;
 
-        if ($referenceGf === '') return $this->json(['message' => 'La référence GF est obligatoire'], 400);
-        if (strlen($referenceGf) > 50) return $this->json(['message' => 'La référence GF ne peut pas dépasser 50 caractères'], 400);
-        if ($numeroLot === '') return $this->json(['message' => 'Le numéro de lot est obligatoire'], 400);
-        if (strlen($numeroLot) > 50) return $this->json(['message' => 'Le numéro de lot ne peut pas dépasser 50 caractères'], 400);
+        if ($referenceGf === '') {
+            return $this->json(['message' => 'La référence GF est obligatoire'], 400);
+        }
+        if (strlen($referenceGf) > 50) {
+            return $this->json(['message' => 'La référence GF ne peut pas dépasser 50 caractères'], 400);
+        }
+        if ($numeroLot === '') {
+            return $this->json(['message' => 'Le numéro de lot est obligatoire'], 400);
+        }
+        if (strlen($numeroLot) > 50) {
+            return $this->json(['message' => 'Le numéro de lot ne peut pas dépasser 50 caractères'], 400);
+        }
         if ($quantiteRaw === null || !ctype_digit((string) $quantiteRaw) || (int) $quantiteRaw < 0) {
             return $this->json(['message' => 'La quantité disponible doit être un entier positif ou nul'], 400);
         }
 
-        $client = $em->getRepository(Client::class)->find((int) ($data['idClient'] ?? 0));
-        $plant  = $em->getRepository(Plant::class)->find((int) ($data['idPlant'] ?? 0));
-        if (!$client) return $this->json(['message' => 'Client introuvable'], 400);
-        if (!$plant)  return $this->json(['message' => 'Plant introuvable'], 400);
+        $idClient = (int) ($data['idClient'] ?? 0);
+        $idPlant  = (int) ($data['idPlant']  ?? 0);
+
+        $client = $em->getRepository(Client::class)->find($idClient);
+        $plant  = $em->getRepository(Plant::class)->find($idPlant);
+
+        if (!$client) {
+            return $this->json(['message' => "Client introuvable (idClient=$idClient)"], 400);
+        }
+        if (!$plant) {
+            return $this->json(['message' => "Plant introuvable (idPlant=$idPlant)"], 400);
+        }
 
         try {
             $g = new GfClient();
@@ -207,6 +264,7 @@ class GfClientController extends AbstractController
             $g->setNomClient(trim($data['nomClient'] ?? $client->getNomClient()));
             $g->setClient($client);
             $g->setPlant($plant);
+
             $em->persist($g);
             $em->flush();
         } catch (\Throwable $e) {
@@ -226,27 +284,35 @@ class GfClientController extends AbstractController
     public function update(int $id, Request $request, GfClientRepository $repo, EntityManagerInterface $em, LogService $logService): JsonResponse
     {
         $g = $repo->find($id);
-        if (!$g) return $this->json(['message' => 'Sachet introuvable'], 404);
+        if (!$g) {
+            return $this->json(['message' => 'Sachet introuvable'], 404);
+        }
 
         $data = json_decode($request->getContent(), true);
+
         if (isset($data['referenceGf']))        $g->setReferenceGf($data['referenceGf']);
         if (isset($data['numeroLot']))          $g->setNumeroLot($data['numeroLot']);
         if (isset($data['quantiteDisponible'])) $g->setQuantiteDisponible($data['quantiteDisponible']);
         if (isset($data['seuilAlerte']))        $g->setSeuilAlerte($data['seuilAlerte']);
         if (isset($data['nomClient']))          $g->setNomClient($data['nomClient']);
+
         if (isset($data['idClient'])) {
-            $c = $em->getRepository(Client::class)->find($data['idClient']);
-            if ($c) $g->setClient($c);
+            $client = $em->getRepository(Client::class)->find($data['idClient']);
+            if ($client) $g->setClient($client);
         }
         if (isset($data['idPlant'])) {
-            $p = $em->getRepository(Plant::class)->find($data['idPlant']);
-            if ($p) $g->setPlant($p);
+            $plant = $em->getRepository(Plant::class)->find($data['idPlant']);
+            if ($plant) $g->setPlant($plant);
         }
+
         $em->flush();
 
         /** @var \App\Entity\Utilisateur $user */
         $user = $this->getUser();
-        $logService->log($em, $user, 'modification_sachet', 'Sachet lot ' . $g->getNumeroLot() . ' modifié');
+        $logService->log($em, $user, 'modification_sachet',
+            'Sachet lot ' . $g->getNumeroLot() . ' modifié'
+        );
+
         return $this->json(['message' => 'Sachet mis à jour']);
     }
 
@@ -254,14 +320,22 @@ class GfClientController extends AbstractController
     public function delete(int $id, GfClientRepository $repo, EntityManagerInterface $em, LogService $logService): JsonResponse
     {
         $g = $repo->find($id);
-        if (!$g) return $this->json(['message' => 'Sachet introuvable'], 404);
+        if (!$g) {
+            return $this->json(['message' => 'Sachet introuvable'], 404);
+        }
 
         $numeroLot = $g->getNumeroLot();
+
         /** @var \App\Entity\Utilisateur $user */
         $user = $this->getUser();
+
         $em->remove($g);
         $em->flush();
-        $logService->log($em, $user, 'suppression_sachet', 'Sachet lot ' . $numeroLot . ' supprimé');
+
+        $logService->log($em, $user, 'suppression_sachet',
+            'Sachet lot ' . $numeroLot . ' supprimé'
+        );
+
         return $this->json(['message' => 'Sachet supprimé']);
     }
 }

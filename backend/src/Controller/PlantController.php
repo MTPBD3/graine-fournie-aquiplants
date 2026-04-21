@@ -15,7 +15,11 @@ class PlantController extends AbstractController
 {
     private function serialize(Plant $p): array
     {
-        return ['id' => $p->getIdPlant(), 'nomPlant' => $p->getNomPlant(), 'nomEspece' => $p->getNomEspece()];
+        return [
+            'id'        => $p->getIdPlant(),
+            'nomPlant'  => $p->getNomPlant(),
+            'nomEspece' => $p->getNomEspece(),
+        ];
     }
 
     #[Route('', methods: ['GET'])]
@@ -28,7 +32,9 @@ class PlantController extends AbstractController
     public function show(int $id, PlantRepository $repo): JsonResponse
     {
         $p = $repo->find($id);
-        if (!$p) return $this->json(['message' => 'Plante introuvable'], 404);
+        if (!$p) {
+            return $this->json(['message' => 'Plante introuvable'], 404);
+        }
         return $this->json($this->serialize($p));
     }
 
@@ -36,11 +42,14 @@ class PlantController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
         $p = new Plant();
-        $p->setNomPlant(trim($data['nomPlant'] ?? ''));
-        $p->setNomEspece(trim($data['nomEspece'] ?? ''));
+        $p->setNomPlant($data['nomPlant'] ?? '');
+        $p->setNomEspece($data['nomEspece'] ?? '');
+
         $em->persist($p);
         $em->flush();
+
         return $this->json(['id' => $p->getIdPlant(), 'message' => 'Plante créée'], 201);
     }
 
@@ -48,11 +57,17 @@ class PlantController extends AbstractController
     public function update(int $id, Request $request, PlantRepository $repo, EntityManagerInterface $em): JsonResponse
     {
         $p = $repo->find($id);
-        if (!$p) return $this->json(['message' => 'Plante introuvable'], 404);
+        if (!$p) {
+            return $this->json(['message' => 'Plante introuvable'], 404);
+        }
+
         $data = json_decode($request->getContent(), true);
+
         if (isset($data['nomPlant']))  $p->setNomPlant($data['nomPlant']);
         if (isset($data['nomEspece'])) $p->setNomEspece($data['nomEspece']);
+
         $em->flush();
+
         return $this->json(['message' => 'Plante mise à jour']);
     }
 
@@ -60,9 +75,13 @@ class PlantController extends AbstractController
     public function delete(int $id, PlantRepository $repo, EntityManagerInterface $em): JsonResponse
     {
         $p = $repo->find($id);
-        if (!$p) return $this->json(['message' => 'Plante introuvable'], 404);
+        if (!$p) {
+            return $this->json(['message' => 'Plante introuvable'], 404);
+        }
+
         $em->remove($p);
         $em->flush();
+
         return $this->json(null, 204);
     }
 }

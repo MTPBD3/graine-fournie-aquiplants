@@ -21,7 +21,7 @@ class HistoGfDeposee
     private \DateTimeInterface $dateReception;
 
     #[ORM\Column(name: 'statut', type: 'string', columnDefinition: "ENUM('en_attente','en_stock','epuise') NOT NULL DEFAULT 'en_attente'")]
-    private string $statut = 'en_attente';
+    private string $statut;
 
     #[ORM\Column(name: 'note', type: 'string', length: 255, nullable: true)]
     private ?string $note = null;

@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\GfClient;
 use App\Entity\HistoGfDeposee;
+use App\Entity\GfClient;
 use App\Repository\HistoGfDeposeeRepository;
 use App\Service\LogService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,10 +24,13 @@ class HistoGfDeposeeController extends AbstractController
             'statut'          => $h->getStatut(),
             'note'            => $h->getNote(),
             'gfClient' => [
-                'id'        => $h->getGfClient()->getIdGfClient(),
-                'numeroLot' => $h->getGfClient()->getNumeroLot(),
-                'nomClient' => $h->getGfClient()->getNomClient(),
-                'plant'     => ['id' => $h->getGfClient()->getPlant()->getIdPlant(), 'nomPlant' => $h->getGfClient()->getPlant()->getNomPlant()],
+                'id'          => $h->getGfClient()->getIdGfClient(),
+                'numeroLot'   => $h->getGfClient()->getNumeroLot(),
+                'nomClient'   => $h->getGfClient()->getNomClient(),
+                'plant' => [
+                    'id'       => $h->getGfClient()->getPlant()->getIdPlant(),
+                    'nomPlant' => $h->getGfClient()->getPlant()->getNomPlant(),
+                ],
             ],
         ];
     }
@@ -42,7 +45,9 @@ class HistoGfDeposeeController extends AbstractController
     public function show(int $id, HistoGfDeposeeRepository $repo): JsonResponse
     {
         $h = $repo->find($id);
-        if (!$h) return $this->json(['message' => 'Historique introuvable'], 404);
+        if (!$h) {
+            return $this->json(['message' => 'Historique introuvable'], 404);
+        }
         return $this->json($this->serialize($h));
     }
 
@@ -50,8 +55,11 @@ class HistoGfDeposeeController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
         $gfClient = $em->getRepository(GfClient::class)->find($data['idGfClient'] ?? 0);
-        if (!$gfClient) return $this->json(['message' => 'GfClient introuvable'], 400);
+        if (!$gfClient) {
+            return $this->json(['message' => 'GfClient introuvable'], 400);
+        }
 
         $h = new HistoGfDeposee();
         $h->setQuantiteDeposee($data['quantiteDeposee'] ?? 0);
@@ -59,6 +67,7 @@ class HistoGfDeposeeController extends AbstractController
         $h->setStatut($data['statut'] ?? 'en_attente');
         $h->setNote($data['note'] ?? null);
         $h->setGfClient($gfClient);
+
         $em->persist($h);
         $em->flush();
 
@@ -69,7 +78,9 @@ class HistoGfDeposeeController extends AbstractController
     public function update(int $id, Request $request, HistoGfDeposeeRepository $repo, EntityManagerInterface $em, LogService $logService): JsonResponse
     {
         $h = $repo->find($id);
-        if (!$h) return $this->json(['message' => 'Historique introuvable'], 404);
+        if (!$h) {
+            return $this->json(['message' => 'Historique introuvable'], 404);
+        }
 
         $data        = json_decode($request->getContent(), true);
         $statutAvant = $h->getStatut();
@@ -78,6 +89,7 @@ class HistoGfDeposeeController extends AbstractController
         if (isset($data['quantiteDeposee'])) $h->setQuantiteDeposee($data['quantiteDeposee']);
         if (isset($data['note']))            $h->setNote($data['note']);
         if (isset($data['dateReception']))   $h->setDateReception(new \DateTime($data['dateReception']));
+
         $em->flush();
 
         if (($data['statut'] ?? null) === 'en_stock' && $statutAvant !== 'en_stock') {
@@ -95,9 +107,13 @@ class HistoGfDeposeeController extends AbstractController
     public function delete(int $id, HistoGfDeposeeRepository $repo, EntityManagerInterface $em): JsonResponse
     {
         $h = $repo->find($id);
-        if (!$h) return $this->json(['message' => 'Historique introuvable'], 404);
+        if (!$h) {
+            return $this->json(['message' => 'Historique introuvable'], 404);
+        }
+
         $em->remove($h);
         $em->flush();
+
         return $this->json(null, 204);
     }
 }

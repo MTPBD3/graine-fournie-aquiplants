@@ -32,7 +32,9 @@ class ClientController extends AbstractController
     public function show(int $id, ClientRepository $repo): JsonResponse
     {
         $c = $repo->find($id);
-        if (!$c) return $this->json(['message' => 'Client introuvable'], 404);
+        if (!$c) {
+            return $this->json(['message' => 'Client introuvable'], 404);
+        }
         return $this->json($this->serialize($c));
     }
 
@@ -40,11 +42,14 @@ class ClientController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
         $c = new Client();
-        $c->setNomClient(trim($data['nom'] ?? ''));
-        $c->setPrenomClient(trim($data['prenom'] ?? ''));
+        $c->setNomClient($data['nom'] ?? '');
+        $c->setPrenomClient($data['prenom'] ?? '');
+
         $em->persist($c);
         $em->flush();
+
         return $this->json(['id' => $c->getIdClient(), 'message' => 'Client créé'], 201);
     }
 
@@ -52,11 +57,17 @@ class ClientController extends AbstractController
     public function update(int $id, Request $request, ClientRepository $repo, EntityManagerInterface $em): JsonResponse
     {
         $c = $repo->find($id);
-        if (!$c) return $this->json(['message' => 'Client introuvable'], 404);
+        if (!$c) {
+            return $this->json(['message' => 'Client introuvable'], 404);
+        }
+
         $data = json_decode($request->getContent(), true);
+
         if (isset($data['nom']))    $c->setNomClient($data['nom']);
         if (isset($data['prenom'])) $c->setPrenomClient($data['prenom']);
+
         $em->flush();
+
         return $this->json(['message' => 'Client mis à jour']);
     }
 
@@ -64,9 +75,13 @@ class ClientController extends AbstractController
     public function delete(int $id, ClientRepository $repo, EntityManagerInterface $em): JsonResponse
     {
         $c = $repo->find($id);
-        if (!$c) return $this->json(['message' => 'Client introuvable'], 404);
+        if (!$c) {
+            return $this->json(['message' => 'Client introuvable'], 404);
+        }
+
         $em->remove($c);
         $em->flush();
+
         return $this->json(null, 204);
     }
 }

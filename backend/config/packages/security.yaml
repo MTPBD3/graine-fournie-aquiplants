@@ -1,4 +1,7 @@
 security:
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_EMPLOYE]
+
     password_hashers:
         App\Entity\Utilisateur:
             algorithm: bcrypt
@@ -31,9 +34,5 @@ security:
 
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api/utilisateurs, roles: ROLE_ADMIN }
-        - { path: ^/api/logs, roles: ROLE_ADMIN }
+        - { path: ^/api/admin, roles: ROLE_ADMIN }
         - { path: ^/api, roles: ROLE_EMPLOYE }
-
-    role_hierarchy:
-        ROLE_ADMIN: ROLE_EMPLOYE

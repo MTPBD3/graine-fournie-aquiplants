@@ -8,23 +8,36 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/api/gf-histo-clients')]
 class GfHistoClientController extends AbstractController
 {
-    #[Route('', methods: ['GET'])]
+    #[Route('/api/gf-histo-clients', methods: ['GET'])]
     public function index(Request $request, GfHistoClientRepository $repo): JsonResponse
     {
-        $idGfClient = $request->query->getInt('idGfClient');
-        $items = $idGfClient
-            ? $repo->findBy(['gfClient' => $idGfClient], ['dateSemis' => 'DESC'])
-            : $repo->findBy([], ['dateSemis' => 'DESC'], 100);
+        $idGfClient = $request->query->getInt('idGfClient', 0);
 
-        return $this->json(array_map(fn($h) => [
-            'id'              => $h->getIdHisto(),
-            'quantiteSemee'   => $h->getQuantiteSemee(),
-            'dateSemis'       => $h->getDateSemis()->format('Y-m-d'),
-            'nbGraineParMotte'=> $h->getNbGraineParMotte(),
-            'nomUv'           => $h->getNomUv(),
-        ], $items));
+        if ($idGfClient === 0) {
+            return $this->json(['message' => 'Paramètre idGfClient requis'], 400);
+        }
+
+        $items = $repo->createQueryBuilder('h')
+            ->where('h.gfClient = :id')
+            ->setParameter('id', $idGfClient)
+            ->orderBy('h.dateSemis', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        $data = array_map(fn($h) => [
+            'id'               => $h->getIdHisto(),
+            'dateSemis'        => $h->getDateSemis()->format('Y-m-d'),
+            'quantiteSemee'    => $h->getQuantiteSemee(),
+            'nomUv'            => $h->getNomUv(),
+            'nbGraineParMotte' => $h->getNbGraineParMotte(),
+            'uv' => [
+                'id'    => $h->getUv()->getIdUv(),
+                'nomUv' => $h->getUv()->getNomUv(),
+            ],
+        ], $items);
+
+        return $this->json($data);
     }
 }

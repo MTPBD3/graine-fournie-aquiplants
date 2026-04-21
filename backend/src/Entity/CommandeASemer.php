@@ -34,13 +34,13 @@ class CommandeASemer
     public function getIdCommande(): ?int { return $this->idCommande; }
 
     public function getQuantiteASemer(): int { return $this->quantiteASemer; }
-    public function setQuantiteASemer(int $q): static { $this->quantiteASemer = $q; return $this; }
+    public function setQuantiteASemer(int $quantiteASemer): static { $this->quantiteASemer = $quantiteASemer; return $this; }
 
     public function getDateSemis(): \DateTimeInterface { return $this->dateSemis; }
-    public function setDateSemis(\DateTimeInterface $d): static { $this->dateSemis = $d; return $this; }
+    public function setDateSemis(\DateTimeInterface $dateSemis): static { $this->dateSemis = $dateSemis; return $this; }
 
     public function getDateLivraison(): \DateTimeInterface { return $this->dateLivraison; }
-    public function setDateLivraison(\DateTimeInterface $d): static { $this->dateLivraison = $d; return $this; }
+    public function setDateLivraison(\DateTimeInterface $dateLivraison): static { $this->dateLivraison = $dateLivraison; return $this; }
 
     public function getUv(): Uv { return $this->uv; }
     public function setUv(Uv $uv): static { $this->uv = $uv; return $this; }
