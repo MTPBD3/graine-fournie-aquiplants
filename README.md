@@ -1,5 +1,7 @@
 # 🌱 Graine Fournie AQUIPLANTS
 
+[![CI](https://github.com/MTPBD3/graine-fournie-aquiplants/actions/workflows/ci.yml/badge.svg)](https://github.com/MTPBD3/graine-fournie-aquiplants/actions/workflows/ci.yml)
+
 Application web de gestion des arrivées et du stockage de graines fournies par les clients de la pépinière AQUIPLANTS (Eyragues, France).
 
 ## Contexte
