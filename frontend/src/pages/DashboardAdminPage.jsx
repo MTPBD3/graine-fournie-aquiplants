@@ -278,9 +278,6 @@ export default function DashboardAdminPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchMode, setSearchMode]   = useState('client');
 
-  const sessionCode = useMemo(() =>
-    Array.from({ length: 6 }, () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'[Math.floor(Math.random() * 36)]).join(''), []);
-
   const today = useMemo(() =>
     new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }), []);
 
@@ -400,14 +397,9 @@ export default function DashboardAdminPage() {
               <SettingsIcon fontSize="small" />
             </IconButton>
             {!isMobile && (
-              <Box sx={{ ml: 0.5, textAlign: 'right' }}>
-                <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary', fontSize: '0.72rem' }}>
-                  {today}
-                </Typography>
-                <Typography variant="caption" sx={{ display: 'block', color: 'text.disabled', fontSize: '0.68rem', fontFamily: '"DM Mono", monospace' }}>
-                  SESSION #{sessionCode}
-                </Typography>
-              </Box>
+              <Typography variant="caption" sx={{ ml: 0.5, color: 'text.secondary', fontSize: '0.72rem' }}>
+                {today}
+              </Typography>
             )}
           </Box>
         </Box>
