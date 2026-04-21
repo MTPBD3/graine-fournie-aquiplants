@@ -174,7 +174,7 @@ function SmartSearch({ searchMode, onModeChange, onSelect }) {
   };
 
   return (
-    <Box ref={containerRef} sx={{ position: 'relative', flex: 1, maxWidth: 420 }}>
+    <Box ref={containerRef} sx={{ position: 'relative', flex: 1, maxWidth: { xs: '100%', md: 420 }, minWidth: 0 }}>
       <Box sx={{ display: 'flex', alignItems: 'stretch' }}>
 
         {/* Toggle Client / Graine */}
@@ -371,13 +371,13 @@ export default function DashboardAdminPage() {
         mb: 3,
       }}>
         <Box sx={{
-          display: 'flex', alignItems: 'center', gap: 2,
+          display: 'flex', alignItems: 'center', gap: { xs: 1, md: 2 },
           minHeight: 56,
-          flexWrap: { xs: 'wrap', md: 'nowrap' },
+          flexWrap: 'nowrap',
         }}>
 
-          {/* Titre — gauche */}
-          <Box sx={{ flex: '0 0 auto' }}>
+          {/* Titre — gauche, masqué sur mobile */}
+          <Box sx={{ display: { xs: 'none', md: 'block' }, flex: '0 0 auto' }}>
             <Typography sx={{ fontWeight: 800, fontSize: '1rem', color: '#1B5E20', lineHeight: 1.2 }}>
               Tableau de bord
             </Typography>
