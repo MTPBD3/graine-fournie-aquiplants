@@ -155,6 +155,20 @@ class EmplacementController extends AbstractController
         }
 
         $gfClient->setEmplacement($e);
+
+        $depots = $gfClient->getHistoDepots()->toArray();
+        if (!empty($depots)) {
+            usort($depots, fn($a, $b) => $b->getIdHistoDepot() - $a->getIdHistoDepot());
+            $depots[0]->setStatut('en_stock');
+        } else {
+            $histo = new HistoGfDeposee();
+            $histo->setStatut('en_stock');
+            $histo->setQuantiteDeposee($gfClient->getQuantiteDisponible());
+            $histo->setDateReception(new \DateTime('today'));
+            $histo->setGfClient($gfClient);
+            $em->persist($histo);
+        }
+
         $em->flush();
         $em->refresh($e);
 
