@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box, Grid, Paper, Typography, Chip, Divider, CircularProgress,
@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
+import MenuIcon from '@mui/icons-material/Menu';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
@@ -22,6 +23,7 @@ import GrassIcon from '@mui/icons-material/Grass';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { useApi } from '../hooks/useApi';
 import { useAuth } from '../context/AuthContext';
+import { DrawerOpenContext } from '../components/Layout';
 import { formatDate } from '../utils/formatDate';
 
 const DONUT_COLORS = ['#1B5E20', '#D4E157', '#FF8F00', '#388E3C', '#81C784', '#E53935'];
@@ -267,9 +269,10 @@ function SmartSearch({ searchMode, onModeChange, onSelect }) {
 // ── Page principale ───────────────────────────────────────────────────────────
 export default function DashboardAdminPage() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const theme    = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const navigate    = useNavigate();
+  const openDrawer  = useContext(DrawerOpenContext);
+  const theme       = useTheme();
+  const isMobile    = useMediaQuery(theme.breakpoints.down('md'));
   const handleLogout = () => { logout(); navigate('/'); };
 
   const { data: stats,    loading: lStats  } = useApi('/api/statistiques');
@@ -361,22 +364,29 @@ export default function DashboardAdminPage() {
       {/* ── HEADER UNIQUE ───────────────────────────────────────────────── */}
       <Box sx={{
         position: 'sticky',
-        top: { xs: 56, md: 0 },
+        top: 0,
         zIndex: 100,
         bgcolor: '#fff',
         borderBottom: '1px solid #E8F5E9',
         mx: { xs: -1.5, md: -3 },
-        px: { xs: 1.5, md: 3 },
+        px: { xs: 1, md: 3 },
         py: 0,
         mb: 3,
       }}>
         <Box sx={{
-          display: 'flex', alignItems: 'center', gap: { xs: 1, md: 2 },
+          display: 'flex', alignItems: 'center', gap: { xs: 0.75, md: 2 },
           minHeight: 56,
           flexWrap: 'nowrap',
         }}>
 
-          {/* Titre — gauche, masqué sur mobile */}
+          {/* Hamburger — mobile uniquement */}
+          {isMobile && (
+            <IconButton edge="start" onClick={openDrawer} sx={{ color: 'text.primary', flexShrink: 0 }}>
+              <MenuIcon />
+            </IconButton>
+          )}
+
+          {/* Titre — desktop uniquement */}
           <Box sx={{ display: { xs: 'none', md: 'block' }, flex: '0 0 auto' }}>
             <Typography sx={{ fontWeight: 800, fontSize: '1rem', color: '#1B5E20', lineHeight: 1.2 }}>
               Tableau de bord

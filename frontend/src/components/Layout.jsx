@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, createContext } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+
+export const DrawerOpenContext = createContext(() => {});
 import {
   Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText,
   AppBar, Toolbar, Typography, IconButton, Avatar, Divider,
@@ -194,78 +196,84 @@ function SidebarContent({ onNavigate }) {
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate  = useNavigate();
+  const location  = useLocation();
   const theme     = useTheme();
   const isMobile  = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleLogout = () => { logout(); navigate('/'); };
 
+  // Le dashboard gère son propre header mobile intégré
+  const dashboardActive = location.pathname.startsWith('/dashboard');
+
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <DrawerOpenContext.Provider value={() => setDrawerOpen(true)}>
+      <Box sx={{ display: 'flex', minHeight: '100vh' }}>
 
-      {/* Sidebar desktop permanente */}
-      {!isMobile && (
-        <Drawer
-          variant="permanent"
-          sx={{
-            width: SIDEBAR_WIDTH, flexShrink: 0,
-            '& .MuiDrawer-paper': { width: SIDEBAR_WIDTH, boxSizing: 'border-box', borderRight: 'none' },
-          }}
-        >
-          <SidebarContent />
-        </Drawer>
-      )}
-
-      {/* Drawer mobile temporaire */}
-      {isMobile && (
-        <Drawer
-          variant="temporary"
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          ModalProps={{ keepMounted: true }}
-          sx={{ '& .MuiDrawer-paper': { width: SIDEBAR_WIDTH, boxSizing: 'border-box', borderRight: 'none' } }}
-        >
-          <SidebarContent onNavigate={() => setDrawerOpen(false)} />
-        </Drawer>
-      )}
-
-      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-
-        {/* Topbar — mobile uniquement (hamburger + titre) */}
-        {isMobile && (
-          <AppBar
-            position="sticky"
-            elevation={0}
-            sx={{ bgcolor: '#FFFFFF', borderBottom: '1px solid #E8F5E9', color: 'text.primary' }}
+        {/* Sidebar desktop permanente */}
+        {!isMobile && (
+          <Drawer
+            variant="permanent"
+            sx={{
+              width: SIDEBAR_WIDTH, flexShrink: 0,
+              '& .MuiDrawer-paper': { width: SIDEBAR_WIDTH, boxSizing: 'border-box', borderRight: 'none' },
+            }}
           >
-            <Toolbar sx={{ minHeight: 56, gap: 1, px: 1.5 }}>
-              <IconButton edge="start" onClick={() => setDrawerOpen(true)} sx={{ color: 'text.primary' }}>
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#1B5E20', fontSize: '0.9rem' }}>
-                Graine Fournie
-              </Typography>
-              <Box sx={{ flexGrow: 1 }} />
-              <Tooltip title="Déconnexion">
-                <Avatar
-                  sx={{ width: 34, height: 34, bgcolor: '#1B5E20', fontSize: '0.85rem', cursor: 'pointer' }}
-                  onClick={handleLogout}
-                >
-                  {user?.email?.[0]?.toUpperCase() ?? 'U'}
-                </Avatar>
-              </Tooltip>
-            </Toolbar>
-          </AppBar>
+            <SidebarContent />
+          </Drawer>
         )}
 
-        {/* Contenu de la page */}
-        <Box
-          component="main"
-          sx={{ flexGrow: 1, p: { xs: 1.5, md: 3 }, bgcolor: '#F7FAF3' }}
-        >
-          <Outlet />
+        {/* Drawer mobile temporaire */}
+        {isMobile && (
+          <Drawer
+            variant="temporary"
+            open={drawerOpen}
+            onClose={() => setDrawerOpen(false)}
+            ModalProps={{ keepMounted: true }}
+            sx={{ '& .MuiDrawer-paper': { width: SIDEBAR_WIDTH, boxSizing: 'border-box', borderRight: 'none' } }}
+          >
+            <SidebarContent onNavigate={() => setDrawerOpen(false)} />
+          </Drawer>
+        )}
+
+        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+
+          {/* Topbar mobile — masqué sur le dashboard (qui a son propre header mobile) */}
+          {isMobile && !dashboardActive && (
+            <AppBar
+              position="sticky"
+              elevation={0}
+              sx={{ bgcolor: '#FFFFFF', borderBottom: '1px solid #E8F5E9', color: 'text.primary' }}
+            >
+              <Toolbar sx={{ minHeight: 56, gap: 1, px: 1.5 }}>
+                <IconButton edge="start" onClick={() => setDrawerOpen(true)} sx={{ color: 'text.primary' }}>
+                  <MenuIcon />
+                </IconButton>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#1B5E20', fontSize: '0.9rem' }}>
+                  Graine Fournie
+                </Typography>
+                <Box sx={{ flexGrow: 1 }} />
+                <Tooltip title="Déconnexion">
+                  <Avatar
+                    sx={{ width: 34, height: 34, bgcolor: '#1B5E20', fontSize: '0.85rem', cursor: 'pointer' }}
+                    onClick={handleLogout}
+                  >
+                    {user?.email?.[0]?.toUpperCase() ?? 'U'}
+                  </Avatar>
+                </Tooltip>
+              </Toolbar>
+            </AppBar>
+          )}
+
+          {/* Contenu de la page */}
+          <Box
+            component="main"
+            sx={{ flexGrow: 1, p: { xs: 1.5, md: 3 }, bgcolor: '#F7FAF3' }}
+          >
+            <Outlet />
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </DrawerOpenContext.Provider>
   );
 }
