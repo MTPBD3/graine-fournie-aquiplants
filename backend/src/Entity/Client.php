@@ -28,14 +28,10 @@ class Client
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: CommandeASemer::class)]
     private Collection $commandes;
 
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Emplacement::class)]
-    private Collection $emplacements;
-
     public function __construct()
     {
         $this->gfClients = new ArrayCollection();
         $this->commandes = new ArrayCollection();
-        $this->emplacements = new ArrayCollection();
     }
 
     public function getIdClient(): ?int { return $this->idClient; }
@@ -48,5 +44,4 @@ class Client
 
     public function getGfClients(): Collection { return $this->gfClients; }
     public function getCommandes(): Collection { return $this->commandes; }
-    public function getEmplacements(): Collection { return $this->emplacements; }
 }

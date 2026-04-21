@@ -19,7 +19,7 @@ class AppFixtures extends Fixture
         $admin->setPrenom('AQUIPLANTS');
         $admin->setEmail('admin@aquiplants.fr');
         $admin->setRole('admin');
-        $admin->setMdpCrypte($this->hasher->hashPassword($admin, 'admin1234'));
+        $admin->setMdpCrypte($this->hasher->hashPassword($admin, 'test'));
         $manager->persist($admin);
 
         // Employé de test
@@ -28,7 +28,7 @@ class AppFixtures extends Fixture
         $employe->setPrenom('Jean');
         $employe->setEmail('employe@aquiplants.fr');
         $employe->setRole('employe');
-        $employe->setMdpCrypte($this->hasher->hashPassword($employe, 'employe1234'));
+        $employe->setMdpCrypte($this->hasher->hashPassword($employe, 'test'));
         $manager->persist($employe);
 
         $manager->flush();
