@@ -222,16 +222,9 @@ class GfClientController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         // ── Validation des entrées ────────────────────────────────────────────
-        $referenceGf = trim($data['referenceGf'] ?? '');
         $numeroLot   = trim($data['numeroLot'] ?? '');
         $quantiteRaw = $data['quantiteDisponible'] ?? null;
 
-        if ($referenceGf === '') {
-            return $this->json(['message' => 'La référence GF est obligatoire'], 400);
-        }
-        if (strlen($referenceGf) > 50) {
-            return $this->json(['message' => 'La référence GF ne peut pas dépasser 50 caractères'], 400);
-        }
         if ($numeroLot === '') {
             return $this->json(['message' => 'Le numéro de lot est obligatoire'], 400);
         }
@@ -257,7 +250,6 @@ class GfClientController extends AbstractController
 
         try {
             $g = new GfClient();
-            $g->setReferenceGf($referenceGf);
             $g->setNumeroLot($numeroLot);
             $g->setQuantiteDisponible((int) $quantiteRaw);
             $g->setSeuilAlerte((int) ($data['seuilAlerte'] ?? 0));
@@ -290,7 +282,6 @@ class GfClientController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        if (isset($data['referenceGf']))        $g->setReferenceGf($data['referenceGf']);
         if (isset($data['numeroLot']))          $g->setNumeroLot($data['numeroLot']);
         if (isset($data['quantiteDisponible'])) $g->setQuantiteDisponible($data['quantiteDisponible']);
         if (isset($data['seuilAlerte']))        $g->setSeuilAlerte($data['seuilAlerte']);

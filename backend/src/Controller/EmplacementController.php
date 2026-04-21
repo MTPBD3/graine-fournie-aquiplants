@@ -30,7 +30,6 @@ class EmplacementController extends AbstractController
 
         return [
             'id'                 => $gf->getIdGfClient(),
-            'referenceGf'        => $gf->getReferenceGf(),
             'quantiteDisponible' => $gf->getQuantiteDisponible(),
             'nomClient'          => $gf->getNomClient(),
             'statut'             => $statut ?? 'en_attente',

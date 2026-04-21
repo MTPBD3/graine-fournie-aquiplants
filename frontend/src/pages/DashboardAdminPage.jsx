@@ -154,7 +154,7 @@ function SmartSearch({ searchMode, onModeChange, onSelect }) {
   const handleSelect = (item) => {
     const label = searchMode === 'client'
       ? `${item.prenomClient ?? ''} ${item.nomClient ?? ''}`.trim()
-      : `${item.referenceGf ?? ''} · ${item.plant?.nomPlant ?? ''}`.trim();
+      : `${item.numeroLot ?? ''} · ${item.plant?.nomPlant ?? ''}`.trim();
     setQuery(label);
     setOpen(false);
     onSelect(label);
@@ -240,7 +240,7 @@ function SmartSearch({ searchMode, onModeChange, onSelect }) {
             results.map((item, i) => {
               const label = searchMode === 'client'
                 ? `${item.prenomClient ?? ''} ${item.nomClient ?? ''}`.trim()
-                : `${item.referenceGf ?? ''} · ${item.plant?.nomPlant ?? ''}`;
+                : `${item.numeroLot ?? ''} · ${item.plant?.nomPlant ?? ''}`;
               return (
                 <Box
                   key={item.idGfClient ?? item.idClient ?? i}

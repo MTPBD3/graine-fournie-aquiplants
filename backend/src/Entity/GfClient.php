@@ -16,9 +16,6 @@ class GfClient
     #[ORM\Column(name: 'id_gf_client', type: 'integer')]
     private ?int $idGfClient = null;
 
-    #[ORM\Column(name: 'reference_gf', type: 'string', length: 50)]
-    private string $referenceGf;
-
     #[ORM\Column(name: 'numero_lot', type: 'string', length: 50)]
     private string $numeroLot;
 
@@ -56,9 +53,6 @@ class GfClient
     }
 
     public function getIdGfClient(): ?int { return $this->idGfClient; }
-
-    public function getReferenceGf(): string { return $this->referenceGf; }
-    public function setReferenceGf(string $referenceGf): static { $this->referenceGf = $referenceGf; return $this; }
 
     public function getNumeroLot(): string { return $this->numeroLot; }
     public function setNumeroLot(string $numeroLot): static { $this->numeroLot = $numeroLot; return $this; }

@@ -22,7 +22,6 @@ const DRAFT_KEY = 'gf_sachet_draft';
 const emptyForm = {
   idClient: '',
   idPlant: '',
-  referenceGf: '',
   numeroLot: '',
   quantiteDisponible: '',
 };
@@ -254,9 +253,6 @@ export default function ArriveesSachetsPage() {
     const errs = {};
     if (!f.idClient) errs.idClient = 'Veuillez sélectionner un client.';
     if (!f.idPlant)  errs.idPlant  = 'Veuillez sélectionner une plante.';
-    const ref = f.referenceGf.trim();
-    if (!ref) errs.referenceGf = 'La référence est obligatoire.';
-    else if (ref.length > 50) errs.referenceGf = 'Max 50 caractères.';
     const lot = f.numeroLot.trim();
     if (!lot) errs.numeroLot = 'Le numéro de lot est obligatoire.';
     else if (lot.length > 50) errs.numeroLot = 'Max 50 caractères.';
@@ -305,7 +301,6 @@ export default function ArriveesSachetsPage() {
       await apiRequest('/api/gf-clients', 'POST', {
         idClient: Number(form.idClient),
         idPlant: Number(form.idPlant),
-        referenceGf: sanitize(form.referenceGf),
         numeroLot: sanitize(form.numeroLot),
         quantiteDisponible: Number(form.quantiteDisponible) || 0,
         seuilAlerte: 0,
@@ -714,13 +709,13 @@ export default function ArriveesSachetsPage() {
               {/* Select Client + bouton "+" */}
               <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
                 <FormControl fullWidth size="small" required error={!!formErrors.idClient}>
-                  <InputLabel>Client</InputLabel>
+                  <InputLabel id="select-client-label">Client</InputLabel>
                   <Select
+                    labelId="select-client-label"
                     name="idClient"
                     value={form.idClient}
                     label="Client"
                     onChange={handleChange}
-                    displayEmpty
                   >
                     {clientsList.length === 0 && (
                       <MenuItem disabled value="">
@@ -757,13 +752,13 @@ export default function ArriveesSachetsPage() {
               {/* Select Plante + bouton "+" */}
               <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
                 <FormControl fullWidth size="small" required error={!!formErrors.idPlant}>
-                  <InputLabel>Plante / espèce</InputLabel>
+                  <InputLabel id="select-plant-label">Plante / espèce</InputLabel>
                   <Select
+                    labelId="select-plant-label"
                     name="idPlant"
                     value={form.idPlant}
                     label="Plante / espèce"
                     onChange={handleChange}
-                    displayEmpty
                   >
                     {plantsList.length === 0 && (
                       <MenuItem disabled value="">
@@ -798,18 +793,6 @@ export default function ArriveesSachetsPage() {
               </Box>
 
               <TextField
-                label="Référence sachet"
-                name="referenceGf"
-                value={form.referenceGf}
-                onChange={handleChange}
-                fullWidth
-                size="small"
-                placeholder="GF-XXXX-XXX"
-                error={!!formErrors.referenceGf}
-                helperText={formErrors.referenceGf}
-                inputProps={{ maxLength: 50 }}
-              />
-              <TextField
                 label="Numéro de lot"
                 name="numeroLot"
                 value={form.numeroLot}
@@ -838,7 +821,6 @@ export default function ArriveesSachetsPage() {
               {[
                 { label: 'Client',        value: selectedClient ? `${selectedClient.nom} ${selectedClient.prenom}` : '—' },
                 { label: 'Plante',        value: selectedPlant ? `${selectedPlant.nomPlant}${selectedPlant.nomEspece ? ` (${selectedPlant.nomEspece})` : ''}` : '—' },
-                { label: 'Référence',     value: form.referenceGf || '(auto)' },
                 { label: 'Numéro de lot', value: form.numeroLot || '—' },
                 { label: 'Quantité',      value: form.quantiteDisponible || '0' },
               ].map(({ label, value }) => (
