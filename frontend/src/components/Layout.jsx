@@ -1,23 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import {
-  Box,
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Avatar,
-  Divider,
-  Tooltip,
-  InputBase,
-  useMediaQuery,
-  useTheme,
-  Collapse,
+  Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText,
+  AppBar, Toolbar, Typography, IconButton, Avatar, Divider,
+  Tooltip, InputBase, Badge, Chip,
+  useMediaQuery, useTheme,
 } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
@@ -31,125 +18,203 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../context/AuthContext';
+import { useApi } from '../hooks/useApi';
 
-const SIDEBAR_WIDTH = 240;
-const SIDEBAR_BG = '#1B5E20';
-const SIDEBAR_TEXT = '#FFFFFF';
-const SIDEBAR_ACTIVE_BG = 'rgba(255,255,255,0.15)';
+const SIDEBAR_WIDTH  = 248;
+const SIDEBAR_BG     = '#1B5E20';
+const SIDEBAR_TEXT   = '#FFFFFF';
+const SIDEBAR_ACTIVE = 'rgba(212,225,87,0.18)';
 
-const menuItems = [
-  { label: 'Tableau de bord', icon: <DashboardIcon />, path: '/dashboard', roles: ['ROLE_EMPLOYE', 'ROLE_ADMIN'] },
-  { label: 'Arrivée sachet', icon: <Inventory2Icon />, path: '/arrivees-sachets', roles: ['ROLE_EMPLOYE', 'ROLE_ADMIN'] },
-  { label: 'Gestion stocks', icon: <WarehouseIcon />, path: '/gestion-stocks', roles: ['ROLE_EMPLOYE', 'ROLE_ADMIN'] },
-  { label: 'Statistiques', icon: <BarChartIcon />, path: '/statistiques', roles: ['ROLE_EMPLOYE', 'ROLE_ADMIN'] },
-  { label: 'Alertes stock', icon: <NotificationsActiveIcon />, path: '/alertes', roles: ['ROLE_ADMIN'] },
-  { label: 'Gestion utilisateurs', icon: <PeopleIcon />, path: '/gestion-utilisateurs', roles: ['ROLE_ADMIN'] },
-  { label: 'Paramètres', icon: <SettingsIcon />, path: '/parametres', roles: ['ROLE_EMPLOYE', 'ROLE_ADMIN'] },
+// ── Menu structuré en sections ────────────────────────────────────────────────
+const MENU_SECTIONS = [
+  {
+    label: 'PRINCIPALE',
+    items: [
+      { label: 'Tableau de bord',    icon: <DashboardIcon />,          path: '/dashboard',            roles: ['ROLE_EMPLOYE', 'ROLE_ADMIN'] },
+      { label: "Arrivée d'un sachet", icon: <Inventory2Icon />,         path: '/arrivees-sachets',     roles: ['ROLE_EMPLOYE', 'ROLE_ADMIN'], badgeKey: 'enAttente' },
+      { label: 'Gestion des stocks', icon: <WarehouseIcon />,           path: '/gestion-stocks',       roles: ['ROLE_EMPLOYE', 'ROLE_ADMIN'], badgeKey: 'enStock' },
+    ],
+  },
+  {
+    label: 'ANALYSE',
+    items: [
+      { label: 'Statistiques',       icon: <BarChartIcon />,            path: '/statistiques',         roles: ['ROLE_EMPLOYE', 'ROLE_ADMIN'] },
+      { label: 'Alertes stock',      icon: <NotificationsActiveIcon />, path: '/alertes',              roles: ['ROLE_ADMIN'], badgeKey: 'alertes' },
+    ],
+  },
+  {
+    label: 'ADMINISTRATION',
+    items: [
+      { label: 'Utilisateurs',       icon: <PeopleIcon />,              path: '/gestion-utilisateurs', roles: ['ROLE_ADMIN'] },
+      { label: 'Paramètres',         icon: <SettingsIcon />,            path: '/parametres',           roles: ['ROLE_EMPLOYE', 'ROLE_ADMIN'] },
+    ],
+  },
 ];
 
+// ── Contenu de la sidebar ─────────────────────────────────────────────────────
 function SidebarContent({ onNavigate }) {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate  = useNavigate();
+  const location  = useLocation();
+
+  const { data: stats  } = useApi('/api/statistiques');
+  const { data: alertes } = useApi('/api/alertes');
 
   const userRoles = user?.roles ?? [];
-  const visibleItems = menuItems.filter((item) =>
-    item.roles.some((r) => userRoles.includes(r))
-  );
+  const isAdmin   = userRoles.includes('ROLE_ADMIN');
 
-  const handleNav = (path) => {
-    navigate(path);
-    onNavigate?.();
+  const badges = {
+    enAttente: stats?.parStatut?.en_attente ?? 0,
+    enStock:   stats?.parStatut?.en_stock   ?? 0,
+    alertes:   Array.isArray(alertes) ? alertes.length : 0,
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-    onNavigate?.();
-  };
+  const displayName = user?.prenom
+    ? `${user.prenom}${user.nom ? ' ' + user.nom[0].toUpperCase() + '.' : ''}`
+    : (user?.email?.split('@')[0] ?? 'Utilisateur');
+
+  const initials = displayName
+    .split(' ')
+    .map(w => w[0] ?? '')
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+
+  const roleLabel = isAdmin ? 'Administrateur' : 'Employé';
+
+  const handleNav = (path) => { navigate(path); onNavigate?.(); };
+  const handleLogout = () => { logout(); navigate('/'); onNavigate?.(); };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: SIDEBAR_BG, color: SIDEBAR_TEXT }}>
-      <Box sx={{ px: 2.5, py: 3 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#D4E157', lineHeight: 1.2, fontSize: '0.95rem' }}>
-          Graine Fournie
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', bgcolor: SIDEBAR_BG, color: SIDEBAR_TEXT }}>
+
+      {/* Logo */}
+      <Box sx={{ px: 2.5, pt: 3, pb: 2 }}>
+        <Typography sx={{ fontWeight: 800, color: '#D4E157', lineHeight: 1.1, fontSize: '1rem', letterSpacing: '0.01em' }}>
+          AQUIPLANTS
         </Typography>
-        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem' }}>
-          AQUIPLANTS · Eyragues
+        <Typography sx={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.72rem', letterSpacing: '0.08em', mt: 0.25 }}>
+          GRAINE FOURNIE
         </Typography>
       </Box>
 
-      <Divider sx={{ borderColor: 'rgba(255,255,255,0.15)', mx: 2 }} />
+      <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)', mx: 2, mb: 1 }} />
 
-      <List sx={{ px: 1, mt: 1, flexGrow: 1 }}>
-        {visibleItems.map((item) => {
-          const active = location.pathname.startsWith(item.path);
+      {/* Sections de navigation */}
+      <Box sx={{ flex: 1, overflowY: 'auto', px: 1 }}>
+        {MENU_SECTIONS.map((section, si) => {
+          const visibleItems = section.items.filter(item =>
+            item.roles.some(r => userRoles.includes(r))
+          );
+          if (visibleItems.length === 0) return null;
+
           return (
-            <ListItemButton
-              key={item.path}
-              onClick={() => handleNav(item.path)}
-              sx={{
-                borderRadius: 2,
-                mb: 0.5,
-                backgroundColor: active ? SIDEBAR_ACTIVE_BG : 'transparent',
-                '&:hover': { backgroundColor: SIDEBAR_ACTIVE_BG },
-                color: SIDEBAR_TEXT,
-              }}
-            >
-              <ListItemIcon sx={{ color: active ? '#D4E157' : 'rgba(255,255,255,0.7)', minWidth: 38 }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText
-                primary={item.label}
-                slotProps={{ primary: { fontSize: '0.875rem', fontWeight: active ? 600 : 400 } }}
-              />
-            </ListItemButton>
+            <Box key={section.label} sx={{ mt: si === 0 ? 0.5 : 2 }}>
+              <Typography sx={{
+                px: 1.5, mb: 0.5,
+                fontSize: '0.65rem', fontWeight: 700,
+                color: 'rgba(255,255,255,0.35)',
+                letterSpacing: '0.1em',
+              }}>
+                {section.label}
+              </Typography>
+              <List disablePadding>
+                {visibleItems.map(item => {
+                  const active     = location.pathname.startsWith(item.path);
+                  const badgeCount = item.badgeKey ? (badges[item.badgeKey] ?? 0) : 0;
+                  return (
+                    <ListItemButton
+                      key={item.path}
+                      onClick={() => handleNav(item.path)}
+                      sx={{
+                        borderRadius: 2, mb: 0.25, px: 1.5, py: 0.75,
+                        bgcolor: active ? SIDEBAR_ACTIVE : 'transparent',
+                        '&:hover': { bgcolor: SIDEBAR_ACTIVE },
+                        color: SIDEBAR_TEXT,
+                      }}
+                    >
+                      <ListItemIcon sx={{ color: active ? '#D4E157' : 'rgba(255,255,255,0.65)', minWidth: 36 }}>
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.label}
+                        slotProps={{ primary: { sx: { fontSize: '0.85rem', fontWeight: active ? 600 : 400 } } }}
+                      />
+                      {badgeCount > 0 && (
+                        <Chip
+                          label={badgeCount}
+                          size="small"
+                          sx={{
+                            height: 18, minWidth: 18,
+                            fontSize: '0.65rem', fontWeight: 700,
+                            bgcolor: active ? '#D4E157' : 'rgba(212,225,87,0.25)',
+                            color: active ? '#1B5E20' : '#D4E157',
+                            '& .MuiChip-label': { px: 0.5 },
+                          }}
+                        />
+                      )}
+                    </ListItemButton>
+                  );
+                })}
+              </List>
+            </Box>
           );
         })}
-      </List>
+      </Box>
 
-      <Divider sx={{ borderColor: 'rgba(255,255,255,0.15)', mx: 2, mb: 1 }} />
-      <Box sx={{ px: 1, pb: 2 }}>
-        <ListItemButton
-          onClick={handleLogout}
-          sx={{
-            borderRadius: 2,
-            color: 'rgba(255,255,255,0.7)',
-            '&:hover': { backgroundColor: SIDEBAR_ACTIVE_BG, color: '#fff' },
-          }}
-        >
-          <ListItemIcon sx={{ color: 'inherit', minWidth: 38 }}>
-            <LogoutIcon />
-          </ListItemIcon>
-          <ListItemText primary="Déconnexion" slotProps={{ primary: { fontSize: '0.875rem' } }} />
-        </ListItemButton>
+      {/* Avatar + nom + rôle + déconnexion */}
+      <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)', mx: 2, mt: 1 }} />
+      <Box sx={{ px: 1.5, py: 1.75 }}>
+        <Box sx={{
+          display: 'flex', alignItems: 'center', gap: 1.5,
+          bgcolor: 'rgba(255,255,255,0.08)', borderRadius: 2, px: 1.5, py: 1,
+        }}>
+          <Avatar sx={{
+            width: 34, height: 34,
+            bgcolor: '#D4E157', color: '#1B5E20',
+            fontWeight: 800, fontSize: '0.8rem', flexShrink: 0,
+          }}>
+            {initials}
+          </Avatar>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography noWrap sx={{ color: '#fff', fontSize: '0.82rem', fontWeight: 600, lineHeight: 1.2 }}>
+              {displayName}
+            </Typography>
+            <Typography noWrap sx={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.7rem' }}>
+              {roleLabel}
+            </Typography>
+          </Box>
+          <Tooltip title="Déconnexion">
+            <IconButton onClick={handleLogout} size="small" sx={{ color: 'rgba(255,255,255,0.55)', p: 0.5, '&:hover': { color: '#fff' } }}>
+              <LogoutIcon sx={{ fontSize: 18 }} />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Box>
     </Box>
   );
 }
 
+// ── Layout principal ──────────────────────────────────────────────────────────
 export default function Layout() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
+  const navigate  = useNavigate();
+  const theme     = useTheme();
+  const isMobile  = useMediaQuery(theme.breakpoints.down('md'));
+  const [drawerOpen,  setDrawerOpen]  = useState(false);
+  const [searchOpen,  setSearchOpen]  = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  const handleLogout = () => { logout(); navigate('/'); };
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Sidebar desktop */}
+
+      {/* Sidebar desktop permanente */}
       {!isMobile && (
         <Drawer
           variant="permanent"
           sx={{
-            width: SIDEBAR_WIDTH,
-            flexShrink: 0,
+            width: SIDEBAR_WIDTH, flexShrink: 0,
             '& .MuiDrawer-paper': { width: SIDEBAR_WIDTH, boxSizing: 'border-box', borderRight: 'none' },
           }}
         >
@@ -157,77 +222,58 @@ export default function Layout() {
         </Drawer>
       )}
 
-      {/* Drawer mobile */}
+      {/* Drawer mobile temporaire */}
       {isMobile && (
         <Drawer
           variant="temporary"
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
           ModalProps={{ keepMounted: true }}
-          sx={{
-            '& .MuiDrawer-paper': { width: SIDEBAR_WIDTH, boxSizing: 'border-box', borderRight: 'none' },
-          }}
+          sx={{ '& .MuiDrawer-paper': { width: SIDEBAR_WIDTH, boxSizing: 'border-box', borderRight: 'none' } }}
         >
           <SidebarContent onNavigate={() => setDrawerOpen(false)} />
         </Drawer>
       )}
 
       <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+
         {/* Topbar */}
         <AppBar
           position="sticky"
           elevation={0}
-          sx={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #E0E0E0', color: 'text.primary' }}
+          sx={{ bgcolor: '#FFFFFF', borderBottom: '1px solid #E8F5E9', color: 'text.primary' }}
         >
           <Toolbar sx={{ minHeight: 56, gap: 1, px: { xs: 1.5, md: 2 } }}>
-            {/* Hamburger mobile */}
+
             {isMobile && (
               <IconButton edge="start" onClick={() => setDrawerOpen(true)} sx={{ color: 'text.primary' }}>
                 <MenuIcon />
               </IconButton>
             )}
 
-            {/* Logo mobile */}
             {isMobile && !searchOpen && (
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'primary.dark', flexGrow: 1, fontSize: '0.9rem' }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#1B5E20', flexGrow: 1, fontSize: '0.9rem' }}>
                 Graine Fournie
               </Typography>
             )}
 
-            {/* Barre de recherche desktop (toujours visible) */}
             {!isMobile && (
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  backgroundColor: '#F5F5F5',
-                  border: '1px solid #E0E0E0',
-                  borderRadius: 3,
-                  px: 1.5,
-                  py: 0.5,
-                  flexGrow: 1,
-                  maxWidth: 400,
-                }}
-              >
+              <Box sx={{
+                display: 'flex', alignItems: 'center',
+                bgcolor: '#F7FAF3', border: '1px solid #E8F5E9',
+                borderRadius: 3, px: 1.5, py: 0.5, flexGrow: 1, maxWidth: 380,
+              }}>
                 <SearchIcon sx={{ color: 'text.disabled', fontSize: 18, mr: 1 }} />
                 <InputBase placeholder="Rechercher..." sx={{ fontSize: '0.875rem', width: '100%' }} />
               </Box>
             )}
 
-            {/* Barre de recherche mobile expandable */}
             {isMobile && searchOpen && (
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  backgroundColor: '#F5F5F5',
-                  border: '1px solid #E0E0E0',
-                  borderRadius: 3,
-                  px: 1.5,
-                  py: 0.5,
-                  flexGrow: 1,
-                }}
-              >
+              <Box sx={{
+                display: 'flex', alignItems: 'center',
+                bgcolor: '#F7FAF3', border: '1px solid #E8F5E9',
+                borderRadius: 3, px: 1.5, py: 0.5, flexGrow: 1,
+              }}>
                 <SearchIcon sx={{ color: 'text.disabled', fontSize: 18, mr: 1 }} />
                 <InputBase placeholder="Rechercher..." sx={{ fontSize: '0.875rem', width: '100%' }} autoFocus />
               </Box>
@@ -235,28 +281,21 @@ export default function Layout() {
 
             <Box sx={{ flexGrow: isMobile && !searchOpen ? 0 : 1 }} />
 
-            {/* Icône loupe mobile */}
             {isMobile && (
-              <IconButton
-                onClick={() => setSearchOpen((v) => !v)}
-                sx={{ color: 'text.secondary' }}
-                size="small"
-              >
+              <IconButton onClick={() => setSearchOpen(v => !v)} sx={{ color: 'text.secondary' }} size="small">
                 {searchOpen ? <CloseIcon /> : <SearchIcon />}
               </IconButton>
             )}
 
-            {/* Email utilisateur desktop */}
             {!isMobile && (
-              <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1 }}>
+              <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1, fontSize: '0.8rem' }}>
                 {user?.email}
               </Typography>
             )}
 
-            {/* Avatar */}
             <Tooltip title="Déconnexion">
               <Avatar
-                sx={{ width: 34, height: 34, bgcolor: 'primary.main', fontSize: '0.85rem', cursor: 'pointer' }}
+                sx={{ width: 34, height: 34, bgcolor: '#1B5E20', fontSize: '0.85rem', cursor: 'pointer' }}
                 onClick={handleLogout}
               >
                 {user?.email?.[0]?.toUpperCase() ?? 'U'}
@@ -265,8 +304,11 @@ export default function Layout() {
           </Toolbar>
         </AppBar>
 
-        {/* Contenu */}
-        <Box component="main" sx={{ flexGrow: 1, p: { xs: 1.5, md: 3 }, backgroundColor: 'background.default' }}>
+        {/* Contenu de la page */}
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, p: { xs: 1.5, md: 3 }, bgcolor: '#F7FAF3' }}
+        >
           <Outlet />
         </Box>
       </Box>
