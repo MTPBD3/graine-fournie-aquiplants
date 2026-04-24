@@ -1,0 +1,18 @@
+.git
+.gitignore
+docs
+JOURNAL.md
+README.md
+
+# Backend
+backend/var/
+backend/vendor/
+backend/config/jwt/
+backend/.env.local
+backend/.env.*.local
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/.env.development.local
