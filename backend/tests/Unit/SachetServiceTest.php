@@ -18,7 +18,6 @@ class SachetServiceTest extends TestCase
         $plant->setNomPlant('Tomate')->setNomEspece('Solanum lycopersicum');
 
         $sachet = new GfClient();
-        $sachet->setReferenceGf('REF-001');
         $sachet->setNumeroLot('LOT-001');
         $sachet->setNomClient('Dupont');
         $sachet->setQuantiteDisponible($quantite);

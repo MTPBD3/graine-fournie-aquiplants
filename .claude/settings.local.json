@@ -48,7 +48,9 @@
       "Bash(composer install *)",
       "Bash(git commit *)",
       "Bash(php bin/console doctrine:query:sql \"SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='graine_fournie_aquiplants' AND TABLE_NAME='emplacement'\")",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(docker compose *)",
+      "Bash(ipconfig)"
     ]
   }
 }
