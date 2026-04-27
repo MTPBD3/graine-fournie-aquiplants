@@ -49,4 +49,9 @@
 - Réalisation du diagramme de classes UML 2.5 (9 classes + 3 enums)
 - Rédaction du document Jalon 4
 
+## Semaine du 27 avril 2026
+- Mise en place du CI/CD via GitHub Actions
+- Développement full-stack (frontend React + backend Symfony) : application fonctionnelle
+- Correction bugs header dashboard (responsive mobile, fusion en un seul header, sticky + SmartSearch)
+- Suppression référence sachet full-stack + fix labels Select MUI
 
