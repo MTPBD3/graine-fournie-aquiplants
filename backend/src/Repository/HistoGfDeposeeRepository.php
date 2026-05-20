@@ -22,7 +22,7 @@ class HistoGfDeposeeRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('h')
             ->where('h.statut = :statut')
             ->andWhere('h.dateReception < :limite')
-            ->setParameter('statut', 'en_attente')
+            ->setParameter('statut', 'a_traiter')
             ->setParameter('limite', $limiteDate)
             ->orderBy('h.dateReception', 'ASC')
             ->getQuery()

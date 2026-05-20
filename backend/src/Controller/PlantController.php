@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Espece;
 use App\Entity\Plant;
 use App\Repository\PlantRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +19,8 @@ class PlantController extends AbstractController
         return [
             'id'        => $p->getIdPlant(),
             'nomPlant'  => $p->getNomPlant(),
-            'nomEspece' => $p->getNomEspece(),
+            'nomEspece' => $p->getEspece()?->getNomEspece() ?? '',
+            'idEspece'  => $p->getEspece()?->getIdEspece(),
         ];
     }
 
@@ -43,9 +45,18 @@ class PlantController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
+        $nomPlant = trim($data['nomPlant'] ?? '');
+        if ($nomPlant === '') {
+            return $this->json(['message' => 'Le nom de la plante est obligatoire'], 400);
+        }
+
         $p = new Plant();
-        $p->setNomPlant($data['nomPlant'] ?? '');
-        $p->setNomEspece($data['nomEspece'] ?? '');
+        $p->setNomPlant($nomPlant);
+
+        if (!empty($data['idEspece'])) {
+            $espece = $em->getRepository(Espece::class)->find((int) $data['idEspece']);
+            if ($espece) $p->setEspece($espece);
+        }
 
         $em->persist($p);
         $em->flush();
@@ -63,8 +74,12 @@ class PlantController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        if (isset($data['nomPlant']))  $p->setNomPlant($data['nomPlant']);
-        if (isset($data['nomEspece'])) $p->setNomEspece($data['nomEspece']);
+        if (isset($data['nomPlant'])) $p->setNomPlant($data['nomPlant']);
+
+        if (isset($data['idEspece'])) {
+            $espece = $em->getRepository(Espece::class)->find((int) $data['idEspece']);
+            if ($espece) $p->setEspece($espece);
+        }
 
         $em->flush();
 

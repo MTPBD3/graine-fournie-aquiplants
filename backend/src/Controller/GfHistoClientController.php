@@ -32,10 +32,10 @@ class GfHistoClientController extends AbstractController
             'quantiteSemee'    => $h->getQuantiteSemee(),
             'nomUv'            => $h->getNomUv(),
             'nbGraineParMotte' => $h->getNbGraineParMotte(),
-            'uv' => [
+            'uv' => $h->getUv() !== null ? [
                 'id'    => $h->getUv()->getIdUv(),
                 'nomUv' => $h->getUv()->getNomUv(),
-            ],
+            ] : null,
         ], $items);
 
         return $this->json($data);

@@ -50,7 +50,23 @@
       "Bash(php bin/console doctrine:query:sql \"SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='graine_fournie_aquiplants' AND TABLE_NAME='emplacement'\")",
       "Bash(node -e ' *)",
       "Bash(docker compose *)",
-      "Bash(ipconfig)"
+      "Bash(ipconfig)",
+      "Bash(docker exec *)",
+      "PowerShell(docker exec gf_symfony *)",
+      "PowerShell(docker exec gf_mysql *)",
+      "PowerShell(curl.exe -s -o NUL -w \"%{http_code}\" \"http://localhost:8000/api/gf-clients\" 2>&1)",
+      "PowerShell(curl.exe -s -o NUL -w \"%{http_code}\" -X POST \"http://localhost:8000/api/emplacements/assigner\" -H \"Content-Type: application/json\" 2>&1)",
+      "Bash(cp \"/c/Users/Aquiplants_DEV/Downloads/R__Export_Plant.csv\" \"/c/Users/Aquiplants_DEV/Desktop/Valentin_PROJETS/Graine_fournie_AQUIPLANTS_projets_fil_rouge/graine-fournie-aquiplants/backend/var/data/\")",
+      "Bash(cp \"/c/Users/Aquiplants_DEV/Downloads/R__Export_UV.csv\" \"/c/Users/Aquiplants_DEV/Desktop/Valentin_PROJETS/Graine_fournie_AQUIPLANTS_projets_fil_rouge/graine-fournie-aquiplants/backend/var/data/\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('plant'\\), indent=2\\)\\)\")",
+      "Bash(echo \"exit:$?\")",
+      "Bash(npm --version)",
+      "Bash(npm install *)",
+      "Bash(npm test *)",
+      "PowerShell(docker exec *)",
+      "Bash(xargs grep *)",
+      "PowerShell($resp = Invoke-WebRequest -Uri \"http://localhost:8000/api/login\" -Method POST -ContentType \"application/json\" -Body '{\"email\":\"x\",\"password\":\"x\"}' -UseBasicParsing -ErrorAction SilentlyContinue; $resp.Headers | Where-Object { $_.Key -match \"Security|Frame|Content-Type|Referrer|CSP|X-\" })",
+      "PowerShell(try { Invoke-WebRequest -Uri \"http://localhost:8000/api/login\" -Method POST -ContentType \"application/json\" -Body '{\"email\":\"x\",\"password\":\"x\"}' -UseBasicParsing } catch { $_.Exception.Response.Headers })"
     ]
   }
 }

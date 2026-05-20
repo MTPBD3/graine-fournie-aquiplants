@@ -18,9 +18,8 @@ const COLORS = {
 };
 
 const STATUS_LABELS = {
-  en_stock:   'En stock',
-  epuise:     'Épuisé',
-  en_attente: 'En attente',
+  range:     'Rangé',
+  a_traiter: 'À traiter',
 };
 
 function EmplacementCell({ id, sachets = [], onEmplacementClick }) {

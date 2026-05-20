@@ -6,6 +6,7 @@ import {
   Stepper, Step, StepLabel, Divider, IconButton, CircularProgress,
   Card, CardContent, CardActions, useMediaQuery, useTheme, Alert,
   Select, InputLabel, FormControl, FormHelperText, Tooltip, Snackbar,
+  Autocomplete,
 } from '@mui/material';
 import { sanitize } from '../utils/sanitize';
 import { formatDate } from '../utils/formatDate';
@@ -51,7 +52,10 @@ function QuickCreateDialog({ open, onClose, title, fields, onSubmit }) {
     }
   };
 
-  const allFilled = fields.every((f) => (values[f.name] ?? '').trim() !== '');
+  const allFilled = fields.every((f) => {
+    if (f.required === false) return true;
+    return (values[f.name] ?? '').toString().trim() !== '';
+  });
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
@@ -63,7 +67,26 @@ function QuickCreateDialog({ open, onClose, title, fields, onSubmit }) {
       <DialogContent sx={{ pt: 2 }}>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {fields.map((f) => (
+          {fields.map((f) => f.type === 'autocomplete' ? (
+            <Autocomplete
+              key={f.name}
+              options={f.options ?? []}
+              getOptionLabel={(opt) => typeof opt === 'string' ? opt : (opt.label ?? '')}
+              onChange={(_, newVal) =>
+                setValues((v) => ({ ...v, [f.name]: newVal?.value ?? '' }))
+              }
+              size="small"
+              renderInput={({ inputProps, InputProps, ...params }) => (
+                <TextField
+                  {...params}
+                  label={f.label}
+                  size="small"
+                  required={f.required !== false}
+                  slotProps={{ htmlInput: inputProps, input: InputProps }}
+                />
+              )}
+            />
+          ) : (
             <TextField
               key={f.name}
               label={f.label}
@@ -72,8 +95,8 @@ function QuickCreateDialog({ open, onClose, title, fields, onSubmit }) {
               onChange={(e) => setValues((v) => ({ ...v, [f.name]: e.target.value }))}
               fullWidth
               size="small"
-              required
-              inputProps={f.type === 'number' ? { min: 1 } : undefined}
+              required={f.required !== false}
+              slotProps={f.type === 'number' ? { htmlInput: { min: 1 } } : undefined}
             />
           ))}
         </Box>
@@ -104,7 +127,7 @@ export default function ArriveesSachetsPage() {
   const { data: sachets, loading, error, refetch } = useApi('/api/gf-clients');
   const { data: clientsData, refetch: refetchClients } = useApi('/api/clients');
   const { data: plantsData, refetch: refetchPlants } = useApi('/api/plants');
-  const { data: uvsData, refetch: refetchUvs } = useApi('/api/uvs');
+  const { data: especesData } = useApi('/api/especes');
 
   // ── State (tous les useState AVANT les useEffect) ─────────────────────────
   const [filtre, setFiltre] = useState('tous');
@@ -135,9 +158,11 @@ export default function ArriveesSachetsPage() {
   // Modal "Utiliser"
   const [utilisModalOpen,  setUtilisModalOpen]  = useState(false);
   const [utilisSachet,     setUtilisSachet]     = useState(null);
-  const [utilisForm,       setUtilisForm]       = useState({ nbMottes: '', idUv: '', nbGraineParMotte: '' });
+  const [utilisForm,       setUtilisForm]       = useState({ nbMottes: '', idEspece: '', idUv: '', nbGraineParMotte: '' });
   const [utilisSaving,     setUtilisSaving]     = useState(false);
   const [utilisError,      setUtilisError]      = useState('');
+  const [uvsByEspece,      setUvsByEspece]      = useState([]);
+  const [uvsEspeceLoading, setUvsEspeceLoading] = useState(false);
   // Multi-sachet overflow flow
   const [compatibles,         setCompatibles]         = useState([]);
   const [compatiblesLoading,  setCompatiblesLoading]  = useState(false);
@@ -155,23 +180,6 @@ export default function ArriveesSachetsPage() {
   const [clientDialogOpen, setClientDialogOpen] = useState(false);
   const [plantDialogOpen,  setPlantDialogOpen]  = useState(false);
   const [uvDialogOpen,     setUvDialogOpen]     = useState(false);
-
-  // Debug — structure complète des réponses API
-  useEffect(() => {
-    if (sachets !== null) {
-      console.log('[ArriveesSachets] /api/gf-clients (brut) →', sachets);
-      if (Array.isArray(sachets) && sachets.length > 0) {
-        console.log('[ArriveesSachets] exemple sachet[0] →', sachets[0]);
-        console.log('[ArriveesSachets] statuts présents →', [...new Set(sachets.map((s) => s.statut))]);
-        console.log('[ArriveesSachets] histoDepotId présent sur [0] ?', sachets[0].histoDepotId);
-      }
-    }
-  }, [sachets]);
-
-  useEffect(() => {
-    console.log('[ArriveesSachets] /api/clients →', clientsData);
-    console.log('[ArriveesSachets] /api/plants →', plantsData);
-  }, [clientsData, plantsData]);
 
   // Persistance du brouillon formulaire
   useEffect(() => {
@@ -263,9 +271,11 @@ export default function ArriveesSachetsPage() {
 
   const formIsValid = Object.keys(validateForm(form)).length === 0;
 
-  const clientsList = Array.isArray(clientsData) ? clientsData : [];
-  const plantsList  = Array.isArray(plantsData)  ? plantsData  : [];
-  const uvsList     = Array.isArray(uvsData)      ? uvsData     : [];
+  const clientsList  = Array.isArray(clientsData)  ? clientsData  : [];
+  const plantsList   = Array.isArray(plantsData)   ? plantsData   : [];
+  const especesOpts  = Array.isArray(especesData)
+    ? especesData.map((e) => ({ value: e.id, label: e.nomEspece }))
+    : [];
 
   const allSachets = Array.isArray(sachets) ? sachets : [];
   const filtered = filtre === 'tous'
@@ -367,14 +377,49 @@ export default function ArriveesSachetsPage() {
     }
   };
 
+  // ── Cascade UV : se déclenche à chaque ouverture du modal Utiliser ─────────
+  useEffect(() => {
+    if (!utilisModalOpen || !utilisSachet) return;
+
+    const idEspece  = utilisSachet.plant?.idEspece;
+    const nomEspece = utilisSachet.plant?.nomEspece ?? '(aucune)';
+
+    if (!idEspece) {
+      setUvsByEspece([]);
+      setUvsEspeceLoading(false);
+      return;
+    }
+
+    setUvsEspeceLoading(true);
+    setUvsByEspece([]);
+
+    apiRequest(`/api/especes/${idEspece}/uvs`, 'GET', null, token)
+      .then((res) => {
+        const list = Array.isArray(res) ? res : [];
+        setUvsByEspece(list);
+      })
+      .catch(() => {
+        setUvsByEspece([]);
+      })
+      .finally(() => setUvsEspeceLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [utilisModalOpen, utilisSachet?.id]);
+
   // ── Handlers "Utiliser" ──────────────────────────────────────────────────
   const handleOpenUtiliser = (sachet) => {
     setUtilisSachet(sachet);
-    setUtilisForm({ nbMottes: '', idUv: '', nbGraineParMotte: '' });
+    setUtilisForm({
+      nbMottes: '',
+      idEspece: sachet.plant?.idEspece ?? '',
+      idUv: '',
+      nbGraineParMotte: '',
+    });
     setUtilisError('');
     setUtilisFlowState('simple');
     setCompatibles([]);
     setDistribution([]);
+    setUvsByEspece([]);
+    setUvsEspeceLoading(true);
     setUtilisModalOpen(true);
   };
 
@@ -382,10 +427,9 @@ export default function ArriveesSachetsPage() {
     const { name, value } = e.target;
     setUtilisForm((f) => {
       const next = { ...f, [name]: value };
-      // Auto-remplissage nbGraineParMotte quand on choisit l'UV
       if (name === 'idUv') {
-        const uv = uvsList.find((u) => u.id === Number(value));
-        if (uv) next.nbGraineParMotte = String(uv.nbGraineParMotte);
+        const uv = uvsByEspece.find((u) => u.id === Number(value));
+        if (uv) next.nbGraineParMotte = String(uv.nombreGraineParMotte);
       }
       return next;
     });
@@ -455,44 +499,44 @@ export default function ArriveesSachetsPage() {
       nom: sanitize(values.nom),
       prenom: sanitize(values.prenom),
     }, token);
-    console.log('[QuickCreate] client créé →', res);
     await refetchClients();
     setForm((f) => ({ ...f, idClient: res.id }));
   };
 
   // Création rapide plante — POST puis auto-sélection
   const handleCreatePlant = async (values) => {
-    const res = await apiRequest('/api/plants', 'POST', {
-      nomPlant: sanitize(values.nomPlant),
-      nomEspece: sanitize(values.nomEspece),
-    }, token);
-    console.log('[QuickCreate] plante créée →', res);
+    const payload = { nomPlant: sanitize(values.nomPlant) };
+    if (values.idEspece) payload.idEspece = Number(values.idEspece);
+    const res = await apiRequest('/api/plants', 'POST', payload, token);
     await refetchPlants();
     setForm((f) => ({ ...f, idPlant: res.id }));
   };
 
-  // Création rapide UV — POST puis auto-sélection + pré-remplissage nbGraineParMotte
+  // Création rapide UV — POST puis rafraîchissement cascade + auto-sélection
   const handleCreateUv = async (values) => {
     const res = await apiRequest('/api/uvs', 'POST', {
       nomUv: sanitize(values.nomUv),
-      nbGraineParMotte: Number(values.nbGraineParMotte),
+      nombreGraineParMotte:   Number(values.nombreGraineParMotte),
+      nombrePlantParPlateaux: Number(values.nombrePlantParPlateaux),
+      idEspece: Number(utilisForm.idEspece),
     }, token);
-    await refetchUvs();
+    if (utilisForm.idEspece) {
+      const uvs = await apiRequest(`/api/especes/${utilisForm.idEspece}/uvs`, 'GET', null, token);
+      setUvsByEspece(Array.isArray(uvs) ? uvs : []);
+    }
     setUtilisForm((f) => ({
       ...f,
       idUv: res.id,
-      nbGraineParMotte: String(res.nbGraineParMotte),
+      nbGraineParMotte: String(res.nombreGraineParMotte),
     }));
   };
 
   const statutLabel = (s) => {
-    if (s.statut === 'en_stock') return 'Rangé';
-    if (s.statut === 'epuise') return 'Épuisé';
+    if (s.statut === 'range') return 'Rangé';
     return 'À traiter';
   };
   const statutChipColor = (s) => {
-    if (s.statut === 'en_stock') return 'success';
-    if (s.statut === 'epuise') return 'error';
+    if (s.statut === 'range') return 'success';
     return 'warning';
   };
 
@@ -523,9 +567,8 @@ export default function ArriveesSachetsPage() {
         sx={{ mb: 2 }}
       >
         <ToggleButton value="tous">Tous</ToggleButton>
-        <ToggleButton value="en_attente">À traiter</ToggleButton>
-        <ToggleButton value="en_stock">Rangé</ToggleButton>
-        <ToggleButton value="epuise">Épuisé</ToggleButton>
+        <ToggleButton value="a_traiter">À traiter</ToggleButton>
+        <ToggleButton value="range">Rangé</ToggleButton>
       </ToggleButtonGroup>
 
       {loading ? (
@@ -547,9 +590,9 @@ export default function ArriveesSachetsPage() {
               elevation={0}
               sx={{
                 border: '1px solid',
-                borderColor: s.statut === 'en_stock' ? '#A5D6A7' : '#FFB74D',
+                borderColor: s.statut === 'range' ? '#A5D6A7' : '#FFB74D',
                 borderRadius: 2,
-                borderLeft: `4px solid ${s.statut === 'en_stock' ? '#2E7D32' : '#FF8F00'}`,
+                borderLeft: `4px solid ${s.statut === 'range' ? '#2E7D32' : '#FF8F00'}`,
               }}
             >
               <CardContent sx={{ pb: 1, pt: 1.5, px: 2 }}>
@@ -571,7 +614,7 @@ export default function ArriveesSachetsPage() {
                   {s.client?.nom ?? '—'}
                 </Typography>
               </CardContent>
-              {s.statut === 'en_attente' && (
+              {s.statut === 'a_traiter' && (
                 <CardActions sx={{ pt: 0, px: 2, pb: 1.5 }}>
                   <Button
                     fullWidth
@@ -585,7 +628,7 @@ export default function ArriveesSachetsPage() {
                   </Button>
                 </CardActions>
               )}
-              {s.statut === 'en_stock' && (
+              {s.statut === 'range' && (
                 <CardActions sx={{ pt: 0, px: 2, pb: 1.5, gap: 1 }}>
                   <Button
                     fullWidth
@@ -640,7 +683,7 @@ export default function ArriveesSachetsPage() {
                       <Chip label={statutLabel(s)} size="small" color={statutChipColor(s)} sx={{ fontSize: '0.75rem' }} />
                     </TableCell>
                     <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                      {s.statut === 'en_attente' && isAdmin && (
+                      {s.statut === 'a_traiter' && isAdmin && (
                         <Button
                           size="small"
                           variant="outlined"
@@ -652,7 +695,7 @@ export default function ArriveesSachetsPage() {
                           Marquer comme rangé
                         </Button>
                       )}
-                      {s.statut === 'en_stock' && (
+                      {s.statut === 'range' && (
                         <Box sx={{ display: 'flex', gap: 0.5 }}>
                           <Tooltip title="Utiliser des graines">
                             <IconButton
@@ -801,7 +844,7 @@ export default function ArriveesSachetsPage() {
                 size="small"
                 error={!!formErrors.numeroLot}
                 helperText={formErrors.numeroLot}
-                inputProps={{ maxLength: 50 }}
+                slotProps={{ htmlInput: { maxLength: 50 } }}
               />
               <TextField
                 label="Quantité disponible"
@@ -813,7 +856,7 @@ export default function ArriveesSachetsPage() {
                 size="small"
                 error={!!formErrors.quantiteDisponible}
                 helperText={formErrors.quantiteDisponible}
-                inputProps={{ min: 1, step: 1 }}
+                slotProps={{ htmlInput: { min: 1, step: 1 } }}
               />
             </Box>
           ) : (
@@ -886,8 +929,14 @@ export default function ArriveesSachetsPage() {
         onClose={() => setPlantDialogOpen(false)}
         title="Nouvelle plante"
         fields={[
-          { name: 'nomPlant',  label: 'Nom de la plante' },
-          { name: 'nomEspece', label: 'Nom de l\'espèce' },
+          { name: 'nomPlant', label: 'Nom de la plante' },
+          {
+            name: 'idEspece',
+            label: 'Espèce',
+            type: 'autocomplete',
+            required: false,
+            options: especesOpts,
+          },
         ]}
         onSubmit={handleCreatePlant}
       />
@@ -898,8 +947,9 @@ export default function ArriveesSachetsPage() {
         onClose={() => setUvDialogOpen(false)}
         title="Nouvelle UV"
         fields={[
-          { name: 'nomUv',            label: 'Nom UV' },
-          { name: 'nbGraineParMotte', label: 'Graines par motte', type: 'number' },
+          { name: 'nomUv',                  label: 'Nom UV' },
+          { name: 'nombreGraineParMotte',   label: 'Graines par motte',   type: 'number' },
+          { name: 'nombrePlantParPlateaux', label: 'Nb plants/plateaux',  type: 'number' },
         ]}
         onSubmit={handleCreateUv}
       />
@@ -925,9 +975,16 @@ export default function ArriveesSachetsPage() {
               <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 {utilisSachet.plant?.nomPlant ?? utilisSachet.numeroLot}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
                 {utilisSachet.numeroLot} — Stock actuel : <strong>{utilisSachet.quantiteDisponible}</strong> unité{utilisSachet.quantiteDisponible !== 1 ? 's' : ''}
               </Typography>
+              {utilisSachet.plant?.nomEspece && (
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.25 }}>
+                  Espèce : <strong>{utilisSachet.plant.nomEspece}</strong>
+                  {uvsEspeceLoading && <CircularProgress size={10} sx={{ ml: 1 }} />}
+                  {!uvsEspeceLoading && uvsByEspece.length > 0 && ` — ${uvsByEspece.length} UV disponible${uvsByEspece.length > 1 ? 's' : ''}`}
+                </Typography>
+              )}
             </Box>
           )}
 
@@ -941,7 +998,7 @@ export default function ArriveesSachetsPage() {
               fullWidth
               size="small"
               required
-              inputProps={{ min: 1 }}
+              slotProps={{ htmlInput: { min: 1 } }}
             />
 
             {/* Bloc calcul automatique mottes → graines */}
@@ -968,41 +1025,57 @@ export default function ArriveesSachetsPage() {
               </Box>
             )}
 
+            {!utilisForm.idEspece && !uvsEspeceLoading && (
+              <Alert severity="warning" sx={{ py: 0.5 }}>
+                Cette plante n'a pas d'espèce liée — impossible de charger les UV.
+              </Alert>
+            )}
+
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
-              <FormControl fullWidth size="small" required>
-                <InputLabel>UV utilisée</InputLabel>
+              <FormControl fullWidth size="small" required disabled={!utilisForm.idEspece || uvsEspeceLoading}>
+                <InputLabel>
+                  {uvsEspeceLoading ? 'Chargement des UV…' : 'UV utilisée'}
+                </InputLabel>
                 <Select
                   name="idUv"
                   value={utilisForm.idUv}
-                  label="UV utilisée"
+                  label={uvsEspeceLoading ? 'Chargement des UV…' : 'UV utilisée'}
                   onChange={handleUtilisFormChange}
                 >
-                  {uvsList.length === 0 && (
-                    <MenuItem disabled value=""><em>Aucune UV — créez-en une via +</em></MenuItem>
+                  {uvsEspeceLoading && (
+                    <MenuItem disabled value=""><em>Chargement…</em></MenuItem>
                   )}
-                  {uvsList.map((u) => (
+                  {!uvsEspeceLoading && uvsByEspece.length === 0 && utilisForm.idEspece && (
+                    <MenuItem disabled value="">
+                      <em>Aucune UV pour cette espèce — créez-en une via +</em>
+                    </MenuItem>
+                  )}
+                  {uvsByEspece.map((u) => (
                     <MenuItem key={u.id} value={u.id}>
-                      {u.nomUv} ({u.nbGraineParMotte} gr/motte)
+                      {u.nomUv} ({u.nombreGraineParMotte} gr/motte · {u.nombrePlantParPlateaux} plants/plateaux)
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-              <Tooltip title="Créer une UV">
-                <IconButton
-                  color="primary"
-                  onClick={() => setUvDialogOpen(true)}
-                  sx={{
-                    mt: 0.25,
-                    border: '1px solid',
-                    borderColor: 'primary.main',
-                    borderRadius: 1,
-                    width: 40,
-                    height: 40,
-                    flexShrink: 0,
-                  }}
-                >
-                  <AddIcon fontSize="small" />
-                </IconButton>
+              <Tooltip title={utilisForm.idEspece ? 'Créer une UV' : 'Plante sans espèce liée'}>
+                <span>
+                  <IconButton
+                    color="primary"
+                    onClick={() => setUvDialogOpen(true)}
+                    disabled={!utilisForm.idEspece}
+                    sx={{
+                      mt: 0.25,
+                      border: '1px solid',
+                      borderColor: utilisForm.idEspece ? 'primary.main' : 'action.disabled',
+                      borderRadius: 1,
+                      width: 40,
+                      height: 40,
+                      flexShrink: 0,
+                    }}
+                  >
+                    <AddIcon fontSize="small" />
+                  </IconButton>
+                </span>
               </Tooltip>
             </Box>
 
@@ -1014,7 +1087,7 @@ export default function ArriveesSachetsPage() {
               onChange={handleUtilisFormChange}
               fullWidth
               size="small"
-              inputProps={{ min: 1 }}
+              slotProps={{ htmlInput: { min: 1 } }}
               helperText="Pré-rempli depuis l'UV sélectionnée"
             />
           </Box>
@@ -1138,7 +1211,7 @@ export default function ArriveesSachetsPage() {
                         onChange={(e) => handleDistributionChange(idx, e.target.value)}
                         size="small"
                         sx={{ width: 80 }}
-                        inputProps={{ min: 0, max: row.qteDispo, style: { fontFamily: '"DM Mono", monospace', textAlign: 'center' } }}
+                        slotProps={{ htmlInput: { min: 0, max: row.qteDispo, style: { fontFamily: '"DM Mono", monospace', textAlign: 'center' } } }}
                       />
                     </Box>
                   ))}

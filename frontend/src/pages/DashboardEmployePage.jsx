@@ -18,8 +18,8 @@ export default function DashboardEmployePage() {
     ? `${user.prenom}${user.nom ? ' ' + user.nom.charAt(0).toUpperCase() + '.' : ''}`
     : (user?.email ?? '');
 
-  const arrivees = Array.isArray(sachets) ? sachets.filter((s) => s.statut !== 'epuise').slice(0, 5) : [];
-  const aTraiter = Array.isArray(sachets) ? sachets.filter(s => s.statut === 'en_attente') : [];
+  const arrivees = Array.isArray(sachets) ? sachets.slice(0, 5) : [];
+  const aTraiter = Array.isArray(sachets) ? sachets.filter(s => s.statut === 'a_traiter') : [];
 
   return (
     <Box>
@@ -55,9 +55,9 @@ export default function DashboardEmployePage() {
                       </Typography>
                     </Box>
                     <Chip
-                      label={a.statut === 'en_stock' ? 'Rangé' : a.statut === 'epuise' ? 'Épuisé' : 'À traiter'}
+                      label={a.statut === 'range' ? 'Rangé' : 'À traiter'}
                       size="small"
-                      color={a.statut === 'en_stock' ? 'success' : a.statut === 'epuise' ? 'error' : 'default'}
+                      color={a.statut === 'range' ? 'success' : 'default'}
                       sx={{ fontSize: '0.75rem' }}
                     />
                   </Box>

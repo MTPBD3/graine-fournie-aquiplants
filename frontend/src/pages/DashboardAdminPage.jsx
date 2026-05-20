@@ -2,14 +2,14 @@ import { useState, useMemo, useRef, useEffect, useCallback, useContext } from 'r
 import { useNavigate } from 'react-router-dom';
 import {
   Box, Grid, Paper, Typography, Chip, Divider, CircularProgress,
-  IconButton, Avatar, LinearProgress, ToggleButtonGroup, ToggleButton,
+  IconButton, Avatar, LinearProgress,
   InputBase, Badge, Collapse, Tooltip, useMediaQuery, useTheme,
 } from '@mui/material';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid,
-  Tooltip as RTooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
+  Tooltip as RTooltip, ResponsiveContainer,
 } from 'recharts';
+import EvolutionDepotsChart from '../components/EvolutionDepotsChart';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -280,7 +280,6 @@ export default function DashboardAdminPage() {
   const { data: histoRaw, loading: lHisto  } = useApi('/api/histo-gf-deposees');
   const { data: sachets,  loading: lSachets } = useApi('/api/gf-clients');
 
-  const [period, setPeriod]           = useState('3M');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchMode, setSearchMode]   = useState('client');
 
@@ -292,28 +291,16 @@ export default function DashboardAdminPage() {
     : (user?.email ?? '');
 
   // ── KPI values ──────────────────────────────────────────────────────────────
-  const totalEnStock  = stats?.parStatut?.en_stock ?? null;
+  const totalEnStock  = stats?.parStatut?.range ?? null;
   const alertesCount  = Array.isArray(alertes) ? alertes.length : null;
-  const aValiderCount = stats?.parStatut?.en_attente ?? null;
+  const aValiderCount = stats?.parStatut?.a_traiter ?? null;
 
   const totalUnites = useMemo(() => {
     if (lSachets || !Array.isArray(sachets)) return null;
     return sachets
-      .filter(s => s.statut === 'en_stock')
+      .filter(s => s.statut === 'range')
       .reduce((acc, s) => acc + (s.quantiteDisponible ?? 0), 0);
   }, [sachets, lSachets]);
-
-  // ── Evolution chart ─────────────────────────────────────────────────────────
-  const evolutionData = useMemo(() => {
-    const raw = stats?.evolutionMensuelle ?? [];
-    const n   = period === '1M' ? 1 : period === '3M' ? 3 : 6;
-    const now  = new Date();
-    const cut  = new Date(now.getFullYear(), now.getMonth() - n + 1, 1);
-    const cs   = `${cut.getFullYear()}-${String(cut.getMonth() + 1).padStart(2, '0')}`;
-    return raw
-      .filter(d => d.mois >= cs)
-      .map(d => ({ label: d.mois.slice(5) + '/' + d.mois.slice(2, 4), dépôts: d.total }));
-  }, [stats, period]);
 
   // ── Arrivals ────────────────────────────────────────────────────────────────
   const arrivees = useMemo(() => {
@@ -355,8 +342,8 @@ export default function DashboardAdminPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   [arrivees, searchQuery, searchMode]);
 
-  const statutColor = s => s === 'en_stock' ? '#2E7D32' : s === 'epuise' ? '#E53935' : '#FF8F00';
-  const statutLabel = s => s === 'en_stock' ? 'Rangé' : s === 'epuise' ? 'Épuisé' : 'En attente';
+  const statutColor = s => s === 'range' ? '#2E7D32' : '#FF8F00';
+  const statutLabel = s => s === 'range' ? 'Rangé' : 'À traiter';
 
   return (
     <Box sx={{ bgcolor: '#F7FAF3', minHeight: '100%' }}>
@@ -410,7 +397,7 @@ export default function DashboardAdminPage() {
                 <NotificationsIcon fontSize="small" />
               </IconButton>
             </Badge>
-            <IconButton size="small" sx={{ color: 'text.secondary', bgcolor: 'rgba(0,0,0,0.04)', borderRadius: '8px', p: 0.75 }}>
+            <IconButton size="small" onClick={() => navigate('/parametres')} sx={{ color: 'text.secondary', bgcolor: 'rgba(0,0,0,0.04)', borderRadius: '8px', p: 0.75 }}>
               <SettingsIcon fontSize="small" />
             </IconButton>
             {!isMobile && (
@@ -495,41 +482,7 @@ export default function DashboardAdminPage() {
         {/* ── Colonne gauche ── */}
         <Grid size={{ xs: 12, md: 7 }}>
 
-          {/* Évolution des stocks */}
-          <Widget
-            title="Évolution des dépôts"
-            loading={lStats}
-            extra={
-              <ToggleButtonGroup
-                value={period}
-                exclusive
-                onChange={(_, v) => v && setPeriod(v)}
-                size="small"
-                sx={{ '& .MuiToggleButton-root': { py: 0.25, px: 1, fontSize: '0.7rem', textTransform: 'none' } }}
-              >
-                {['1M', '3M', '6M'].map(p => <ToggleButton key={p} value={p}>{p}</ToggleButton>)}
-              </ToggleButtonGroup>
-            }
-          >
-            {evolutionData.length === 0 ? (
-              <Empty text="Aucune donnée sur cette période" />
-            ) : (
-              <ResponsiveContainer width="100%" height={200}>
-                <LineChart data={evolutionData} margin={{ top: 4, right: 8, bottom: 0, left: -20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E8F5E9" />
-                  <XAxis dataKey="label" tick={{ fontSize: 11, fill: '#888' }} />
-                  <YAxis tick={{ fontSize: 11, fill: '#888', fontFamily: '"DM Mono", monospace' }} />
-                  <RTooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #E8F5E9' }} />
-                  <Line
-                    type="monotone" dataKey="dépôts"
-                    stroke="#1B5E20" strokeWidth={2.5}
-                    dot={{ r: 3, fill: '#1B5E20', strokeWidth: 0 }}
-                    activeDot={{ r: 5, fill: '#D4E157', stroke: '#1B5E20', strokeWidth: 2 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            )}
-          </Widget>
+          <EvolutionDepotsChart />
 
           {/* Arrivées récentes */}
           <Widget title="Arrivées récentes" loading={lHisto}>

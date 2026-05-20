@@ -32,14 +32,15 @@ class EmplacementController extends AbstractController
             'id'                 => $gf->getIdGfClient(),
             'quantiteDisponible' => $gf->getQuantiteDisponible(),
             'nomClient'          => $gf->getNomClient(),
-            'statut'             => $statut ?? 'en_attente',
+            'statut'             => $statut ?? 'a_traiter',
             'plant' => [
                 'id'       => $gf->getPlant()->getIdPlant(),
                 'nomPlant' => $gf->getPlant()->getNomPlant(),
             ],
             'client' => [
-                'id'  => $gf->getClient()->getIdClient(),
-                'nom' => $gf->getClient()->getNomClient(),
+                'id'     => $gf->getClient()->getIdClient(),
+                'nom'    => $gf->getClient()->getNomClient(),
+                'prenom' => $gf->getClient()->getPrenomClient(),
             ],
         ];
     }
@@ -114,10 +115,10 @@ class EmplacementController extends AbstractController
         $depots = $gfClient->getHistoDepots()->toArray();
         if (!empty($depots)) {
             usort($depots, fn($a, $b) => $b->getIdHistoDepot() - $a->getIdHistoDepot());
-            $depots[0]->setStatut('en_stock');
+            $depots[0]->setStatut('range');
         } else {
             $histo = new HistoGfDeposee();
-            $histo->setStatut('en_stock');
+            $histo->setStatut('range');
             $histo->setQuantiteDeposee($gfClient->getQuantiteDisponible());
             $histo->setDateReception(new \DateTime('today'));
             $histo->setGfClient($gfClient);
@@ -129,7 +130,7 @@ class EmplacementController extends AbstractController
         /** @var \App\Entity\Utilisateur $user */
         $user = $this->getUser();
         $logService->log($em, $user, 'rangement_sachet',
-            'Sachet ' . $gfClient->getReferenceGf() . ' rangé en ' . $lettreEtagere . '-' . $numeroEtage
+            'Sachet lot ' . $gfClient->getNumeroLot() . ' rangé en ' . $lettreEtagere . '-' . $numeroEtage
         );
 
         $em->refresh($e);
@@ -158,10 +159,10 @@ class EmplacementController extends AbstractController
         $depots = $gfClient->getHistoDepots()->toArray();
         if (!empty($depots)) {
             usort($depots, fn($a, $b) => $b->getIdHistoDepot() - $a->getIdHistoDepot());
-            $depots[0]->setStatut('en_stock');
+            $depots[0]->setStatut('range');
         } else {
             $histo = new HistoGfDeposee();
-            $histo->setStatut('en_stock');
+            $histo->setStatut('range');
             $histo->setQuantiteDeposee($gfClient->getQuantiteDisponible());
             $histo->setDateReception(new \DateTime('today'));
             $histo->setGfClient($gfClient);

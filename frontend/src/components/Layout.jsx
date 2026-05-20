@@ -19,6 +19,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from '../context/AuthContext';
 import { useApi } from '../hooks/useApi';
+import MeteoWidget from './MeteoWidget';
 
 const SIDEBAR_WIDTH  = 248;
 const SIDEBAR_BG     = '#1B5E20';
@@ -62,8 +63,8 @@ function SidebarContent({ onNavigate }) {
   const isAdmin   = userRoles.includes('ROLE_ADMIN');
 
   const badges = {
-    enAttente: stats?.parStatut?.en_attente ?? 0,
-    enStock:   stats?.parStatut?.en_stock   ?? 0,
+    enAttente: stats?.parStatut?.a_traiter ?? 0,
+    enStock:   stats?.parStatut?.range     ?? 0,
     alertes:   Array.isArray(alertes) ? alertes.length : 0,
   };
 
@@ -158,6 +159,11 @@ function SidebarContent({ onNavigate }) {
             </Box>
           );
         })}
+      </Box>
+
+      {/* Widget météo */}
+      <Box sx={{ px: 1.5, pb: 0.5 }}>
+        <MeteoWidget />
       </Box>
 
       {/* Avatar + nom + rôle + déconnexion */}
