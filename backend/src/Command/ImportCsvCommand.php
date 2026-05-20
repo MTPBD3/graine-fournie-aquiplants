@@ -27,6 +27,7 @@ class ImportCsvCommand extends Command
         $this->importEspeces($io, $dataDir . '/R_export_espece.csv');
         $this->importPlants($io, $dataDir . '/R__Export_Plant.csv');
         $this->importUvs($io, $dataDir . '/R__Export_UV.csv');
+        $this->importClients($io, $dataDir . '/R__Export_Client.csv');
 
         return Command::SUCCESS;
     }
@@ -236,5 +237,64 @@ class ImportCsvCommand extends Command
             '%d UV insérée(s), %d mise(s) à jour, %d ignorée(s) (espèce manquante).',
             $inserted, $updated, $skipped
         ));
+    }
+
+    // ── Import clients (R__Export_Client.csv) ─────────────────────────────────
+    // Format : id;nom_client;prenom_client (pas d'en-tête, ISO-8859-1)
+    private function importClients(SymfonyStyle $io, string $path): void
+    {
+        $io->section('Import clients (' . basename($path) . ')');
+
+        if (!file_exists($path)) {
+            throw new \RuntimeException("Fichier introuvable : $path");
+        }
+
+        $handle   = fopen($path, 'r');
+        $inserted = 0;
+        $updated  = 0;
+        $lineNum  = 0;
+
+        while (($raw = fgets($handle)) !== false) {
+            $lineNum++;
+            $line = rtrim(mb_convert_encoding($raw, 'UTF-8', 'ISO-8859-1'));
+            if ($line === '') continue;
+
+            $cols = str_getcsv($line, ';');
+
+            $idClient   = (int)   ($cols[0] ?? 0);
+            $nomClient  = trim($cols[1] ?? '');
+            $prenomClient = trim($cols[2] ?? '');
+
+            if ($idClient === 0 || $nomClient === '') {
+                $io->writeln("<comment>Ligne $lineNum ignorée (id ou nom vide)</comment>");
+                continue;
+            }
+
+            $exists = $this->connection->fetchOne(
+                'SELECT 1 FROM client WHERE id_client = ?', [$idClient]
+            );
+
+            if ($exists) {
+                $this->connection->executeStatement(
+                    'UPDATE client SET nom_client = ?, prenom_client = ? WHERE id_client = ?',
+                    [$nomClient, $prenomClient ?: null, $idClient]
+                );
+                $updated++;
+            } else {
+                $this->connection->executeStatement(
+                    'INSERT INTO client (id_client, nom_client, prenom_client) VALUES (?, ?, ?)',
+                    [$idClient, $nomClient, $prenomClient ?: null]
+                );
+                $inserted++;
+            }
+        }
+
+        fclose($handle);
+
+        $maxId = (int) $this->connection->fetchOne('SELECT MAX(id_client) FROM client');
+        $this->connection->executeStatement('ALTER TABLE client AUTO_INCREMENT = ' . ($maxId + 1));
+
+        $io->writeln($lineNum . ' lignes lues.');
+        $io->success(sprintf('%d client(s) inséré(s), %d mis(s) à jour.', $inserted, $updated));
     }
 }
