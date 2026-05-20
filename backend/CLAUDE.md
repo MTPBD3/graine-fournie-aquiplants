@@ -1,87 +1,66 @@
-# CLAUDE.md
+# CLAUDE.md — Backend Symfony
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+API REST stateless — PHP 8.2 / Symfony 7.4 / Doctrine ORM / MySQL 8.0 / JWT.
+Voir le CLAUDE.md racine pour l'architecture globale et Docker.
 
-## Project
-
-PHP 8.2 / Symfony 7.4 REST API backend for "Graine Fournie Aquiplants" — a seed bag management system for an agricultural nursery. Uses Doctrine ORM with MySQL (dev) and JWT authentication.
-
-## Common Commands
+## Commandes courantes (dans le conteneur)
 
 ```bash
-# Start Docker services (PostgreSQL container)
-docker compose up -d
+# Toujours préfixer avec : docker exec -it gf_symfony
 
-# Install dependencies
-composer install
-
-# Database setup
-php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
-php bin/console doctrine:fixtures:load
-
-# Full database reset
-php bin/console doctrine:database:drop --force && php bin/console doctrine:database:create && php bin/console doctrine:migrations:migrate && php bin/console doctrine:fixtures:load
-
-# Generate migration after entity changes
-php bin/console make:migration
-
-# Start dev server
-symfony serve
-# or
-php -S localhost:8000 -t public
-
-# Validate DB schema against entities
+php bin/console doctrine:migrations:diff       # après changement d'entité
+php bin/console make:migration                 # générer migration
 php bin/console doctrine:schema:validate
-
-# Debug routes
 php bin/console debug:router
-
-# Clear cache
 php bin/console cache:clear
+php bin/console app:import-csv --no-debug      # import CSV espèces/plants/UV
 ```
 
 ## Architecture
 
-**MVC + Stateless REST API**
+**MVC + REST stateless**
 
-- `src/Controller/` — HTTP handlers using `#[Route]` attributes. Currently `AuthController` (login, `/api/me`) and `GfClientController` (seed bag CRUD).
-- `src/Entity/` — 10 Doctrine ORM entities (see below). Attributes-based mapping (no XML/YAML).
-- `src/Repository/` — One repository per entity; custom queries go here.
-- `config/packages/security.yaml` — JWT firewalls. Three firewalls: `dev`, `login` (public, issues tokens), `api` (validates JWT). Role hierarchy: `ROLE_ADMIN` > `ROLE_EMPLOYE`.
+- `src/Controller/` — handlers HTTP avec attribut `#[Route]`. Chaque controller gère une ressource.
+- `src/Entity/` — 11 entités Doctrine (mapping par attributs PHP, pas de XML/YAML).
+- `src/Repository/` — un repository par entité, requêtes personnalisées ici.
+- `src/Command/` — commandes console (`app:import-csv`).
+- `src/Service/` — services partagés (`LogService`).
+- `config/packages/security.yaml` — 3 firewalls JWT : `dev`, `login` (public), `api`.
 
-**Domain Model (10 entities):**
+## Entités
 
-| Entity | Purpose |
-|--------|---------|
-| `Utilisateur` | App user (implements `UserInterface`), auth via email |
-| `Client` | Agricultural client |
-| `Plant` | Plant species |
-| `GfClient` | Seed bag inventory record (core entity) |
-| `CommandeASemer` | Sowing order |
-| `Emplacement` | Storage shelf/location |
-| `GfHistoClient` | Sowing history per seed bag |
-| `HistoGfDeposee` | Deposit history per seed bag |
-| `Uv` | Seedling unit (Unité de Végétal) |
-| `Log` | Audit log linked to `Utilisateur` |
+| Entité              | Table                  | Particularités                                              |
+|---------------------|------------------------|-------------------------------------------------------------|
+| `Utilisateur`       | `utilisateur`          | Implements `UserInterface`, auth email/password             |
+| `Client`            | `client`               | Client de la pépinière                                      |
+| `Espece`            | `espece`               | 3 218 lignes CSV. **Plusieurs espèces peuvent partager le même nom.** |
+| `Plant`             | `plant`                | FK `id_espece` nullable. Chaque plant a son propre id_espece. |
+| `Uv`                | `uv`                   | FK `id_espece`. Lookup par nom d'espèce dans EspeceController. |
+| `GfClient`          | `gf_client`            | Entité centrale, liée à Client + Plant + Emplacement        |
+| `Emplacement`       | `emplacement`          | Code `[A-D]-[1-4]`. Auto-supprimé si plus de sachets.       |
+| `CommandeASemer`    | `commande_a_semer`     |                                                             |
+| `GfHistoClient`     | `gf_histo_client`      | Historique semis                                            |
+| `HistoGfDeposee`    | `histo_gf_deposee`     | Statuts: `en_attente`, `en_stock`, `epuise`                 |
+| `Log`               | `log`                  | Audit trail, FK `Utilisateur`                               |
 
-## Security
+## Sécurité
 
-- JWT keys live in `config/jwt/private.pem` and `config/jwt/public.pem` (gitignored, passphrase: see `.env`).
-- All `/api/*` routes require `ROLE_EMPLOYE` minimum; `/api/admin/*` requires `ROLE_ADMIN`.
-- `/api/login` is public.
+- Clés JWT dans `config/jwt/private.pem` / `config/jwt/public.pem` (gitignorées).
+- Passphrase : variable d'env `JWT_PASSPHRASE`.
+- Hiérarchie : `ROLE_ADMIN > ROLE_EMPLOYE`.
+- `/api/login` public. Tout le reste `ROLE_EMPLOYE` minimum.
 
-## Environment
+## Ajouter une feature
 
-The `.env` file contains dev defaults. Override locally with `.env.local` (not committed).
+1. **Nouvelle entité** : `php bin/console make:entity` → `make:migration` → `migrate`.
+2. **Nouveau controller** : attribut `#[Route('/api/...')]`, dépendances autowirées.
+3. **Toujours committer la migration** avec les changements d'entité.
 
-Key variables:
-- `DATABASE_URL` — MySQL by default (`graine_fournie_aquiplants` db). Docker Compose provides PostgreSQL on port 5432 as an alternative.
-- `JWT_PASSPHRASE` — passphrase for JWT RSA keys.
-- `CORS_ALLOW_ORIGIN` — regex for allowed origins (defaults to localhost).
+## Variables d'environnement clés
 
-## Adding New Features
-
-- New entity: `php bin/console make:entity` → generates entity + repository → run `php bin/console make:migration`.
-- New controller: use `#[Route('/api/...')]` attribute, autowire dependencies via constructor.
-- Migrations must be committed alongside entity changes.
+| Variable        | Dev (Docker)                                              |
+|-----------------|-----------------------------------------------------------|
+| `DATABASE_URL`  | `mysql://aquiplants:aquiplants@mysql_db:3306/aquiplants_db` |
+| `JWT_PASSPHRASE`| `aquiplants`                                              |
+| `CORS_ALLOW_ORIGIN` | `^https?://(localhost\|127\.0\.0\.1)(:[0-9]+)?$`      |

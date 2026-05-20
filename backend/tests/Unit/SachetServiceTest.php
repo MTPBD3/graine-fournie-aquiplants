@@ -2,6 +2,7 @@
 
 namespace App\Tests\Unit;
 
+use App\Entity\Espece;
 use App\Entity\GfClient;
 use App\Entity\Client;
 use App\Entity\Plant;
@@ -14,8 +15,11 @@ class SachetServiceTest extends TestCase
         $client = new Client();
         $client->setNomClient('Dupont')->setPrenomClient('Jean');
 
+        $espece = new Espece();
+        $espece->setNomEspece('Solanum lycopersicum');
+
         $plant = new Plant();
-        $plant->setNomPlant('Tomate')->setNomEspece('Solanum lycopersicum');
+        $plant->setNomPlant('Tomate')->setEspece($espece);
 
         $sachet = new GfClient();
         $sachet->setNumeroLot('LOT-001');

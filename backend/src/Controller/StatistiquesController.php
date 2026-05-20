@@ -6,6 +6,7 @@ use App\Repository\HistoGfDeposeeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 class StatistiquesController extends AbstractController
@@ -16,7 +17,7 @@ class StatistiquesController extends AbstractController
         $all = $repo->findAll();
 
         // Répartition par statut
-        $parStatut = ['en_attente' => 0, 'en_stock' => 0, 'epuise' => 0];
+        $parStatut = ['a_traiter' => 0, 'range' => 0];
         foreach ($all as $h) {
             $s = $h->getStatut();
             if (isset($parStatut[$s])) {
@@ -42,10 +43,8 @@ class StatistiquesController extends AbstractController
             if (!isset($moisMap[$mois])) {
                 $moisMap[$mois] = ['entrees' => 0, 'sorties' => 0];
             }
-            if ($h->getStatut() === 'en_stock') {
+            if ($h->getStatut() === 'range') {
                 $moisMap[$mois]['entrees']++;
-            } elseif ($h->getStatut() === 'epuise') {
-                $moisMap[$mois]['sorties']++;
             }
         }
         uksort($moisMap, fn($a, $b) => strtotime($a) - strtotime($b));
@@ -84,5 +83,32 @@ class StatistiquesController extends AbstractController
             'categorieTop'       => $topNom,
             'picActivite'        => $picMois,
         ]);
+    }
+
+    #[Route('/api/stats/depots', methods: ['GET'])]
+    public function depots(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $periode = $request->query->get('periode', '1M');
+
+        $months = match ($periode) {
+            '3M'    => 3,
+            '6M'    => 6,
+            default => 1,
+        };
+
+        $start = (new \DateTimeImmutable())->modify("-{$months} month")->format('Y-m-d');
+
+        $rows = $em->getConnection()->executeQuery(
+            "SELECT DATE_FORMAT(date_reception, '%Y-%m-%d') AS date, COUNT(*) AS total
+             FROM histo_gf_deposee
+             WHERE date_reception >= :start
+             GROUP BY date
+             ORDER BY date ASC",
+            ['start' => $start]
+        )->fetchAllAssociative();
+
+        return $this->json(
+            array_map(fn($r) => ['date' => $r['date'], 'total' => (int) $r['total']], $rows)
+        );
     }
 }

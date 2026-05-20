@@ -67,7 +67,7 @@ class UtilisateurController extends AbstractController
         $u->setNom($data['nom'] ?? '');
         $u->setPrenom($data['prenom'] ?? '');
         $u->setEmail($data['email']);
-        $u->setRole($data['role'] ?? 'employe');
+        $u->setRole($data['role'] ?? 'ROLE_EMPLOYE');
         $u->setMdpCrypte($hasher->hashPassword($u, $data['motdepasse']));
 
         $em->persist($u);

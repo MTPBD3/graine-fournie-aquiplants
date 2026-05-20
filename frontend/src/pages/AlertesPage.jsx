@@ -39,7 +39,7 @@ export default function AlertesPage() {
   const handleMarquer = async (id) => {
     setMarkingId(id);
     try {
-      await apiRequest(`/api/histo-gf-deposees/${id}`, 'PUT', { statut: 'en_stock' }, token);
+      await apiRequest(`/api/histo-gf-deposees/${id}`, 'PUT', { statut: 'range' }, token);
       refetch();
     } catch {
       // silencieux
@@ -58,7 +58,7 @@ export default function AlertesPage() {
         </Typography>
         {alertes.length > 0 && (
           <Chip
-            label={`${alertes.length} sachet${alertes.length > 1 ? 's' : ''} &gt; ${DELAI_JOURS} jours`}
+            label={`${alertes.length} sachet${alertes.length > 1 ? 's' : ''} > ${DELAI_JOURS} jours`}
             color="error"
             size="small"
           />

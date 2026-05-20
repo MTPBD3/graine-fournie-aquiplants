@@ -8,9 +8,8 @@ use PHPUnit\Framework\TestCase;
 class StatutTransitionTest extends TestCase
 {
     private const TRANSITIONS_VALIDES = [
-        'en_attente' => ['en_stock', 'epuise'],
-        'en_stock'   => ['epuise'],
-        'epuise'     => [],
+        'a_traiter' => ['range'],
+        'range'     => [],
     ];
 
     private function transitionEstValide(string $from, string $to): bool
@@ -18,45 +17,25 @@ class StatutTransitionTest extends TestCase
         return in_array($to, self::TRANSITIONS_VALIDES[$from] ?? [], true);
     }
 
-    public function testPassageEnAttenteVersEnStockEstValide(): void
+    public function testPassageATraiterVersRangeEstValide(): void
     {
-        $this->assertTrue($this->transitionEstValide('en_attente', 'en_stock'));
+        $this->assertTrue($this->transitionEstValide('a_traiter', 'range'));
     }
 
-    public function testPassageEnAttenteVersEpuiseEstValide(): void
+    public function testPassageRangeVersATraiterEstInvalide(): void
     {
-        $this->assertTrue($this->transitionEstValide('en_attente', 'epuise'));
-    }
-
-    public function testPassageEnStockVersEpuiseEstValide(): void
-    {
-        $this->assertTrue($this->transitionEstValide('en_stock', 'epuise'));
-    }
-
-    public function testPassageEnStockVersEnAttenteEstInvalide(): void
-    {
-        $this->assertFalse($this->transitionEstValide('en_stock', 'en_attente'));
-    }
-
-    public function testPassageEpuiseVersEnAttenteEstInvalide(): void
-    {
-        $this->assertFalse($this->transitionEstValide('epuise', 'en_attente'));
-    }
-
-    public function testPassageEpuiseVersEnStockEstInvalide(): void
-    {
-        $this->assertFalse($this->transitionEstValide('epuise', 'en_stock'));
+        $this->assertFalse($this->transitionEstValide('range', 'a_traiter'));
     }
 
     public function testEntiteAccepteStatutValide(): void
     {
         $h = new HistoGfDeposee();
-        $h->setStatut('en_stock');
-        $this->assertSame('en_stock', $h->getStatut());
+        $h->setStatut('range');
+        $this->assertSame('range', $h->getStatut());
     }
 
-    public function testStatutsValidesSontAuNombreDeTrois(): void
+    public function testStatutsValidesSontAuNombreDeDeux(): void
     {
-        $this->assertCount(3, self::TRANSITIONS_VALIDES);
+        $this->assertCount(2, self::TRANSITIONS_VALIDES);
     }
 }

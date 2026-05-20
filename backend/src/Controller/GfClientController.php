@@ -38,7 +38,7 @@ class GfClientController extends AbstractController
             'quantiteDisponible' => $g->getQuantiteDisponible(),
             'seuilAlerte'        => $g->getSeuilAlerte(),
             'nomClient'          => $g->getNomClient(),
-            'statut'             => $latest ? $latest->getStatut() : 'en_attente',
+            'statut'             => $latest ? $latest->getStatut() : 'a_traiter',
             'histoDepotId'       => $latest ? $latest->getIdHistoDepot() : null,
             'client' => [
                 'id'     => $g->getClient()->getIdClient(),
@@ -48,15 +48,28 @@ class GfClientController extends AbstractController
             'plant' => [
                 'id'        => $g->getPlant()->getIdPlant(),
                 'nomPlant'  => $g->getPlant()->getNomPlant(),
-                'nomEspece' => $g->getPlant()->getNomEspece(),
+                'nomEspece' => $g->getPlant()->getEspece()?->getNomEspece() ?? '',
+                'idEspece'  => $g->getPlant()->getEspece()?->getIdEspece(),
             ],
         ];
     }
 
     #[Route('', methods: ['GET'])]
-    public function index(GfClientRepository $repo): JsonResponse
+    public function index(Request $request, GfClientRepository $repo): JsonResponse
     {
-        return $this->json(array_map([$this, 'serialize'], $repo->findAll()));
+        $search = trim($request->query->get('search', ''));
+
+        if ($search !== '') {
+            $items = $repo->createQueryBuilder('g')
+                ->where('g.numeroLot LIKE :s OR g.nomClient LIKE :s')
+                ->setParameter('s', '%' . $search . '%')
+                ->getQuery()
+                ->getResult();
+        } else {
+            $items = $repo->findAll();
+        }
+
+        return $this->json(array_map([$this, 'serialize'], $items));
     }
 
     #[Route('/alertes', methods: ['GET'])]
@@ -76,7 +89,7 @@ class GfClientController extends AbstractController
             'emplacement' => null, // résolu via EmplacementController si besoin
             'quantite'   => $g->getQuantiteDisponible(),
             'seuil'      => $g->getSeuilAlerte(),
-            'statut'     => ($this->getLatestHistoDepot($g) ? $this->getLatestHistoDepot($g)->getStatut() : 'en_attente'),
+            'statut'     => ($this->getLatestHistoDepot($g) ? $this->getLatestHistoDepot($g)->getStatut() : 'a_traiter'),
         ], $data);
 
         return $this->json(array_values($result));
@@ -96,8 +109,8 @@ class GfClientController extends AbstractController
             if ($c->getClient()->getIdClient() !== $g->getClient()->getIdClient()) return false;
             if ($c->getPlant()->getIdPlant() !== $g->getPlant()->getIdPlant()) return false;
             $latest = $this->getLatestHistoDepot($c);
-            $statut = $latest ? $latest->getStatut() : 'en_attente';
-            if ($statut === 'epuise') return false;
+            $statut = $latest ? $latest->getStatut() : 'a_traiter';
+            if ($statut !== 'range') return false;
             if ($c->getQuantiteDisponible() <= 0) return false;
             return true;
         });
@@ -138,7 +151,7 @@ class GfClientController extends AbstractController
             return $this->json(['message' => 'UV introuvable'], 400);
         }
 
-        $nb = $nbGraineParMotteForce ?: $uv->getNbGraineParMotte();
+        $nb = $nbGraineParMotteForce ?: $uv->getNombreGraineParMotte();
 
         // Format multi-sachets (utilisations[]) ou legacy (quantiteUtilisee)
         if (isset($data['utilisations']) && is_array($data['utilisations'])) {
@@ -175,10 +188,6 @@ class GfClientController extends AbstractController
             $em->persist($histo);
 
             if ($nouvelleQte <= 0) {
-                $latest = $this->getLatestHistoDepot($sachet);
-                if ($latest !== null) {
-                    $latest->setStatut('epuise');
-                }
                 $emplacement = $sachet->getEmplacement();
                 if ($emplacement !== null) {
                     $sachet->setEmplacement(null);

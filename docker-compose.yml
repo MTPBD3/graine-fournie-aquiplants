@@ -32,6 +32,8 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/var/www/html
+      - /var/www/html/vendor
+      - /var/www/html/var
     environment:
       APP_ENV: dev
       APP_SECRET: aquiplants_dev_secret_change_in_production
@@ -39,7 +41,7 @@ services:
       JWT_SECRET_KEY: /var/www/html/config/jwt/private.pem
       JWT_PUBLIC_KEY: /var/www/html/config/jwt/public.pem
       JWT_PASSPHRASE: aquiplants
-      CORS_ALLOW_ORIGIN: '^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$'
+      CORS_ALLOW_ORIGIN: '^https?://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+)(:[0-9]+)?$'
     depends_on:
       mysql_db:
         condition: service_healthy

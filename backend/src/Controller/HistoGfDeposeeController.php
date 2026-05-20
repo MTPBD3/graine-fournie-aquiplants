@@ -64,7 +64,7 @@ class HistoGfDeposeeController extends AbstractController
         $h = new HistoGfDeposee();
         $h->setQuantiteDeposee($data['quantiteDeposee'] ?? 0);
         $h->setDateReception(new \DateTime($data['dateReception'] ?? 'now'));
-        $h->setStatut($data['statut'] ?? 'en_attente');
+        $h->setStatut($data['statut'] ?? 'a_traiter');
         $h->setNote($data['note'] ?? null);
         $h->setGfClient($gfClient);
 
@@ -92,7 +92,7 @@ class HistoGfDeposeeController extends AbstractController
 
         $em->flush();
 
-        if (($data['statut'] ?? null) === 'en_stock' && $statutAvant !== 'en_stock') {
+        if (($data['statut'] ?? null) === 'range' && $statutAvant !== 'range') {
             /** @var \App\Entity\Utilisateur $user */
             $user = $this->getUser();
             $logService->log($em, $user, 'changement_statut',

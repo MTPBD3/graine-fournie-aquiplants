@@ -24,6 +24,8 @@ export default function ParametresPage() {
   const [error, setError] = useState('');
   const [notifEmail, setNotifEmail] = useState(true);
   const [seuilAlerte, setSeuilAlerte] = useState('5');
+  const [meteoVille, setMeteoVille] = useState(() => localStorage.getItem('meteo_ville') ?? '');
+  const [meteoSaved, setMeteoSaved] = useState(false);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -142,6 +144,44 @@ export default function ParametresPage() {
             />
           </Box>
         </Box>
+      </Paper>
+
+      {/* Météo */}
+      <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', p: 2.5, mb: 2 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 0.5 }}>
+          Météo
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Ville affichée dans le widget météo de la barre latérale. Laissez vide pour utiliser la géolocalisation de l'appareil.
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'flex-start' }}>
+          <TextField
+            label="Ville par défaut"
+            placeholder="ex : Eyragues, Paris, Lyon…"
+            value={meteoVille}
+            onChange={e => { setMeteoVille(e.target.value); setMeteoSaved(false); }}
+            size="small"
+            sx={{ flex: 1 }}
+          />
+          <Button
+            variant="outlined"
+            onClick={() => {
+              const v = meteoVille.trim();
+              if (v) localStorage.setItem('meteo_ville', v);
+              else localStorage.removeItem('meteo_ville');
+              setMeteoSaved(true);
+            }}
+            sx={{ borderColor: '#2E7D32', color: '#2E7D32', whiteSpace: 'nowrap',
+              '&:hover': { bgcolor: '#2E7D321A', borderColor: '#1B5E20' } }}
+          >
+            Enregistrer
+          </Button>
+        </Box>
+        {meteoSaved && (
+          <Typography variant="caption" sx={{ color: '#2E7D32', mt: 1, display: 'block' }}>
+            Ville enregistrée. Le widget se mettra à jour au prochain chargement.
+          </Typography>
+        )}
       </Paper>
 
       {/* À propos */}

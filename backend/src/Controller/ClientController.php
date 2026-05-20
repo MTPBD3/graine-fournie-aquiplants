@@ -23,9 +23,21 @@ class ClientController extends AbstractController
     }
 
     #[Route('', methods: ['GET'])]
-    public function index(ClientRepository $repo): JsonResponse
+    public function index(Request $request, ClientRepository $repo): JsonResponse
     {
-        return $this->json(array_map([$this, 'serialize'], $repo->findAll()));
+        $search = trim($request->query->get('search', ''));
+
+        if ($search !== '') {
+            $items = $repo->createQueryBuilder('c')
+                ->where('c.nomClient LIKE :s OR c.prenomClient LIKE :s')
+                ->setParameter('s', '%' . $search . '%')
+                ->getQuery()
+                ->getResult();
+        } else {
+            $items = $repo->findAll();
+        }
+
+        return $this->json(array_map([$this, 'serialize'], $items));
     }
 
     #[Route('/{id}', methods: ['GET'])]

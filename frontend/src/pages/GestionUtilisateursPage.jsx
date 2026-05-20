@@ -24,6 +24,8 @@ const ACTION_META = {
   changement_statut:      { label: 'Rangement',           color: '#388E3C', bg: '#F1F8E9' },
   creation_utilisateur:   { label: 'Créa. utilisateur',   color: '#6A1B9A', bg: '#F3E5F5' },
   suppression_utilisateur:{ label: 'Suppr. utilisateur',  color: '#BF360C', bg: '#FBE9E7' },
+  rangement_sachet:       { label: 'Rangement sachet',    color: '#2E7D32', bg: '#E8F5E9' },
+  utilisation_sachet:     { label: 'Utilisation graines', color: '#FF8F00', bg: '#FFF8E1' },
 };
 
 function ActionBadge({ action }) {
