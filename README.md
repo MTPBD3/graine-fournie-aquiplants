@@ -24,8 +24,8 @@ AQUIPLANTS gère manuellement l'arrivée et le stockage de graines fournies par 
 | J1 | Janvier 2026 | Cahier des charges fonctionnel | ✅ Livré |
 | J2 | Février 2026 | Méthodologie & Conception UI/UX | ✅ Livré |
 | J3 | Mars 2026 | Modélisation base de données | ✅ Livré |
-| J4 | Avril 2026 | Architecture & Diagrammes UML | 🔄 En cours |
-| J5 | Mai 2026 | Développement, Sécurité & Tests | ⏳ À venir |
+| J4 | Avril 2026 | Architecture & Diagrammes UML | ✅ Livré |
+| J5 | Mai 2026 | Développement, Sécurité & Tests | 🔄 En cours |
 | J6 | Juin 2026 | Déploiement & Livrable final | ⏳ À venir |
 
 
