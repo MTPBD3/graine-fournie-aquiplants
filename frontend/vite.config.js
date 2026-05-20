@@ -34,11 +34,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react':    ['react', 'react-dom', 'react-router-dom'],
-          'vendor-mui':      ['@mui/material', '@emotion/react', '@emotion/styled'],
-          'vendor-mui-icons':['@mui/icons-material'],
-          'vendor-recharts': ['recharts'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@mui/icons-material')) return 'vendor-mui-icons';
+            if (id.includes('@mui')) return 'vendor-mui';
+            if (id.includes('recharts')) return 'vendor-recharts';
+            if (id.includes('react')) return 'vendor-react';
+          }
         },
       },
     },
