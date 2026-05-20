@@ -43,12 +43,12 @@ class GfClientControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(401);
     }
 
-    public function testLoginAvecCredentialsVideRetourne400(): void
+    public function testLoginAvecCredentialsVideRetourne401(): void
     {
         $client = static::createClient();
         $client->request('POST', '/api/login', [], [], [
             'CONTENT_TYPE' => 'application/json',
         ], json_encode(['email' => '', 'password' => '']));
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(401);
     }
 }
