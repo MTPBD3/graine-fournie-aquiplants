@@ -19,8 +19,8 @@ class Client
     #[ORM\Column(name: 'nom_client', type: 'string', length: 150)]
     private string $nomClient;
 
-    #[ORM\Column(name: 'prenom_client', type: 'string', length: 150)]
-    private string $prenomClient;
+    #[ORM\Column(name: 'prenom_client', type: 'string', length: 150, nullable: true)]
+    private ?string $prenomClient = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: GfClient::class)]
     private Collection $gfClients;
@@ -43,8 +43,8 @@ class Client
     public function getNomClient(): string { return $this->nomClient; }
     public function setNomClient(string $nomClient): static { $this->nomClient = $nomClient; return $this; }
 
-    public function getPrenomClient(): string { return $this->prenomClient; }
-    public function setPrenomClient(string $prenomClient): static { $this->prenomClient = $prenomClient; return $this; }
+    public function getPrenomClient(): ?string { return $this->prenomClient; }
+    public function setPrenomClient(?string $prenomClient): static { $this->prenomClient = $prenomClient; return $this; }
 
     public function getGfClients(): Collection { return $this->gfClients; }
     public function getCommandes(): Collection { return $this->commandes; }
