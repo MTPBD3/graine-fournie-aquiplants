@@ -1,0 +1,9 @@
+# Override de développement — active Xdebug et le mode dev Symfony.
+# Usage : docker compose --env-file .env.docker -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+services:
+  symfony_app:
+    build:
+      target: dev
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: "1"

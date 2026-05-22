@@ -18,6 +18,20 @@ class UtilisateurController extends AbstractController
 {
     private const ROLES_AUTORISES = ['ROLE_ADMIN', 'ROLE_EMPLOYE'];
 
+    private function validatePassword(string $password): ?string
+    {
+        if (strlen($password) < 10) {
+            return 'Le mot de passe doit contenir au moins 10 caractères.';
+        }
+        if (!preg_match('/[A-Z]/', $password)) {
+            return 'Le mot de passe doit contenir au moins une lettre majuscule.';
+        }
+        if (!preg_match('/[0-9]/', $password)) {
+            return 'Le mot de passe doit contenir au moins un chiffre.';
+        }
+        return null;
+    }
+
     // Endpoint accessible à tout utilisateur authentifié : mise à jour de son propre profil
     #[Route('/mon-profil', methods: ['PATCH'])]
     public function monProfil(
@@ -32,6 +46,11 @@ class UtilisateurController extends AbstractController
         $newPassword = $data['motdepasse'] ?? null;
         if (empty($newPassword)) {
             return $this->json(['message' => 'Mot de passe requis'], 400);
+        }
+
+        $error = $this->validatePassword($newPassword);
+        if ($error !== null) {
+            return $this->json(['message' => $error], 422);
         }
 
         $user->setMdpCrypte($hasher->hashPassword($user, $newPassword));
@@ -91,6 +110,11 @@ class UtilisateurController extends AbstractController
             return $this->json(['message' => 'Email et mot de passe requis'], 400);
         }
 
+        $error = $this->validatePassword($data['motdepasse']);
+        if ($error !== null) {
+            return $this->json(['message' => $error], 422);
+        }
+
         $role = $data['role'] ?? 'ROLE_EMPLOYE';
         if (!in_array($role, self::ROLES_AUTORISES, true)) {
             return $this->json(['message' => 'Rôle invalide. Valeurs acceptées : ROLE_ADMIN, ROLE_EMPLOYE'], 422);
@@ -109,7 +133,7 @@ class UtilisateurController extends AbstractController
         /** @var Utilisateur $actor */
         $actor = $this->getUser();
         $logService->log($em, $actor, 'creation_utilisateur',
-            'Utilisateur ' . $u->getEmail() . ' créé'
+            'Utilisateur #' . $u->getId() . ' créé'
         );
 
         return $this->json(['id' => $u->getId(), 'message' => 'Utilisateur créé'], 201);
@@ -144,6 +168,10 @@ class UtilisateurController extends AbstractController
 
         $newPassword = $data['motdepasse'] ?? $data['mdpCrypte'] ?? null;
         if (!empty($newPassword)) {
+            $error = $this->validatePassword($newPassword);
+            if ($error !== null) {
+                return $this->json(['message' => $error], 422);
+            }
             $u->setMdpCrypte($hasher->hashPassword($u, $newPassword));
         }
 
@@ -161,7 +189,7 @@ class UtilisateurController extends AbstractController
             return $this->json(['message' => 'Utilisateur introuvable'], 404);
         }
 
-        $email = $u->getEmail();
+        $userId = $u->getId();
 
         /** @var Utilisateur $actor */
         $actor = $this->getUser();
@@ -170,7 +198,7 @@ class UtilisateurController extends AbstractController
         $em->flush();
 
         $logService->log($em, $actor, 'suppression_utilisateur',
-            'Utilisateur ' . $email . ' supprimé'
+            'Utilisateur #' . $userId . ' supprimé'
         );
 
         return $this->json(null, 204);

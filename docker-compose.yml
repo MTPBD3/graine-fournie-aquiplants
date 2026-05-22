@@ -6,16 +6,16 @@ services:
     container_name: gf_mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: aquiplants_db
-      MYSQL_USER: aquiplants
-      MYSQL_PASSWORD: aquiplants
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3307:3306"
+      - "127.0.0.1:3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -26,6 +26,7 @@ services:
     build:
       context: .
       dockerfile: docker/symfony/Dockerfile
+      target: prod
     container_name: gf_symfony
     restart: unless-stopped
     ports:
@@ -35,12 +36,12 @@ services:
       - /var/www/html/vendor
       - /var/www/html/var
     environment:
-      APP_ENV: dev
-      APP_SECRET: aquiplants_dev_secret_change_in_production
-      DATABASE_URL: "mysql://aquiplants:aquiplants@mysql_db:3306/aquiplants_db?serverVersion=8.0&charset=utf8mb4"
+      APP_ENV: prod
+      APP_SECRET: ${APP_SECRET}
+      DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql_db:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4"
       JWT_SECRET_KEY: /var/www/html/config/jwt/private.pem
       JWT_PUBLIC_KEY: /var/www/html/config/jwt/public.pem
-      JWT_PASSPHRASE: aquiplants
+      JWT_PASSPHRASE: ${JWT_PASSPHRASE}
       CORS_ALLOW_ORIGIN: '^https?://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+)(:[0-9]+)?$'
     depends_on:
       mysql_db:
@@ -63,18 +64,18 @@ services:
     depends_on:
       - symfony_app
 
-  # ── phpMyAdmin ───────────────────────────────────────────────────────────
+  # ── phpMyAdmin (accès local uniquement) ──────────────────────────────────
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: gf_phpmyadmin
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"
     environment:
       PMA_HOST: mysql_db
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: aquiplants
-      MYSQL_PASSWORD: aquiplants
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     depends_on:
       mysql_db:
         condition: service_healthy

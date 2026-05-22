@@ -44,16 +44,30 @@ Wireframes et maquettes haute fidélité disponibles sur Figma :
 ```bash
 git clone https://github.com/MTPBD3/graine-fournie-aquiplants.git
 cd graine-fournie-aquiplants
-docker compose up -d
+
+# Copier et renseigner les variables d'environnement Docker
+cp .env.docker.example .env.docker
+# Éditer .env.docker avec les vraies valeurs si nécessaire
+
+# Démarrer l'application (mode production)
+docker compose --env-file .env.docker up -d --build
 ```
+
+### Mode développement (avec Xdebug)
+
+```bash
+docker compose --env-file .env.docker -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+```
+
+Le mode dev active `APP_ENV=dev`, `APP_DEBUG=1` et Xdebug dans le conteneur Symfony.
 
 ## URLs d'accès
 
-| Service           | URL                   |
-|-------------------|-----------------------|
-| Application React | http://localhost:3000 |
-| API Symfony       | http://localhost:8000 |
-| phpMyAdmin        | http://localhost:8080 |
+| Service           | URL                            | Accessible depuis        |
+|-------------------|--------------------------------|--------------------------|
+| Application React | http://localhost:3000          | Réseau                   |
+| API Symfony       | http://localhost:8000          | Réseau                   |
+| phpMyAdmin        | http://127.0.0.1:8080          | Localhost uniquement      |
 
 ## Charger les données de test
 
