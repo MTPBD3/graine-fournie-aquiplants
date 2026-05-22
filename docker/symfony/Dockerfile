@@ -1,4 +1,5 @@
-FROM php:8.2-fpm
+# ── Stage base (commun prod + dev) ─────────────────────────────────────────
+FROM php:8.2-fpm AS base
 
 # Dépendances système
 RUN apt-get update && apt-get install -y \
@@ -15,10 +16,6 @@ RUN apt-get update && apt-get install -y \
         opcache \
         zip \
     && rm -rf /var/lib/apt/lists/*
-
-# Xdebug (mode coverage uniquement, pas de surcoût en prod/dev)
-RUN pecl install xdebug && docker-php-ext-enable xdebug
-COPY docker/symfony/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Composer 2
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -39,8 +36,19 @@ RUN sed -i 's/\r$//' /usr/local/bin/init.sh \
 # Code source (pour builds standalone sans volume)
 COPY backend/ /var/www/html/
 
+# Donne la propriété à www-data pour les volumes anonymes (vendor/, var/)
+RUN chown -R www-data:www-data /var/www/html
+
 WORKDIR /var/www/html
 
 EXPOSE 8000
 
+# ── Stage prod (défaut, sans Xdebug) ───────────────────────────────────────
+FROM base AS prod
+ENTRYPOINT ["/usr/local/bin/init.sh"]
+
+# ── Stage dev (Xdebug activé) ──────────────────────────────────────────────
+FROM base AS dev
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+COPY docker/symfony/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 ENTRYPOINT ["/usr/local/bin/init.sh"]
