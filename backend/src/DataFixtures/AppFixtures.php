@@ -13,23 +13,23 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // Admin
-        $admin = new Utilisateur();
-        $admin->setNom('Admin');
-        $admin->setPrenom('AQUIPLANTS');
-        $admin->setEmail('admin@aquiplants.fr');
-        $admin->setRole('admin');
-        $admin->setMdpCrypte($this->hasher->hashPassword($admin, 'test'));
-        $manager->persist($admin);
+        $repo = $manager->getRepository(Utilisateur::class);
 
-        // Employé de test
-        $employe = new Utilisateur();
-        $employe->setNom('Dupont');
-        $employe->setPrenom('Jean');
-        $employe->setEmail('employe@aquiplants.fr');
-        $employe->setRole('employe');
-        $employe->setMdpCrypte($this->hasher->hashPassword($employe, 'test'));
-        $manager->persist($employe);
+        if (!$repo->findOneBy(['email' => 'admin@aquiplants.fr'])) {
+            $admin = new Utilisateur();
+            $admin->setNom('Admin')->setPrenom('AQUIPLANTS')
+                  ->setEmail('admin@aquiplants.fr')->setRole('admin')
+                  ->setMdpCrypte($this->hasher->hashPassword($admin, 'test'));
+            $manager->persist($admin);
+        }
+
+        if (!$repo->findOneBy(['email' => 'employe@aquiplants.fr'])) {
+            $employe = new Utilisateur();
+            $employe->setNom('Dupont')->setPrenom('Jean')
+                    ->setEmail('employe@aquiplants.fr')->setRole('employe')
+                    ->setMdpCrypte($this->hasher->hashPassword($employe, 'test'));
+            $manager->persist($employe);
+        }
 
         $manager->flush();
     }
