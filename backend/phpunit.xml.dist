@@ -15,7 +15,7 @@
         <env name="DATABASE_URL" value="sqlite:///%kernel.cache_dir%/test.db" force="true" />
 
         <!-- ###+ symfony/framework-bundle ### -->
-        <env name="APP_ENV" value="dev"/>
+        <env name="APP_ENV" value="test" force="true"/>
         <env name="APP_SECRET" value=""/>
         <env name="APP_SHARE_DIR" value="var/share"/>
         <!-- ###- symfony/framework-bundle ### -->
@@ -39,7 +39,7 @@
         <!-- ###+ lexik/jwt-authentication-bundle ### -->
         <env name="JWT_SECRET_KEY" value="%kernel.project_dir%/config/jwt/private.pem"/>
         <env name="JWT_PUBLIC_KEY" value="%kernel.project_dir%/config/jwt/public.pem"/>
-        <env name="JWT_PASSPHRASE" value="ef1ad6d22104c6bcd9d71eff4fec2750a8d000c19c830a63db4496a8567dca1c"/>
+        <env name="JWT_PASSPHRASE" value="aquiplants"/>
         <!-- ###- lexik/jwt-authentication-bundle ### -->
 
         <!-- ###+ nelmio/cors-bundle ### -->
