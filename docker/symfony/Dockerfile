@@ -1,5 +1,5 @@
 # ── Stage base (commun prod + dev) ─────────────────────────────────────────
-FROM php:8.2-fpm AS base
+FROM php:8.2.31-fpm AS base
 
 # Dépendances système
 RUN apt-get update && apt-get install -y \
@@ -27,6 +27,9 @@ RUN rm -f /etc/nginx/sites-enabled/default \
 
 # Configuration Supervisord
 COPY docker/symfony/supervisord.conf /etc/supervisor/conf.d/app.conf
+
+# Désactive l'exposition de la version PHP
+COPY docker/symfony/php.ini /usr/local/etc/php/conf.d/security.ini
 
 # Script d'initialisation (supprime CRLF si créé sur Windows)
 COPY docker/scripts/init.sh /usr/local/bin/init.sh

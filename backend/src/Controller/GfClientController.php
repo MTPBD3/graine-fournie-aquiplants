@@ -269,7 +269,7 @@ class GfClientController extends AbstractController
             $em->persist($g);
             $em->flush();
         } catch (\Throwable $e) {
-            return $this->json(['error' => $e->getMessage()], 500);
+            return $this->json(['message' => 'Erreur lors de la création du sachet'], 500);
         }
 
         /** @var \App\Entity\Utilisateur $user */
