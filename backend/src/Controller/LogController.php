@@ -28,7 +28,6 @@ class LogController extends AbstractController
                 'id'     => $l->getUtilisateur()->getId(),
                 'nom'    => $l->getUtilisateur()->getNom(),
                 'prenom' => $l->getUtilisateur()->getPrenom(),
-                'email'  => $l->getUtilisateur()->getEmail(),
             ],
         ], $logs);
 

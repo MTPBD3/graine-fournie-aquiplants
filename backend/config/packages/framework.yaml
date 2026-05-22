@@ -5,6 +5,12 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
+    cache:
+        pools:
+            cache.rate_limiter:
+                adapter: cache.adapter.filesystem
+                default_lifetime: 900
+
     #esi: true
     #fragments: true
 
