@@ -16,6 +16,10 @@ RUN apt-get update && apt-get install -y \
         zip \
     && rm -rf /var/lib/apt/lists/*
 
+# Xdebug (mode coverage uniquement, pas de surcoût en prod/dev)
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+COPY docker/symfony/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
 # Composer 2
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
