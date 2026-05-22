@@ -34,9 +34,39 @@ AQUIPLANTS gère manuellement l'arrivée et le stockage de graines fournies par 
 Wireframes et maquettes haute fidélité disponibles sur Figma :
 [Voir les maquettes](https://www.figma.com/design/ywbMZtE731MNfb0sqrdyYH/Figma-Graine-Fournie-AQUIPLANTS?node-id=54-8033&t=UNuvO2izCszRlxVN-1)
 
-## Lancer le projet
+## Prérequis
 
-*Instructions à venir au Jalon 5 avec la mise en place de Docker.*
+- Docker Desktop installé et démarré
+- Git
+
+## Lancement
+
+```bash
+git clone https://github.com/MTPBD3/graine-fournie-aquiplants.git
+cd graine-fournie-aquiplants
+docker compose up -d
+```
+
+## URLs d'accès
+
+| Service           | URL                   |
+|-------------------|-----------------------|
+| Application React | http://localhost:3000 |
+| API Symfony       | http://localhost:8000 |
+| phpMyAdmin        | http://localhost:8080 |
+
+## Charger les données de test
+
+```bash
+docker exec gf_symfony php bin/console doctrine:fixtures:load --append
+```
+
+## Comptes de test
+
+| Rôle           | Email                   | Mot de passe |
+|----------------|-------------------------|--------------|
+| Administrateur | testadmin@aquiplants.fr | admin        |
+| Employé        | testuser@aquiplants.fr  | user         |
 
 ## Auteur
 
