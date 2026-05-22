@@ -43,14 +43,7 @@ export default function ParametresPage() {
 
     setSaving(true);
     try {
-      // Trouver l'ID de l'utilisateur connecté via la liste
-      const utilisateurs = await apiRequest('/api/utilisateurs', 'GET', null, token);
-      const me = utilisateurs.find((u) => u.email === user?.email);
-      if (!me) {
-        setError('Impossible de trouver votre compte utilisateur.');
-        return;
-      }
-      await apiRequest(`/api/utilisateurs/${me.id}`, 'PUT', { motdepasse: password.trim() }, token);
+      await apiRequest('/api/utilisateurs/mon-profil', 'PATCH', { motdepasse: password.trim() }, token);
       setSuccess(true);
       setPassword('');
       setConfirmPassword('');

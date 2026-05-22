@@ -11,11 +11,37 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api/utilisateurs')]
 class UtilisateurController extends AbstractController
 {
+    private const ROLES_AUTORISES = ['ROLE_ADMIN', 'ROLE_EMPLOYE'];
+
+    // Endpoint accessible à tout utilisateur authentifié : mise à jour de son propre profil
+    #[Route('/mon-profil', methods: ['PATCH'])]
+    public function monProfil(
+        Request $request,
+        EntityManagerInterface $em,
+        UserPasswordHasherInterface $hasher,
+    ): JsonResponse {
+        /** @var Utilisateur $user */
+        $user = $this->getUser();
+        $data = json_decode($request->getContent(), true);
+
+        $newPassword = $data['motdepasse'] ?? null;
+        if (empty($newPassword)) {
+            return $this->json(['message' => 'Mot de passe requis'], 400);
+        }
+
+        $user->setMdpCrypte($hasher->hashPassword($user, $newPassword));
+        $em->flush();
+
+        return $this->json(['message' => 'Mot de passe mis à jour']);
+    }
+
     #[Route('', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(UtilisateurRepository $repo): JsonResponse
     {
         $items = $repo->findAll();
@@ -33,6 +59,7 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function show(int $id, UtilisateurRepository $repo): JsonResponse
     {
         $u = $repo->find($id);
@@ -51,6 +78,7 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route('', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function create(
         Request $request,
         EntityManagerInterface $em,
@@ -63,17 +91,22 @@ class UtilisateurController extends AbstractController
             return $this->json(['message' => 'Email et mot de passe requis'], 400);
         }
 
+        $role = $data['role'] ?? 'ROLE_EMPLOYE';
+        if (!in_array($role, self::ROLES_AUTORISES, true)) {
+            return $this->json(['message' => 'Rôle invalide. Valeurs acceptées : ROLE_ADMIN, ROLE_EMPLOYE'], 422);
+        }
+
         $u = new Utilisateur();
         $u->setNom($data['nom'] ?? '');
         $u->setPrenom($data['prenom'] ?? '');
         $u->setEmail($data['email']);
-        $u->setRole($data['role'] ?? 'ROLE_EMPLOYE');
+        $u->setRole($role);
         $u->setMdpCrypte($hasher->hashPassword($u, $data['motdepasse']));
 
         $em->persist($u);
         $em->flush();
 
-        /** @var \App\Entity\Utilisateur $actor */
+        /** @var Utilisateur $actor */
         $actor = $this->getUser();
         $logService->log($em, $actor, 'creation_utilisateur',
             'Utilisateur ' . $u->getEmail() . ' créé'
@@ -83,6 +116,7 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['PUT'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function update(
         int $id,
         Request $request,
@@ -97,12 +131,17 @@ class UtilisateurController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
+        if (isset($data['role'])) {
+            if (!in_array($data['role'], self::ROLES_AUTORISES, true)) {
+                return $this->json(['message' => 'Rôle invalide. Valeurs acceptées : ROLE_ADMIN, ROLE_EMPLOYE'], 422);
+            }
+            $u->setRole($data['role']);
+        }
+
         if (isset($data['nom']))    $u->setNom($data['nom']);
         if (isset($data['prenom'])) $u->setPrenom($data['prenom']);
         if (isset($data['email']))  $u->setEmail($data['email']);
-        if (isset($data['role']))   $u->setRole($data['role']);
 
-        // Mise à jour mot de passe si fourni (via motdepasse ou mdpCrypte en clair)
         $newPassword = $data['motdepasse'] ?? $data['mdpCrypte'] ?? null;
         if (!empty($newPassword)) {
             $u->setMdpCrypte($hasher->hashPassword($u, $newPassword));
@@ -114,6 +153,7 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(int $id, UtilisateurRepository $repo, EntityManagerInterface $em, LogService $logService): JsonResponse
     {
         $u = $repo->find($id);
@@ -123,7 +163,7 @@ class UtilisateurController extends AbstractController
 
         $email = $u->getEmail();
 
-        /** @var \App\Entity\Utilisateur $actor */
+        /** @var Utilisateur $actor */
         $actor = $this->getUser();
 
         $em->remove($u);
