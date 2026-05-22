@@ -57,10 +57,4 @@ php bin/console app:import-csv --no-debug      # import CSV espèces/plants/UV
 2. **Nouveau controller** : attribut `#[Route('/api/...')]`, dépendances autowirées.
 3. **Toujours committer la migration** avec les changements d'entité.
 
-## Variables d'environnement clés
 
-| Variable        | Dev (Docker)                                              |
-|-----------------|-----------------------------------------------------------|
-| `DATABASE_URL`  | `mysql://aquiplants:aquiplants@mysql_db:3306/aquiplants_db` |
-| `JWT_PASSPHRASE`| `aquiplants`                                              |
-| `CORS_ALLOW_ORIGIN` | `^https?://(localhost\|127\.0\.0\.1)(:[0-9]+)?$`      |
