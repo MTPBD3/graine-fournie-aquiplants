@@ -14,6 +14,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Préparer le fichier .env
+        working-directory: backend
+        run: |
+          echo "APP_ENV=test" > .env
+          echo "APP_SECRET=${{ secrets.APP_SECRET }}" >> .env
+          echo "JWT_PASSPHRASE=${{ secrets.JWT_PASSPHRASE }}" >> .env
+          echo "JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem" >> .env
+          echo "JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem" >> .env
+          echo "DATABASE_URL=sqlite:///%kernel.project_dir%/var/data_test.db" >> .env
+          echo "CORS_ALLOW_ORIGIN='^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?\$'" >> .env
+          echo "DEFAULT_URI=http://localhost" >> .env
+          echo "APP_SHARE_DIR=var/share" >> .env
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -47,7 +60,7 @@ jobs:
         working-directory: backend
         env:
           APP_ENV: test
-          JWT_PASSPHRASE: aquiplants
+          JWT_PASSPHRASE: ${{ secrets.JWT_PASSPHRASE }}
         run: vendor/bin/phpunit --testsuite Functional --colors=always
 
   frontend:
