@@ -40,41 +40,50 @@ Write-Host "--- [3/3] Import LOAD DATA INFILE ---"
 $sql = @"
 SET FOREIGN_KEY_CHECKS = 0;
 
+TRUNCATE TABLE uv;
+TRUNCATE TABLE plant;
+TRUNCATE TABLE client;
+TRUNCATE TABLE espece;
+
+-- 1/4 espece
 LOAD DATA INFILE '/var/lib/mysql-files/R_export_espece.csv'
-REPLACE INTO TABLE espece
+INTO TABLE espece
 CHARACTER SET latin1
 FIELDS TERMINATED BY ';' ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 ROWS
 (id_espece, nom_espece);
-SELECT CONCAT('  espece  : ', ROW_COUNT(), ' lignes traitees') AS '';
+SELECT CONCAT('  espece  : ', ROW_COUNT(), ' lignes') AS '';
 
+-- 2/4 client (3 colonnes CSV : id_client, nom_client, prenom — prenom ignore)
 LOAD DATA INFILE '/var/lib/mysql-files/R__Export_Client.csv'
-REPLACE INTO TABLE client
+INTO TABLE client
 CHARACTER SET latin1
 FIELDS TERMINATED BY ';' ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 ROWS
-(id_client, nom_client);
-SELECT CONCAT('  client  : ', ROW_COUNT(), ' lignes traitees') AS '';
+(id_client, nom_client, @prenom);
+SELECT CONCAT('  client  : ', ROW_COUNT(), ' lignes') AS '';
 
+-- 3/4 plant (4 colonnes CSV : id_plant, nom_plant, id_espece, nom_espece — nom_espece ignore)
 LOAD DATA INFILE '/var/lib/mysql-files/R__Export_Plant.csv'
-REPLACE INTO TABLE plant
+INTO TABLE plant
 CHARACTER SET latin1
 FIELDS TERMINATED BY ';' ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 ROWS
-(id_plant, nom_plant, id_espece);
-SELECT CONCAT('  plant   : ', ROW_COUNT(), ' lignes traitees') AS '';
+(id_plant, nom_plant, id_espece, @nom_espece);
+SELECT CONCAT('  plant   : ', ROW_COUNT(), ' lignes') AS '';
 
+-- 4/4 uv (CSV : id_uv;id_espece;nom_uv;nombrePlantParPlateaux;nombreGraineParMotte)
 LOAD DATA INFILE '/var/lib/mysql-files/R__Export_UV.csv'
-REPLACE INTO TABLE uv
+INTO TABLE uv
 CHARACTER SET latin1
 FIELDS TERMINATED BY ';' ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 ROWS
 (id_uv, id_espece, nom_uv, nombre_plant_par_plateaux, nombre_graine_par_motte);
-SELECT CONCAT('  uv      : ', ROW_COUNT(), ' lignes traitees') AS '';
+SELECT CONCAT('  uv      : ', ROW_COUNT(), ' lignes') AS '';
 
 SET FOREIGN_KEY_CHECKS = 1;
 "@
