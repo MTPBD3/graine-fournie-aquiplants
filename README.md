@@ -45,21 +45,15 @@ Wireframes et maquettes haute fidélité disponibles sur Figma :
 git clone https://github.com/MTPBD3/graine-fournie-aquiplants.git
 cd graine-fournie-aquiplants
 
-# Copier et renseigner les variables d'environnement Docker
-cp .env.docker.example .env.docker
-# Éditer .env.docker avec les vraies valeurs si nécessaire
+# Créer le fichier d'environnement (non versionné, contient les credentials)
+cp .env.docker .env
+# Éditer .env avec les vraies valeurs si nécessaire
 
-# Démarrer l'application (mode production)
-docker compose --env-file .env.docker up -d --build
+# Démarrer l'application
+docker compose up -d --build
 ```
 
-### Mode développement (avec Xdebug)
-
-```bash
-docker compose --env-file .env.docker -f docker-compose.yml -f docker-compose.dev.yml up -d --build
-```
-
-Le mode dev active `APP_ENV=dev`, `APP_DEBUG=1` et Xdebug dans le conteneur Symfony.
+> **Note :** `.env` est ignoré par Git (`.gitignore`). Ne jamais commiter ce fichier.
 
 ## URLs d'accès
 
@@ -72,7 +66,25 @@ Le mode dev active `APP_ENV=dev`, `APP_DEBUG=1` et Xdebug dans le conteneur Symf
 ## Charger les données de test
 
 ```bash
-docker exec gf_symfony php bin/console doctrine:fixtures:load --append
+docker exec gf_symfony php bin/console doctrine:fixtures:load --append --no-interaction
+```
+
+## Sauvegarder et restaurer la base de données
+
+> **Attention :** `docker compose down -v` supprime le volume `mysql_data` et **efface toutes les données**.
+> Faire un dump avant toute opération destructive.
+
+**Sauvegarder :**
+
+```bash
+bash docker/scripts/backup.sh
+# Crée un fichier backup_YYYYMMDD_HHMMSS.sql dans le répertoire courant
+```
+
+**Restaurer depuis un dump :**
+
+```bash
+docker exec -i gf_mysql mysql -uaquiplants -paquiplants aquiplants_db < backup.sql
 ```
 
 ## Comptes de test
@@ -99,7 +111,7 @@ docker exec gf_symfony chmod -R ug+rwX var/
 
 ```bash
 docker compose down -v    # supprime volumes MySQL, vendor et var
-docker compose --env-file .env.docker up -d --build
+docker compose up -d --build
 ```
 
 ---
