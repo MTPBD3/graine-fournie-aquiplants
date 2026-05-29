@@ -24,8 +24,8 @@ AQUIPLANTS gère manuellement l'arrivée et le stockage de graines fournies par 
 | J1 | Janvier 2026 | Cahier des charges fonctionnel | ✅ Livré |
 | J2 | Février 2026 | Méthodologie & Conception UI/UX | ✅ Livré |
 | J3 | Mars 2026 | Modélisation base de données | ✅ Livré |
-| J4 | Avril 2026 | Architecture & Diagrammes UML | 🔄 En cours |
-| J5 | Mai 2026 | Développement, Sécurité & Tests | ⏳ À venir |
+| J4 | Avril 2026 | Architecture & Diagrammes UML | ✅ Livré |
+| J5 | Mai 2026 | Développement, Sécurité & Tests | 🔄 En cours |
 | J6 | Juin 2026 | Déploiement & Livrable final | ⏳ À venir |
 
 
@@ -47,24 +47,32 @@ cd graine-fournie-aquiplants
 
 # Créer le fichier d'environnement (non versionné, contient les credentials)
 cp .env.docker .env
+# Éditer .env avec les vraies valeurs si nécessaire
 
+# Démarrer l'application
 docker compose up -d --build
 ```
 
-> **Note :** `.env` est ignoré par Git (`.gitignore`). Ne jamais commiter ce fichier.
 
 ## URLs d'accès
 
-| Service           | URL                   |
-|-------------------|-----------------------|
-| Application React | http://localhost:3000 |
-| API Symfony       | http://localhost:8000 |
-| phpMyAdmin        | http://localhost:8080 |
+| Service           | URL                            | Accessible depuis        |
+|-------------------|--------------------------------|--------------------------|
+| Application React | http://localhost:3000          | Réseau                   |
+| API Symfony       | http://localhost:8000          | Réseau                   |
+| phpMyAdmin        | http://127.0.0.1:8080          | Localhost uniquement      |
 
-## Charger les données de test
+## Charger les données
 
 ```bash
+# 1. Migrations (schéma BDD)
+docker exec gf_symfony php bin/console doctrine:migrations:migrate --no-interaction
+
+# 2. Fixtures (comptes de test)
 docker exec gf_symfony php bin/console doctrine:fixtures:load --append --no-interaction
+
+# 3. Import CSV (données réelles : espèces, plants, UVs, clients)
+bash docker/scripts/import_data.sh
 ```
 
 ## Sauvegarder et restaurer la base de données
