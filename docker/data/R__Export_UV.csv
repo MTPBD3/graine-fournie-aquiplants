@@ -1,0 +1,1992 @@
+id_uv;id_espece;nom_uv;nombre_plant_par_plateaux;nombre_graine_par_motte
+1;1;Pltx 150;150;3
+2;2;Pltx 240 Polystyrène;240;3
+3;3;Pltx 240 STAMP plastique;240;3
+4;4;Pltx 60;60;1
+5;5;Pltx 150;150;4
+6;6;Pltx 240 Polystyrène;240;4
+7;7;Pltx 240 STAMP plastique;240;4
+8;8;Pltx 96;96;1
+9;9;Plateaux 176;176;5
+10;10;Pltx 140;140;5
+11;11;Pltx 150;150;5
+12;12;Pltx 240 Polystyrène;240;5
+13;13;Pltx 240 STAMP plastique;240;5
+14;14;Pltx 60;60;5
+15;15;Pltx 96;96;5
+16;16;Plateaux 176 Bio;176;5
+17;17;Pltx 150 Bio;150;5
+18;18;Pltx 240 Polystyrène Bio;240;5
+19;19;Pltx 240 STAMP plastique Bio;240;5
+20;20;Plx 140 Bio;140;5
+21;21;Plateaux 176;176;1
+22;22;Pltx 140;140;1
+23;23;Pltx 150;150;1
+24;24;Pltx 240 Polystyrène;240;1
+25;25;Pltx 240 STAMP plastique;240;1
+26;26;Pltx 60;60;1
+27;27;Pltx 96;96;1
+28;28;Plateaux 176 Bio;176;1
+29;29;Pltx 150 Bio;150;1
+30;30;Pltx 240 Polystyrène Bio;240;1
+31;31;Pltx 240 STAMP plastique Bio;240;1
+32;32;Pltx 96;96;1
+33;33;Plx 140 Bio;140;1
+34;34;Plateaux 176;176;1
+35;35;Pltx 120 écarté taillé trié;120;1
+36;36;Pltx 140;140;1
+37;37;Pltx 150 écarté taillé;150;1
+38;38;Pltx 150 écarté taillé trié;150;1
+39;39;Pltx 240 Polystyrène écarté taillé;240;1
+40;40;Pltx 240 Polystyrène écarté taillé trié;240;1
+41;41;Pltx 96 écarté taillé;96;1
+42;42;Pltx 96 écarté taillé trié;96;1
+43;43;Plateaux 176 Bio;176;1
+44;44;Pltx 120 Bio écarté taillé;120;1
+45;45;Pltx 140 Bio;140;1
+46;46;Pltx 150 Bio écarté taillé;150;1
+47;47;Pltx 240 Polystyrène Bio écarté taillé;240;1
+48;48;Pltx 96 Bio écarté taillé;96;1
+49;49;Pltx 96 Bio écarté taillé Trié;96;1
+50;50;Pltx 120 greffé Beaufort;120;1
+51;51;Pltx 120 greffé Beaufort écarté;120;1
+52;52;Pltx 120 greffé Fortamino;120;1
+53;53;Pltx 120 greffé Fortamino écarté;120;1
+54;54;Pltx 120 greffé Protector;120;1
+55;55;Pltx 120 greffé Protector écarté;120;1
+56;56;Pltx 120 greffé STT3;120;1
+57;57;Pltx 120 greffé STT3 écarté;120;1
+58;58;Pltx 120 greffé STT3-E;120;1
+59;59;Pltx 120 greffé STT3-E écarté;120;1
+60;60;Pltx 120 écarté;120;1
+61;61;Pltx 150 écarté;150;1
+62;62;Pltx 168 greffé Beaufort;168;1
+63;63;Pltx 18 greffé Beaufort écarté tuteuré;18;1
+64;64;Pltx 18 greffé Fortamino écarté tuteuré;18;1
+65;65;Pltx 18 greffé STT3 écarté tuteuré;18;1
+66;66;Pltx 18 greffé STT3-E écarté tuteuré;18;1
+67;67;Pltx 18 repiqué écarté;18;1
+68;68;Pltx 240 Polystyrène écarté;240;1
+69;69;Pltx 240 STAMP Plastique écarté;240;1
+70;70;Pltx 32 greffé Beaufort;32;1
+71;71;Pltx 32 greffé Beaufort écarté;32;1
+72;72;Pltx 32 greffé Beaufort écarté tuteuré;32;1
+73;73;Pltx 32 greffé Empérador écarté tuteuré;32;1
+74;74;Pltx 32 greffé Espina écarté tuteuré;32;1
+75;75;Pltx 32 greffé Fortamino;32;1
+76;76;Pltx 32 greffé Fortamino écarté;32;1
+77;77;Pltx 32 greffé Fortamino écarté tuteuré;32;1
+78;78;Pltx 32 greffé Kaiser écarté tuteuré;32;1
+79;79;Pltx 32 greffé Protector écarté tuteuré;32;1
+80;80;Pltx 32 greffé STT3;32;1
+81;81;Pltx 32 greffé STT3 écarté;32;1
+82;82;Pltx 32 greffé STT3 écarté tuteuré;32;1
+83;83;Pltx 32 greffé STT3-E;32;1
+84;84;Pltx 32 greffé STT3-E écarté;32;1
+85;85;Pltx 32 greffé STT3-E écarté tuteuré;32;1
+86;86;Pltx 32 repiqué;32;1
+87;87;Pltx 32 repiqué écarté;32;1
+88;88;Pltx 32 repiqué écarté tuteuré;32;1
+89;89;Pltx 48 écarté trié;48;1
+90;90;Pltx 50 greffé Beaufort;50;1
+91;91;Pltx 50 greffé Beaufort écarté;50;1
+92;92;Pltx 50 greffé Beaufort écarté tuteuré;50;1
+93;93;Pltx 50 greffé Elementa;50;1
+94;94;Pltx 50 greffé Empérador écarté tuteuré;50;1
+95;95;Pltx 50 greffé Espina;50;1
+96;96;Pltx 50 greffé Espina écarté;50;1
+97;97;Pltx 50 greffé Espina écarté tuteuré;50;1
+98;98;Pltx 50 greffé Fortamino;50;1
+99;99;Pltx 50 greffé Fortamino écarté;50;1
+100;100;Pltx 50 greffé Fortamino écarté tuteuré;50;1
+101;101;Pltx 50 greffé STT3;50;1
+102;102;Pltx 50 greffé STT3 écarté;50;1
+103;103;Pltx 50 greffé STT3 écarté tuteuré;50;1
+104;104;Pltx 50 greffé STT3-E;50;1
+105;105;Pltx 50 greffé STT3-E écarté;50;1
+106;106;Pltx 50 greffé STT3-E écarté tuteuré;50;1
+107;107;Pltx 50 repiqué;50;1
+108;108;Pltx 50 repiqué écarté;50;1
+109;109;Pltx 50 repiqué écarté tuteuré;50;1
+110;110;Pltx 60;60;1
+111;111;Pltx 60 greffé Beaufort écarté;60;1
+112;112;Pltx 60 greffé Beaufort écarté tuteuré;60;1
+113;113;Pltx 60 greffé Fortamino écarté;60;1
+114;114;Pltx 60 greffé Fortamino écarté tuteuré;60;1
+115;115;Pltx 60 greffé STT3 écarté;60;1
+116;116;Pltx 60 greffé STT3 écarté tuteuré;60;1
+117;117;Pltx 60 greffé STT3-E écarté;60;1
+118;118;Pltx 60 greffé STT3-E écarté tuteuré;60;1
+119;119;Pltx 60 repiqué écarté;60;1
+120;120;Pltx 60 écarté;60;1
+121;121;Pltx 600;600;1
+122;122;Pltx 90 greffé Beaufort écarté;90;1
+123;123;Pltx 90 greffé Black Angel écarté;90;1
+124;124;Pltx 90 greffé Espina écarté;90;1
+125;125;Pltx 90 greffé Fortamino écarté;90;1
+126;126;Pltx 96 écarté;96;1
+127;127;Pltx 120 Bio;120;1
+128;128;Pltx 120 Bio greffé Beaufort;120;1
+129;129;Pltx 120 Bio greffé Beaufort écarté;120;1
+130;130;Pltx 120 Bio greffé Fortamino;120;1
+131;131;Pltx 120 Bio greffé Fortamino écarté;120;1
+132;132;Pltx 120 Bio greffé Protector;120;1
+133;133;Pltx 120 Bio greffé Protector écarté;120;1
+134;134;Pltx 120 Bio greffé STT3;120;1
+135;135;Pltx 120 Bio greffé STT3 écarté;120;1
+136;136;Pltx 120 Bio greffé STT3-E;120;1
+137;137;Pltx 120 Bio greffé STT3-E écarté;120;1
+138;138;Pltx 150 Bio écarté;150;1
+139;139;Pltx 168 Bio greffé Beaufort écarté;168;1
+140;140;Pltx 168 Bio greffé Espina écarté;168;1
+141;141;Pltx 168 Bio greffé Fortamino écarté;168;1
+142;142;Pltx 168 Bio greffé Protector écarté;168;1
+143;143;Pltx 168 Bio greffé STT3 écarté;168;1
+144;144;Pltx 18 Bio greffé Beaufort écarté tuteuré;18;1
+145;145;Pltx 18 Bio greffé Fortamino écarté tuteuré;18;1
+146;146;Pltx 18 Bio greffé STT3 écarté tuteuré;18;1
+147;147;Pltx 18 Bio greffé STT3-E écarté tuteuré;18;1
+148;148;Pltx 18 Bio repiqué écarté;18;1
+149;149;Pltx 240 Bio Greffé Protector;240;1
+150;150;Pltx 240 Polystyrène Bio écarté;240;1
+151;151;Pltx 240 STAMP Plastique écarté Bio;240;1
+152;152;Pltx 32 Bio greffé Beaufort;32;1
+153;153;Pltx 32 Bio greffé Beaufort écarté;32;1
+154;154;Pltx 32 Bio greffé Beaufort écarté tuteuré;32;1
+155;155;Pltx 32 Bio greffé Espina écarté tuteuré;32;1
+156;156;Pltx 32 Bio greffé Fortamino;32;1
+157;157;Pltx 32 Bio greffé Fortamino écarté;32;1
+158;158;Pltx 32 Bio greffé Fortamino écarté tuteuré;32;1
+159;159;Pltx 32 Bio greffé STT3;32;1
+160;160;Pltx 32 Bio greffé STT3 écarté;32;1
+161;161;Pltx 32 Bio greffé STT3 écarté tuteuré;32;1
+162;162;Pltx 32 Bio greffé STT3-E;32;1
+163;163;Pltx 32 Bio greffé STT3-E écarté;32;1
+164;164;Pltx 32 Bio greffé STT3-E écarté tuteuré;32;1
+165;165;Pltx 32 Bio repiqué;32;1
+166;166;Pltx 32 Bio repiqué écarté;32;1
+167;167;Pltx 32 Bio repiqué écarté tuteuré;32;1
+168;168;Pltx 48 Bio trié;48;1
+169;169;Pltx 50 Bio greffé Beaufort;50;1
+170;170;Pltx 50 Bio greffé Beaufort écarté;50;1
+171;171;Pltx 50 Bio greffé Beaufort écarté tuteuré;50;1
+172;172;Pltx 50 Bio greffé Espina écarté tuteuré;50;1
+173;173;Pltx 50 Bio greffé Fortamino;50;1
+174;174;Pltx 50 Bio greffé Fortamino écarté;50;1
+175;175;Pltx 50 Bio greffé Fortamino écarté tuteuré;50;1
+176;176;Pltx 50 Bio greffé STT3;50;1
+177;177;Pltx 50 Bio greffé STT3 écarté;50;1
+178;178;Pltx 50 Bio greffé STT3 écarté tuteuré;50;1
+179;179;Pltx 50 Bio greffé STT3-E;50;1
+180;180;Pltx 50 Bio greffé STT3-E écarté;50;1
+181;181;Pltx 50 Bio greffé STT3-E écarté tuteuré;50;1
+182;182;Pltx 50 Bio repiqué;50;1
+183;183;Pltx 50 Bio repiqué écarté;50;1
+184;184;Pltx 50 Bio repiqué écarté tuteuré;50;1
+185;185;Pltx 60 Bio greffé Beaufort écarté;60;1
+186;186;Pltx 60 Bio greffé Beaufort écarté tuteuré;60;1
+187;187;Pltx 60 Bio greffé Fortamino écarté;60;1
+188;188;Pltx 60 Bio greffé STT3 écarté;60;1
+189;189;Pltx 60 Bio greffé STT3 écarté tuteuré;60;1
+190;190;Pltx 60 Bio greffé STT3-E écarté;60;1
+191;191;Pltx 60 Bio greffé STT3-E écarté tuteuré;60;1
+192;192;Pltx 60 Bio grerffé Fortamino écarté tuteuré;60;1
+193;193;Pltx 60 Bio repiqué écarté;60;1
+194;194;Pltx 60 Bio écarté;60;1
+195;195;Pltx 600 Bio;600;1
+196;196;Pltx 90 Bio greffé Beaufort écarté;90;1
+197;197;Pltx 90 Bio greffé Black Angel écarté;90;1
+198;198;Pltx 90 Bio greffé Espina écarté;90;1
+199;199;Pltx 90 Bio greffé Fortamino écarté;90;1
+200;200;Pltx 96 Bio écarté;96;1
+201;201;Pltx 150 Bio;150;1
+202;202;Pltx 240 Polystyrène Bio;240;1
+203;203;Plateaux 176;176;8
+204;204;Pltx 120;120;8
+205;205;Pltx 140;140;8
+206;206;Pltx 150;150;8
+207;207;Pltx 240 Polystyrène;240;8
+208;208;Pltx 240 STAMP Plastique;240;8
+209;209;Pltx 240 laine roche écarté;240;8
+210;210;Pltx 96;96;8
+211;211;Plateaux 176 Bio;176;8
+212;212;Pltx 120 Bio;120;8
+213;213;Pltx 150 Bio;150;8
+214;214;Pltx 240 Polystyrène Bio;240;8
+215;215;Pltx 240 STAMP plastique Bio;240;8
+216;216;Plx 140 Bio;140;8
+217;217;Plateaux 176;176;1
+218;218;Pltx 140;140;1
+219;219;Plateaux 176 Bio;176;1
+220;220;Pltx 140 Bio;140;1
+221;221;Pltx 240 Polystyrène Bio;240;1
+222;222;Plateaux 176;176;1
+223;223;Pltx 140;140;1
+224;224;Plateaux 176 Bio;176;1
+225;225;Pltx 140 Bio;140;1
+226;226;Pltx 240 Polystyrène Bio;240;1
+227;227;Plateaux 176;176;2
+228;228;Pltx 120 écarté;120;2
+229;229;Pltx 120 écarté taillé;120;2
+230;230;Pltx 140;140;2
+231;231;Pltx 150 écarté;150;2
+232;232;Pltx 240 Polystyrène;240;2
+233;233;Pltx 240 Polystyrène écarté;240;2
+234;234;Pltx 240 Polystyrène écarté taillé;240;2
+235;235;Pltx 240 STAMP Plastique écarté;240;2
+236;236;Plateaux 176 Bio;176;2
+237;237;Pltx 120 Bio écarté;120;2
+238;238;Pltx 140 Bio;140;2
+239;239;Pltx 240 Polystyrène Bio écarté;240;2
+240;240;Plateaux 176 1G;176;1
+241;241;Plateaux 176 2G;176;2
+242;242;Pltx 120 écarté taillé éclairci;120;2
+243;243;Pltx 120 écarté éclairci;120;2
+244;244;Pltx 140 1G;140;1
+245;245;Pltx 140 2G;140;2
+246;246;Pltx 150 écarté taillé;150;2
+247;247;Pltx 240 Polystyrène écarté taillé éclairci;240;2
+248;248;Pltx 240 Polystyrène écarté éclairci;240;2
+249;249;Pltx 240 STAMP Plastique écarté taillé éclairci;240;2
+250;250;Pltx 240 STAMP Plastique écarté éclairci;240;2
+251;251;Pltx 96 écarté taillé éclairci trié;96;2
+252;252;Plateaux 176 2G Bio;176;2
+253;253;Pltx 120 Bio écarté;120;1
+254;254;Pltx 120 Bio écarté taillé éclairci;120;1
+255;255;Pltx 120 Bio écarté éclairci;120;1
+256;256;Pltx 140 2G Bio;140;2
+257;257;Pltx 150 Bio écarté taillé;150;2
+258;258;Pltx 240 Polystyrène Bio écarté;240;2
+259;259;Pltx 240 Polystyrène Bio écarté taillé éclairci;240;2
+260;260;Pltx 240 Polystyrène Bio écarté éclairci;240;2
+261;261;Pltx 32 Bio repiqué;32;1
+262;262;Pltx 96 Bio écarté taillé éclairci;96;1
+263;263;Pltx 150 Bio;150;1
+264;264;Pltx 240 Polystyrène Bio;240;1
+265;265;Pltx 120 écarté;120;1
+266;266;Pltx 150 écarté;150;1
+267;267;Pltx 150 écarté taillé;150;1
+268;268;Pltx 240 Polystyrène écarté;240;1
+269;269;Pltx 32 repiqué;32;1
+270;270;Pltx 32 repiqué écarté;32;1
+271;271;Pltx 32 repiqué écarté taillé;32;1
+272;272;Pltx 50 repiqué;50;1
+273;273;Pltx 50 repiqué écarté;50;1
+274;274;Pltx 50 repiqué écarté taillé;50;1
+275;275;Pltx 60;60;1
+276;276;Pltx 60 écarté;60;1
+277;277;Pltx 96;96;1
+278;278;Pltx 96 écarté;96;1
+279;279;Pltx 96 écarté taillé;96;1
+280;280;Pltx 120 Bio écarté;120;1
+281;281;Pltx 150 Bio écarté taillé;150;1
+282;282;Pltx 240 Polystyrène Bio écarté;240;1
+283;283;Pltx 32 Bio repiqué écarté;32;1
+284;284;Pltx 50 Bio repiqué;50;1
+285;285;Pltx 50 Bio repiqué écarté;50;1
+286;286;Pltx 50 Bio repiqué écarté taillé;50;1
+287;287;Pltx 96 Bio écarté;96;1
+288;288;Pltx 96 Bio écarté taillé;96;1
+289;289;Pltx 120;120;1
+290;290;Pltx 240 Polystyrène;240;1
+291;291;Pltx 240 STAMP Plastique;240;1
+292;292;Plateaux 176;176;1
+293;293;Pltx 120 écarté;120;1
+294;294;Pltx 120 écarté taillé;120;1
+295;295;Pltx 150 écarté;150;1
+296;296;Pltx 240 Polystyrène;240;1
+297;297;Pltx 240 Polystyrène écarté;240;1
+298;298;Pltx 240 Polystyrène écarté taillé;240;1
+299;299;Pltx 96;96;1
+300;300;Pltx 96 écarté;96;1
+301;301;Pltx 96 écarté trié;96;1
+302;302;Plateaux 176 Bio;176;1
+303;303;Pltx 120 Bio écarté;120;1
+304;304;Pltx 240 Polystyrène Bio écarté;240;1
+305;305;Pltx 96 Bio écarté Trié;96;1
+306;306;Pltx 96 Bio écartév;96;1
+307;307;Plateaux 176;176;1
+308;308;Pltx 120 écarté;120;1
+309;309;Pltx 120 écarté taillé;120;1
+310;310;Pltx 150 écarté;150;1
+311;311;Pltx 240 Polystyrène;240;1
+312;312;Pltx 240 Polystyrène écarté;240;1
+313;313;Pltx 240 Polystyrène écarté taillé;240;1
+314;314;Pltx 96;96;1
+315;315;Pltx 96 écarté;96;1
+316;316;Pltx 96 écarté trié;96;1
+317;317;Pltx 150;150;1
+318;318;Pltx 240 Polystyrène;240;1
+319;319;Pltx 600 Bio;600;1
+320;320;Plateaux 176;176;1
+321;321;Plateaux 176;176;1
+322;322;Pltx 120 écarté taillé;120;1
+323;323;Pltx 140;140;1
+324;324;Pltx 140 repiqué écarté taillé;140;1
+325;325;Pltx 140 écarté taillé;140;1
+326;326;Pltx 150 écarté;150;1
+327;327;Pltx 240 Polystyrène écarté taillé;240;1
+328;328;Pltx 240 STAMP Plastique écarté taillé;240;1
+329;329;Pltx 50 repiqué écarté taillé;50;1
+330;330;Pltx 600;600;1
+331;331;Pltx 84 repiqué;84;1
+332;332;Pltx 84 repiqué écarté taillé;84;1
+333;333;Pltx 96;96;1
+334;334;Pltx 96 repiqué;96;1
+335;335;Pltx 120 Bio écarté taillé;120;1
+336;336;Pltx 140 Bio;140;1
+337;337;Pltx 140 Bio repiqué écarté taillé;140;1
+338;338;Pltx 140 Bio écarté taillé;140;1
+339;339;Pltx 150 BIO écarté;150;1
+340;340;Pltx 240 Polystyrène Bio écarté taillé;240;1
+341;341;Pltx 32 Bio repiqué;32;1
+342;342;Pltx 600 Bio;600;1
+343;343;Pltx 84 Bio repiqué;84;1
+344;344;Pltx 84 Bio repiqué écarté taillé;84;1
+345;345;Pltx 96 Bio;96;1
+346;346;Plateaux 176;176;1
+347;347;Pltx 120 écarté taillé;120;1
+348;348;Pltx 140;140;1
+349;349;Pltx 140 repiqué écarté taillé;140;1
+350;350;Pltx 140 écarté taillé;140;1
+351;351;Pltx 150 écarté;150;1
+352;352;Pltx 240 Polystyrène écarté taillé;240;1
+353;353;Pltx 240 STAMP Plastique écarté taillé;240;1
+354;354;Pltx 50 repiqué écarté taillé;50;1
+355;355;Pltx 600;600;1
+356;356;Pltx 84 repiqué;84;1
+357;357;Pltx 84 repiqué écarté taillé;84;1
+358;358;Pltx 96;96;1
+359;359;Pltx 96 repiqué;96;1
+360;360;Plateaux 176;176;1
+361;361;Pltx 120 Bio écarté taillé;120;1
+362;362;Pltx 140 Bio;140;1
+363;363;Pltx 140 Bio repiqué écarté taillé;140;1
+364;364;Pltx 140 Bio écarté taillé;140;1
+365;365;Pltx 150 BIO écarté;150;1
+366;366;Pltx 240 Polystyrène Bio écarté taillé;240;1
+367;367;Pltx 32 Bio repiqué;32;1
+368;368;Pltx 600 Bio;600;1
+369;369;Pltx 84 Bio repiqué;84;1
+370;370;Pltx 84 Bio repiqué écarté taillé;84;1
+371;371;Pltx 96 Bio;96;1
+372;372;Plateaux 176;176;1
+373;373;Pltx 120 écarté taillé;120;1
+374;374;Pltx 140;140;1
+375;375;Pltx 140 repiqué écarté taillé;140;1
+376;376;Pltx 140 écarté taillé;140;1
+377;377;Pltx 150 écarté;150;1
+378;378;Pltx 240 Polystyrène écarté taillé;240;1
+379;379;Pltx 240 STAMP Plastique écarté taillé;240;1
+380;380;Pltx 50 repiqué écarté taillé;50;1
+381;381;Pltx 600;600;1
+382;382;Pltx 84 repiqué;84;1
+383;383;Pltx 84 repiqué écarté taillé;84;1
+384;384;Pltx 96;96;1
+385;385;Pltx 96 repiqué;96;1
+386;386;Pltx 120 Bio écarté taillé;120;1
+387;387;Pltx 140 Bio;140;1
+388;388;Pltx 140 Bio repiqué écarté taillé;140;1
+389;389;Pltx 140 Bio écarté taillé;140;1
+390;390;Pltx 150 BIO écarté;150;1
+391;391;Pltx 240 Polystyrène Bio écarté taillé;240;1
+392;392;Pltx 32 Bio repiqué;32;1
+393;393;Pltx 600 Bio;600;1
+394;394;Pltx 84 Bio repiqué;84;1
+395;395;Pltx 84 Bio repiqué écarté taillé;84;1
+396;396;Pltx 96 Bio;96;1
+397;397;Plateaux 176;176;5
+398;398;Pltx 140;140;5
+399;399;Pltx 150 écarté;150;5
+400;400;Pltx 240 Polystyrène;240;5
+401;401;Pltx 240 STAMP plastique;240;5
+402;402;Pltx 60;60;5
+403;403;Pltx 96;96;5
+404;404;Plateaux 176 Bio;176;5
+405;405;Pltx 150 Bio;150;5
+406;406;Pltx 240 Polystyrène Bio;240;5
+407;407;Pltx 240 STAMP plastique Bio;240;5
+408;408;Plx 140 Bio;140;5
+409;409;Plateaux 176;176;1
+410;410;Pltx 140;140;1
+411;411;Plateaux 176 Bio;176;1
+412;412;Pltx 140 Bio;140;1
+413;413;Pltx 240 Polystyrène Bio;240;1
+414;414;Plateaux 176;176;1
+415;415;Pltx 140;140;1
+416;416;Plateaux 176 Bio;176;1
+417;417;Pltx 140 Bio;140;1
+418;418;Pltx 240 Polystyrène Bio;240;1
+419;419;Plateaux 176;176;1
+420;420;Plateaux 240 Polystyrène;240;1
+421;421;Pltx 140;140;1
+422;422;Plateaux 176 Bio;176;1
+423;423;Pltx 140 Bio;140;1
+424;424;Pltx 240 Polystyrène Bio;240;1
+425;425;Plateaux 176;176;1
+426;426;Pltx 120 écarté;120;1
+427;427;Pltx 140;140;1
+428;428;Pltx 150 écarté;150;1
+429;429;Pltx 240 Polystyrène écarté;240;1
+430;430;Pltx 240 STAMP Plastique écarté;240;1
+431;431;Pltx 50 repiqué écarté;50;1
+432;432;Pltx 96;96;1
+433;433;Plateaux 176 Bio;176;1
+434;434;Pltx 120 Bio écarté;120;1
+435;435;Pltx 140 Bio;140;1
+436;436;Pltx 150 écarté;150;1
+437;437;Pltx 240 Polystyrène Bio écarté;240;1
+438;438;Pltx 32 Bio repiqué;32;1
+439;439;Pltx 50 Bio repiqué;50;1
+440;440;Pltx 50 Bio repiqué écarté;50;1
+441;441;Pltx 600 Bio;600;1
+442;442;Pltx 96 Bio;96;1
+443;443;Plateaux 176;176;1
+444;444;Pltx 120 écarté;120;1
+445;445;Pltx 140;140;1
+446;446;Pltx 150 écarté;150;1
+447;447;Pltx 240 Polystyrène écarté;240;1
+448;448;Pltx 240 STAMP Plastique écarté;240;1
+449;449;Pltx 50 repiqué écarté;50;1
+450;450;Pltx 96;96;1
+451;451;Plateaux 176 Bio;176;1
+452;452;Pltx 120 Bio écarté;120;1
+453;453;Pltx 140 Bio;140;1
+454;454;Pltx 150 écarté;150;1
+455;455;Pltx 240 Polystyrène Bio écarté;240;1
+456;456;Pltx 32 Bio repiqué;32;1
+457;457;Pltx 50 Bio repiqué;50;1
+458;458;Pltx 50 Bio repiqué écarté;50;1
+459;459;Pltx 600 Bio;600;1
+460;460;Pltx 96 Bio;96;1
+461;461;Plateaux 176;176;1
+462;462;Pltx 120 écarté;120;1
+463;463;Pltx 140;140;1
+464;464;Pltx 150 écarté;150;1
+465;465;Pltx 240 Polystyrène écarté;240;1
+466;466;Pltx 240 STAMP Plastique écarté;240;1
+467;467;Pltx 50 repiqué écarté;50;1
+468;468;Pltx 96;96;1
+469;469;Plateaux 176 Bio;176;1
+470;470;Pltx 120 Bio écarté;120;1
+471;471;Pltx 140 Bio;140;1
+472;472;Pltx 150 écarté;150;1
+473;473;Pltx 240 Polystyrène Bio écarté;240;1
+474;474;Pltx 32 Bio repiqué;32;1
+475;475;Pltx 50 Bio repiqué;50;1
+476;476;Pltx 50 Bio repiqué écarté;50;1
+477;477;Pltx 600 Bio;600;1
+478;478;Pltx 96 Bio;96;1
+479;479;Plateaux 176;176;1
+480;480;Pltx 120 écarté;120;1
+481;481;Pltx 140;140;1
+482;482;Pltx 150 écarté;150;1
+483;483;Pltx 240 Polystyrène écarté;240;1
+484;484;Pltx 240 STAMP Plastique écarté;240;1
+485;485;Pltx 50 repiqué écarté;50;1
+486;486;Pltx 96;96;1
+487;487;Plateaux 176 Bio;176;1
+488;488;Pltx 120 Bio écarté;120;1
+489;489;Pltx 140 Bio;140;1
+490;490;Pltx 150 écarté;150;1
+491;491;Pltx 240 Polystyrène Bio écarté;240;1
+492;492;Pltx 32 Bio repiqué;32;1
+493;493;Pltx 50 Bio repiqué;50;1
+494;494;Pltx 50 Bio repiqué écarté;50;1
+495;495;Pltx 600 Bio;600;1
+496;496;Pltx 96 Bio;96;1
+497;497;Plateaux 176;176;1
+498;498;Pltx 120 écarté;120;1
+499;499;Pltx 140;140;1
+500;500;Pltx 150 écarté;150;1
+501;501;Pltx 240 Polystyrène écarté;240;1
+502;502;Pltx 240 STAMP Plastique écarté;240;1
+503;503;Pltx 50 repiqué écarté;50;1
+504;504;Pltx 96;96;1
+505;505;Plateaux 176 Bio;176;1
+506;506;Pltx 120 Bio écarté;120;1
+507;507;Pltx 140 Bio;140;1
+508;508;Pltx 150 écarté;150;1
+509;509;Pltx 240 Polystyrène Bio écarté;240;1
+510;510;Pltx 32 Bio repiqué;32;1
+511;511;Pltx 50 Bio repiqué;50;1
+512;512;Pltx 50 Bio repiqué écarté;50;1
+513;513;Pltx 600 Bio;600;1
+514;514;Pltx 96 Bio;96;1
+515;515;Plateaux 176;176;1
+516;516;Pltx 120 écarté;120;1
+517;517;Pltx 140;140;1
+518;518;Pltx 150 écarté;150;1
+519;519;Pltx 240 Polystyrène écarté;240;1
+520;520;Pltx 240 STAMP Plastique écarté;240;1
+521;521;Pltx 50 repiqué écarté;50;1
+522;522;Pltx 96;96;1
+523;523;Plateaux 176 Bio;176;1
+524;524;Pltx 120 Bio écarté;120;1
+525;525;Pltx 140 Bio;140;1
+526;526;Pltx 150 écarté;150;1
+527;527;Pltx 240 Polystyrène Bio écarté;240;1
+528;528;Pltx 32 Bio repiqué;32;1
+529;529;Pltx 50 Bio repiqué;50;1
+530;530;Pltx 50 Bio repiqué écarté;50;1
+531;531;Pltx 600 Bio;600;1
+532;532;Pltx 96 Bio;96;1
+533;533;Plateaux 176;176;1
+534;534;Pltx 120 écarté;120;1
+535;535;Pltx 140;140;1
+536;536;Pltx 150 écarté;150;1
+537;537;Pltx 240 Polystyrène écarté;240;1
+538;538;Pltx 240 STAMP Plastique écarté;240;1
+539;539;Pltx 50 repiqué écarté;50;1
+540;540;Pltx 96;96;1
+541;541;Plateaux 176 Bio;176;1
+542;542;Pltx 120 Bio écarté;120;1
+543;543;Pltx 140 Bio;140;1
+544;544;Pltx 150 écarté;150;1
+545;545;Pltx 240 Polystyrène Bio écarté;240;1
+546;546;Pltx 32 Bio repiqué;32;1
+547;547;Pltx 50 Bio repiqué;50;1
+548;548;Pltx 50 Bio repiqué écarté;50;1
+549;549;Pltx 600 Bio;600;1
+550;550;Pltx 96 Bio;96;1
+551;551;Plateaux 176;176;1
+552;552;Pltx 120 écarté;120;1
+553;553;Pltx 140;140;1
+554;554;Pltx 150 écarté;150;1
+555;555;Pltx 240 Polystyrène écarté;240;1
+556;556;Pltx 240 STAMP Plastique écarté;240;1
+557;557;Pltx 50 repiqué écarté;50;1
+558;558;Pltx 96;96;1
+559;559;Plateaux 176 Bio;176;1
+560;560;Pltx 120 Bio écarté;120;1
+561;561;Pltx 140 Bio;140;1
+562;562;Pltx 150 écarté;150;1
+563;563;Pltx 240 Polystyrène Bio écarté;240;1
+564;564;Pltx 32 Bio repiqué;32;1
+565;565;Pltx 50 Bio repiqué;50;1
+566;566;Pltx 50 Bio repiqué écarté;50;1
+567;567;Pltx 600 Bio;600;1
+568;568;Pltx 96 Bio;96;1
+569;569;Plateaux 176;176;1
+570;570;Pltx 120 écarté;120;1
+571;571;Pltx 140;140;1
+572;572;Pltx 150 écarté;150;1
+573;573;Pltx 240 Polystyrène écarté;240;1
+574;574;Pltx 240 STAMP Plastique écarté;240;1
+575;575;Pltx 50 repiqué écarté;50;1
+576;576;Pltx 96;96;1
+577;577;Plateaux 176 Bio;176;1
+578;578;Pltx 120 Bio écarté;120;1
+579;579;Pltx 140 Bio;140;1
+580;580;Pltx 150 écarté;150;1
+581;581;Pltx 240 Polystyrène Bio écarté;240;1
+582;582;Pltx 32 Bio repiqué;32;1
+583;583;Pltx 50 Bio repiqué;50;1
+584;584;Pltx 50 Bio repiqué écarté;50;1
+585;585;Pltx 600 Bio;600;1
+586;586;Pltx 96 Bio;96;1
+587;587;Plateaux 176;176;1
+588;588;Pltx 120 écarté;120;1
+589;589;Pltx 140;140;1
+590;590;Pltx 150 écarté;150;1
+591;591;Pltx 240 Polystyrène écarté;240;1
+592;592;Pltx 240 STAMP Plastique écarté;240;1
+593;593;Pltx 50 repiqué écarté;50;1
+594;594;Pltx 96;96;1
+595;595;Plateaux 176 Bio;176;1
+596;596;Pltx 120 Bio écarté;120;1
+597;597;Pltx 140 Bio;140;1
+598;598;Pltx 150 écarté;150;1
+599;599;Pltx 240 Polystyrène Bio écarté;240;1
+600;600;Pltx 32 Bio repiqué;32;1
+601;601;Pltx 50 Bio repiqué;50;1
+602;602;Pltx 50 Bio repiqué écarté;50;1
+603;603;Pltx 600 Bio;600;1
+604;604;Pltx 96 Bio;96;1
+605;605;Plateaux 176;176;1
+606;606;Pltx 120 écarté;120;1
+607;607;Pltx 140;140;1
+608;608;Pltx 150 écarté;150;1
+609;609;Pltx 240 Polystyrène écarté;240;1
+610;610;Pltx 240 STAMP Plastique écarté;240;1
+611;611;Pltx 50 repiqué écarté;50;1
+612;612;Pltx 96;96;1
+613;613;Plateaux 176 Bio;176;1
+614;614;Pltx 120 Bio écarté;120;1
+615;615;Pltx 140 Bio;140;1
+616;616;Pltx 150 écarté;150;1
+617;617;Pltx 240 Polystyrène Bio écarté;240;1
+618;618;Pltx 32 Bio repiqué;32;1
+619;619;Pltx 50 Bio repiqué;50;1
+620;620;Pltx 50 Bio repiqué écarté;50;1
+621;621;Pltx 600 Bio;600;1
+622;622;Pltx 96 Bio;96;1
+623;623;Plateaux 176;176;1
+624;624;Pltx 120 écarté;120;1
+625;625;Pltx 140;140;1
+626;626;Pltx 150 écarté;150;1
+627;627;Pltx 240 Polystyrène écarté;240;1
+628;628;Pltx 240 STAMP Plastique écarté;240;1
+629;629;Pltx 50 repiqué écarté;50;1
+630;630;Pltx 96;96;1
+631;631;Plateaux 176 Bio;176;1
+632;632;Pltx 120 Bio écarté;120;1
+633;633;Pltx 140 Bio;140;1
+634;634;Pltx 150 écarté;150;1
+635;635;Pltx 240 Polystyrène Bio écarté;240;1
+636;636;Pltx 32 Bio repiqué;32;1
+637;637;Pltx 50 Bio repiqué;50;1
+638;638;Pltx 50 Bio repiqué écarté;50;1
+639;639;Pltx 600 Bio;600;1
+640;640;Pltx 96 Bio;96;1
+641;641;Plateaux 176;176;1
+642;642;Pltx 120 écarté;120;1
+643;643;Pltx 140;140;1
+644;644;Pltx 150 écarté;150;1
+645;645;Pltx 240 Polystyrène écarté;240;1
+646;646;Pltx 240 STAMP Plastique écarté;240;1
+647;647;Pltx 50 repiqué écarté;50;1
+648;648;Pltx 96;96;1
+649;649;Plateaux 176 Bio;176;1
+650;650;Pltx 120 Bio écarté;120;1
+651;651;Pltx 140 Bio;140;1
+652;652;Pltx 150 écarté;150;1
+653;653;Pltx 240 Polystyrène Bio écarté;240;1
+654;654;Pltx 32 Bio repiqué;32;1
+655;655;Pltx 50 Bio repiqué;50;1
+656;656;Pltx 50 Bio repiqué écarté;50;1
+657;657;Pltx 600 Bio;600;1
+658;658;Pltx 96 Bio;96;1
+659;659;Plateaux 176;176;1
+660;660;Pltx 120 écarté;120;1
+661;661;Pltx 140;140;1
+662;662;Pltx 150 écarté;150;1
+663;663;Pltx 240 Polystyrène écarté;240;1
+664;664;Pltx 240 STAMP Plastique écarté;240;1
+665;665;Pltx 50 repiqué écarté;50;1
+666;666;Pltx 96;96;1
+667;667;Plateaux 176 Bio;176;1
+668;668;Pltx 120 Bio écarté;120;1
+669;669;Pltx 140 Bio;140;1
+670;670;Pltx 150 écarté;150;1
+671;671;Pltx 240 Polystyrène Bio écarté;240;1
+672;672;Pltx 32 Bio repiqué;32;1
+673;673;Pltx 50 Bio repiqué;50;1
+674;674;Pltx 50 Bio repiqué écarté;50;1
+675;675;Pltx 600 Bio;600;1
+676;676;Pltx 96 Bio;96;1
+677;677;Plateaux 176;176;1
+678;678;Pltx 120 écarté;120;1
+679;679;Pltx 140;140;1
+680;680;Pltx 150 écarté;150;1
+681;681;Pltx 240 Polystyrène écarté;240;1
+682;682;Pltx 240 STAMP Plastique écarté;240;1
+683;683;Pltx 50 repiqué écarté;50;1
+684;684;Pltx 96;96;1
+685;685;Plateaux 176 Bio;176;1
+686;686;Pltx 120 Bio écarté;120;1
+687;687;Pltx 140 Bio;140;1
+688;688;Pltx 150 écarté;150;1
+689;689;Pltx 240 Polystyrène Bio écarté;240;1
+690;690;Pltx 32 Bio repiqué;32;1
+691;691;Pltx 50 Bio repiqué;50;1
+692;692;Pltx 50 Bio repiqué écarté;50;1
+693;693;Pltx 600 Bio;600;1
+694;694;Pltx 96 Bio;96;1
+695;695;Plateaux 176;176;1
+696;696;Pltx 120 écarté;120;1
+697;697;Pltx 140;140;1
+698;698;Pltx 150 écarté;150;1
+699;699;Pltx 240 Polystyrène écarté;240;1
+700;700;Pltx 240 STAMP Plastique écarté;240;1
+701;701;Pltx 50 repiqué écarté;50;1
+702;702;Pltx 96;96;1
+703;703;Plateaux 176 Bio;176;1
+704;704;Pltx 120 Bio écarté;120;1
+705;705;Pltx 140 Bio;140;1
+706;706;Pltx 150 écarté;150;1
+707;707;Pltx 240 Polystyrène Bio écarté;240;1
+708;708;Pltx 32 Bio repiqué;32;1
+709;709;Pltx 50 Bio repiqué;50;1
+710;710;Pltx 50 Bio repiqué écarté;50;1
+711;711;Pltx 600 Bio;600;1
+712;712;Pltx 96 Bio;96;1
+713;713;Plateaux 176;176;1
+714;714;Pltx 120 écarté;120;1
+715;715;Pltx 140;140;1
+716;716;Pltx 150 écarté;150;1
+717;717;Pltx 240 Polystyrène écarté;240;1
+718;718;Pltx 240 STAMP Plastique écarté;240;1
+719;719;Pltx 50 repiqué écarté;50;1
+720;720;Pltx 96;96;1
+721;721;Plateaux 176 Bio;176;1
+722;722;Pltx 120 Bio écarté;120;1
+723;723;Pltx 140 Bio;140;1
+724;724;Pltx 150 écarté;150;1
+725;725;Pltx 240 Polystyrène Bio écarté;240;1
+726;726;Pltx 32 Bio repiqué;32;1
+727;727;Pltx 50 Bio repiqué;50;1
+728;728;Pltx 50 Bio repiqué écarté;50;1
+729;729;Pltx 600 Bio;600;1
+730;730;Pltx 96 Bio;96;1
+731;731;Plateaux 176;176;1
+732;732;Pltx 120 écarté;120;1
+733;733;Pltx 140;140;1
+734;734;Pltx 150 écarté;150;1
+735;735;Pltx 240 Polystyrène écarté;240;1
+736;736;Pltx 240 STAMP Plastique écarté;240;1
+737;737;Pltx 50 repiqué écarté;50;1
+738;738;Pltx 96;96;1
+739;739;Plateaux 176 Bio;176;1
+740;740;Pltx 120 Bio écarté;120;1
+741;741;Pltx 140 Bio;140;1
+742;742;Pltx 150 écarté;150;1
+743;743;Pltx 240 Polystyrène Bio écarté;240;1
+744;744;Pltx 32 Bio repiqué;32;1
+745;745;Pltx 50 Bio repiqué;50;1
+746;746;Pltx 50 Bio repiqué écarté;50;1
+747;747;Pltx 600 Bio;600;1
+748;748;Pltx 96 Bio;96;1
+749;749;Plateaux 176 10G;176;10
+750;750;Plateaux 176 5G;176;5
+751;751;Plateaux 176 8G;176;8
+752;752;Pltx 140 10G;140;10
+753;753;Pltx 140 5G;140;5
+754;754;Pltx 140 8G;140;8
+755;755;Pltx 150 écarté 5G;150;5
+756;756;Pltx 150 écarté taillé 10G;150;10
+757;757;Pltx 150 écarté taillé 5G;150;5
+758;758;Pltx 150 écarté taillé 8G;150;8
+759;759;Pltx 240 Polystyrène 5G;240;5
+760;760;Pltx 240 Polystyrène écarté 5G;240;5
+761;761;Pltx 240 Polystyrène écarté taillé 10G;240;10
+762;762;Pltx 240 Polystyrène écarté taillé 2G;240;2
+763;763;Pltx 240 Polystyrène écarté taillé 5G;240;5
+764;764;Pltx 240 Polystyrène écarté taillé 8G;240;8
+765;765;Pltx 600;600;1
+766;766;Plateaux 176 Bio 10G;176;10
+767;767;Plateaux 176 Bio 5G;176;5
+768;768;Plateaux 176 Bio 8G;176;8
+769;769;Pltx 140 Bio 10G;140;10
+770;770;Pltx 140 Bio 5G;140;5
+771;771;Pltx 140 Bio 8G;140;8
+772;772;Pltx 240 Polystyrène Bio écarté taillé 10G;240;10
+773;773;Pltx 240 Polystyrène Bio écarté taillé 5G;240;5
+774;774;Pltx 240 Polystyrène Bio écarté taillé 8G;240;8
+775;775;Plateaux 176;176;5
+776;776;Pltx 140;140;5
+777;777;Pltx 150;150;6
+778;778;Pltx 240 Polystyrène;240;6
+779;779;Pltx 240 Polystyrène écarté;240;6
+780;780;Pltx 240 Polystyrène écarté taillé;240;6
+781;781;Pltx 240 STAMP plastique;240;6
+782;782;Pltx 60;60;6
+783;783;Pltx 96;96;6
+784;784;Plateaux 176 Bio;176;5
+785;785;Pltx 150 Bio;150;5
+786;786;Pltx 240 Polystyrène Bio;240;5
+787;787;Pltx 240 STAMP plastique Bio;240;5
+788;788;Plx 140 Bio;140;5
+789;789;Pltx 120;120;1
+790;790;Pltx 120 greffé RS 841;120;1
+791;791;Pltx 120 greffé RS 841 écarté;120;1
+792;792;Pltx 120 laine roche écarté;120;1
+793;793;Pltx 120 écarté;120;1
+794;794;Pltx 140 trous greffé RS 841;140;1
+795;795;Pltx 150 écarté;150;1
+796;796;Pltx 18 greffé RS 841 écarté 2 Têtes;18;1
+797;797;Pltx 240 Polystyrène;240;1
+798;798;Pltx 240 Polystyrène écarté;240;1
+799;799;Pltx 240 laine roche écarté;240;1
+800;800;Pltx 28 greffé RS 841 laine de roche;28;1
+801;801;Pltx 32 greffé Cobalt écarté;32;1
+802;802;Pltx 32 greffé Custodian écarté;32;1
+803;803;Pltx 32 greffé RS 841 écarté;32;1
+804;804;Pltx 32 greffé RS 841 écarté 2 Têtes;32;1
+805;805;Pltx 32 laine roche écarté;32;1
+806;806;Pltx 32 repiqué;32;1
+807;807;Pltx 32 repiqué laine roche écarté;32;1
+808;808;Pltx 32 repiqué laine roche écarté tuteuré;32;1
+809;809;Pltx 32 repiqué écarté;32;1
+810;810;Pltx 32 repiqué écarté tuteuré;32;1
+811;811;Pltx 40 greffé RS 841 taillé 1 tête;40;1
+812;812;Pltx 40 greffé RS 841 taillé 2 têtes;40;1
+813;813;Pltx 48 écarté;48;1
+814;814;Pltx 48 écarté trié;48;1
+815;815;Pltx 50 greffé Cobalt écarté;50;1
+816;816;Pltx 50 greffé Custodian écarté;50;1
+817;817;Pltx 50 greffé RS 841 écarté;50;1
+818;818;Pltx 50 greffé écarté;50;1
+819;819;Pltx 50 repiqué;50;1
+820;820;Pltx 50 repiqué écarté;50;1
+821;821;Pltx 60;60;1
+822;822;Pltx 60 greffé Cobalt écarté;60;1
+823;823;Pltx 60 greffé Combyne écarté;60;1
+824;824;Pltx 60 greffé Custodian écarté;60;1
+825;825;Pltx 60 greffé RS 841 écarté;60;1
+826;826;Pltx 60 greffé RS 841 écarté taillé 2 têtes;60;1
+827;827;Pltx 60 greffé RS 841 écarté taillé tuteuré 2 têtes;60;1
+828;828;Pltx 60 greffé RS 841 écarté tuteuré;60;1
+829;829;Pltx 90 greffé RS841;90;1
+830;830;Pltx 90 greffé TZ148;90;1
+831;831;Pltx 96;96;1
+832;832;Pltx 96 greffé RS 841;96;1
+833;833;Pltx 96 greffé RS 841 écarté;96;1
+834;834;Pltx 96 greffé RS 841 écarté taillé;96;1
+835;835;Pltx 96 écarté;96;1
+836;836;Pltx 120 Bio;120;1
+837;837;Pltx 120 Bio greffé RS 841;120;1
+838;838;Pltx 120 Bio greffé RS 841 écarté;120;1
+839;839;Pltx 120 Bio écarté;120;1
+840;840;Pltx 140 Bio greffé RS 841;140;1
+841;841;Pltx 150 Bio écarté taillé;150;1
+842;842;Pltx 240 Polystyrène Bio;240;1
+843;843;Pltx 240 Polystyrène Bio écarté;240;1
+844;844;Pltx 32 Bio Greffé Cobalt écarté;32;1
+845;845;Pltx 32 Bio Greffé Custodian écarté;32;1
+846;846;Pltx 32 Bio Greffé RS 841 écarté;32;1
+847;847;Pltx 32 Bio repiqué;32;1
+848;848;Pltx 32 Bio repiqué écarté;32;1
+849;849;Pltx 32 Bio repiqué écarté tuteuré;32;1
+850;850;Pltx 40 Bio greffé Cobalt taillé 1 tête;40;1
+851;851;Pltx 40 Bio greffé Flexifort taillé 1 tête;40;1
+852;852;Pltx 40 Bio greffé RS 841 taillé 1 tête;40;1
+853;853;Pltx 40 Bio greffé RS 841 taillé 2 têtes;40;1
+854;854;Pltx 48 Bio écarté;48;1
+855;855;Pltx 48 Bio écarté trié;48;1
+856;856;Pltx 50 Bio greffé RS 841 écarté;50;1
+857;857;Pltx 50 Bio repiqué;50;1
+858;858;Pltx 50 Bio repiqué écarté;50;1
+859;859;Pltx 60 Bio;60;1
+860;860;Pltx 60 Bio Greffé Cobalt écarté;60;1
+861;861;Pltx 60 Bio Greffé Custodian écarté;60;1
+862;862;Pltx 60 Bio Greffé RS 841 écarté;60;1
+863;863;Pltx 60 Bio Greffé écarté;60;1
+864;864;Pltx 60 Bio greffé RS 841 écarté taillé 2 têtes;60;1
+865;865;Pltx 60 Bio greffé RS 841 écarté taillé tuteuré 2 têtes;60;1
+866;866;Pltx 60 Bio greffé RS 841 écarté tuteuré;60;1
+867;867;Pltx 90 Bio greffé RS841;90;1
+868;868;Pltx 90 Bio greffé TZ148;90;1
+869;869;Pltx 96 Bio;96;1
+870;870;Pltx 96 Bio greffé RS 841;96;1
+871;871;Pltx 96 Bio greffé RS 841 écarté;96;1
+872;872;Pltx 96 Bio greffé RS 841 écarté taillé;96;1
+873;873;Pltx 96 Bio écarté;96;1
+874;874;Plateaux 176;176;6
+875;875;Pltx 120;120;6
+876;876;Pltx 140;140;6
+877;877;Pltx 150;150;5
+878;878;Pltx 240 Polystyrène;240;6
+879;879;Pltx 240 STAMP plastique;240;6
+880;880;Pltx 60;60;6
+881;881;Pltx 96;96;1
+882;882;Plateaux 176 Bio;176;6
+883;883;Pltx 150 Bio;150;6
+884;884;Pltx 240 Polystyrène Bio;240;6
+885;885;Pltx 240 STAMP plastique Bio;240;6
+886;886;Plx 140 Bio;140;6
+887;887;Pltx 120 écarté;120;1
+888;888;Pltx 140 trous greffé RS 841;140;1
+889;889;Pltx 240 Polystyrène écarté;240;1
+890;890;Pltx 48 trié;48;1
+891;891;Pltx 50 repiqué écarté;50;1
+892;892;Pltx 60 greffé RS 841 écarté;60;1
+893;893;Pltx 120 Bio écarté;120;1
+894;894;Pltx 140 Bio greffé RS 841;140;1
+895;895;Pltx 240 Polystyrène Bio écarté;240;1
+896;896;Pltx 32 Bio;32;1
+897;897;Pltx 32 Bio repiqué;32;1
+898;898;Pltx 60 Bio greffé RS 841 écarté;60;1
+899;899;Pltx 120 écarté;120;1
+900;900;Pltx 150 écarté;150;1
+901;901;Pltx 150 écarté taillé;150;1
+902;902;Pltx 240 Polystyrène écarté;240;1
+903;903;Pltx 32 repiqué;32;1
+904;904;Pltx 32 repiqué écarté;32;1
+905;905;Pltx 32 repiqué écarté taillé;32;1
+906;906;Pltx 50 repiqué;50;1
+907;907;Pltx 50 repiqué écarté;50;1
+908;908;Pltx 50 repiqué écarté taillé;50;1
+909;909;Pltx 60;60;1
+910;910;Pltx 60 écarté;60;1
+911;911;Pltx 96;96;1
+912;912;Pltx 96 écarté;96;1
+913;913;Pltx 96 écarté taillé;96;1
+914;914;Pltx 120 Bio écarté;120;1
+915;915;Pltx 150 Bio écarté taillé;150;1
+916;916;Pltx 240 Polystyrène Bio écarté;240;1
+917;917;Pltx 32 Bio repiqué écarté;32;1
+918;918;Pltx 50 Bio repiqué;50;1
+919;919;Pltx 50 Bio repiqué écarté;50;1
+920;920;Pltx 50 Bio repiqué écarté taillé;50;1
+921;921;Pltx 96 Bio écarté;96;1
+922;922;Pltx 96 Bio écarté taillé;96;1
+923;923;Pltx 120 écarté;120;1
+924;924;Pltx 140 trous greffé RS 841;140;1
+925;925;Pltx 150 écarté;150;1
+926;926;Pltx 150 écarté taillé;150;1
+927;927;Pltx 240 Polystyrène écarté;240;1
+928;928;Pltx 32 repiqué;32;1
+929;929;Pltx 32 repiqué écarté;32;1
+930;930;Pltx 32 repiqué écarté taillé;32;1
+931;931;Pltx 40 greffé RS 841;40;1
+932;932;Pltx 50 repiqué;50;1
+933;933;Pltx 50 repiqué écarté;50;1
+934;934;Pltx 50 repiqué écarté taillé;50;1
+935;935;Pltx 60;60;1
+936;936;Pltx 60 greffé RS 841;60;1
+937;937;Pltx 60 écarté;60;1
+938;938;Pltx 96;96;1
+939;939;Pltx 96 greffé RS 841;96;1
+940;940;Pltx 96 greffé RS 841 écarté;96;1
+941;941;Pltx 96 écarté;96;1
+942;942;Pltx 96 écarté taillé;96;1
+943;943;Pltx 120 Bio écarté;120;1
+944;944;Pltx 140 Bio greffé RS 841;140;1
+945;945;Pltx 150 Bio écarté taillé;150;1
+946;946;Pltx 240 Polystyrène Bio écarté;240;1
+947;947;Pltx 32 Bio repiqué;32;1
+948;948;Pltx 32 Bio repiqué écarté;32;1
+949;949;Pltx 32 Bio repiqué écarté taillé;32;1
+950;950;Pltx 50 Bio repiqué;50;1
+951;951;Pltx 50 Bio repiqué écarté;50;1
+952;952;Pltx 50 Bio repiqué écarté taillé;50;1
+953;953;Pltx 60 Bio écarté;60;1
+954;954;Pltx 96 Bio;96;1
+955;955;Pltx 96 Bio greffé RS 841;96;1
+956;956;Pltx 96 Bio greffé RS 841 écarté;96;1
+957;957;Pltx 96 Bio écarté;96;1
+958;958;Pltx 96 Bio écarté taillé;96;1
+959;959;Plateaux 176;176;1
+960;960;Pltx 120;120;1
+961;961;Pltx 140;140;1
+962;962;Pltx 140;140;1
+963;963;Pltx 140 repiqué;140;1
+964;964;Pltx 150;150;1
+965;965;Pltx 240 Polystyrène;240;1
+966;966;Pltx 240 STAMP Plastique;240;1
+967;967;Pltx 32;32;1
+968;968;Pltx 48 écarté;48;1
+969;969;Pltx 50;50;1
+970;970;Pltx 50 repiqué;50;1
+971;971;Pltx 50 repiqué écarté;50;1
+972;972;Pltx 50 repiqué écarté taillé tuteuré;50;1
+973;973;Pltx 50 repiqué écarté tuteuré;50;1
+974;974;Pltx 60;60;1
+975;975;Pltx 600;600;1
+976;976;Pltx 84;84;1
+977;977;Pltx 96;96;1
+978;978;Plateaux 176 Bio;176;1
+979;979;Pltx 120 Bio écarté;120;1
+980;980;Pltx 140 Bio;140;1
+981;981;Pltx 150 Bio;150;1
+982;982;Pltx 240 Polystyrène Bio;240;1
+983;983;Pltx 50 Bio repiqué écarté;50;1
+984;984;Pltx 600 Bio;600;1
+985;985;Plateaux 176 10G;176;10
+986;986;Plateaux 176 5G;176;5
+987;987;Plateaux 176 8G;176;8
+988;988;Pltx 140 10G;140;10
+989;989;Pltx 140 5G;140;5
+990;990;Pltx 140 8G;140;8
+991;991;Pltx 150 écarté 5G;150;5
+992;992;Pltx 150 écarté taillé 10G;150;10
+993;993;Pltx 150 écarté taillé 5G;150;5
+994;994;Pltx 150 écarté taillé 8G;150;8
+995;995;Pltx 240 Polystyrène 5G;240;5
+996;996;Pltx 240 Polystyrène écarté 5G;240;5
+997;997;Pltx 240 Polystyrène écarté taillé 10G;240;10
+998;998;Pltx 240 Polystyrène écarté taillé 2G;240;2
+999;999;Pltx 240 Polystyrène écarté taillé 5G;240;5
+1000;1000;Pltx 240 Polystyrène écarté taillé 8G;240;8
+1001;1001;Pltx 600;600;1
+1002;1002;Plateaux 176 Bio 10G;176;10
+1003;1003;Plateaux 176 Bio 5G;176;5
+1004;1004;Plateaux 176 Bio 8G;176;8
+1005;1005;Pltx 140 Bio 10G;140;10
+1006;1006;Pltx 140 Bio 5G;140;5
+1007;1007;Pltx 140 Bio 8G;140;8
+1008;1008;Pltx 240 Polystyrène Bio écarté taillé 10G;240;10
+1009;1009;Pltx 240 Polystyrène Bio écarté taillé 5G;240;5
+1010;1010;Pltx 240 Polystyrène Bio écarté taillé 8G;240;8
+1011;1011;Plateaux 176 1G;176;1
+1012;1012;Plateaux 176 2G et plus;176;3
+1013;1013;Plateaux 240 Polystyrène;240;1
+1014;1014;Pltx 140 1G;140;1
+1015;1015;Pltx 140 2G et plus;140;3
+1016;1016;Pltx 150 1G;150;1
+1017;1017;Pltx 150 2G et plus;150;3
+1018;1018;Plateaux 176 Bio 1G;176;1
+1019;1019;Plateaux 176 Bio 2G et plus;176;3
+1020;1020;Pltx 140 Bio 1G;140;1
+1021;1021;Pltx 140 Bio 2G et plus;140;3
+1022;1022;Pltx 150 Bio 1G;150;4
+1023;1023;Pltx 150 Bio 2G et plus;150;3
+1024;1024;Pltx 240 Polystyrène Bio;240;1
+1025;1025;Plateaux 176;176;5
+1026;1026;Pltx 140;140;5
+1027;1027;Pltx 150;150;5
+1028;1028;Pltx 150 8 graines;150;8
+1029;1029;Pltx 240 Polystyrène;240;5
+1030;1030;Pltx 240 STAMP plastique;240;5
+1031;1031;Pltx 60;60;5
+1032;1032;Pltx 96;96;5
+1033;1033;Plateaux 176 Bio;176;4
+1034;1034;Pltx 150 Bio;150;4
+1035;1035;Pltx 240 Polystyrène Bio;240;4
+1036;1036;Pltx 240 STAMP plastique Bio;240;4
+1037;1037;Plx 140 Bio;140;4
+1038;1038;Plateaux 176;176;1
+1039;1039;Pltx 120 écarté taillé;120;1
+1040;1040;Pltx 140;140;1
+1041;1041;Pltx 150 écarté taillé;150;1
+1042;1042;Pltx 240 Polystyrène écarté taillé;240;1
+1043;1043;Pltx 240 STAMP Plastique écarté taillé;240;1
+1044;1044;Pltx 96 écarté taillé;96;1
+1045;1045;Plateaux 176 Bio;176;1
+1046;1046;Pltx 120 Bio écarté taillé;120;1
+1047;1047;Pltx 140 Bio;140;1
+1048;1048;Pltx 150 Bio écarté taillé;150;1
+1049;1049;Pltx 240 Polystyrène Bio écarté taillé;240;1
+1050;1050;Pltx 140 repiqué;140;1
+1051;1051;Pltx 240 Polystyrène;240;1
+1052;1052;Pltx 240 Polystyrène Bio;240;1
+1053;1053;Plateaux 176;176;1
+1054;1054;Plateaux 240 Polystyrène;240;1
+1055;1055;Pltx 140;140;1
+1056;1056;Plateaux 176 Bio;176;1
+1057;1057;Pltx 140 Bio;140;1
+1058;1058;Pltx 240 Polystyrène Bio;240;1
+1059;1059;Pltx 120 écarté 3 graines;120;3
+1060;1060;Pltx 150 écarté 1 graine;150;1
+1061;1061;Pltx 240 Polystyrène écarté 1 graine;240;1
+1062;1062;Pltx 32 écarté 1 graine;32;1
+1063;1063;Pltx 32 écarté 2 graines;32;2
+1064;1064;Pltx 32 écarté 3 graines;32;3
+1065;1065;Pltx 32 écarté 4 graines;32;4
+1066;1066;Pltx 50 écarté   1 graine;50;1
+1067;1067;Pltx 50 écarté 2 graines;50;2
+1068;1068;Pltx 50 écarté 3 graines;50;3
+1069;1069;Pltx 50 écarté 4 graines;50;4
+1070;1070;Pltx 96 écarté 1 graine;96;1
+1071;1071;Pltx 96 écarté 2 graines;96;2
+1072;1072;Pltx 96 écarté 3 graines;96;3
+1073;1073;Pltx 96 écarté 4 graines;96;4
+1074;1074;Pltx 120 écarté 1 graine;120;1
+1075;1075;Pltx 150 Bio écarté 1 graine;150;1
+1076;1076;Pltx 240 Polystyrène écarté 1 graine BIO;240;1
+1077;1077;Pltx 32 Bio écarté 1graine;32;1
+1078;1078;Pltx 32 Bio écarté 2 graines;32;2
+1079;1079;Pltx 32 Bio écarté 3 graines;32;3
+1080;1080;Pltx 32 Bio écarté 4 graines;32;4
+1081;1081;Pltx 50 Bio écarté 1 graine;50;1
+1082;1082;Pltx 50 Bio écarté 2 graines;50;2
+1083;1083;Pltx 50 Bio écarté 3 graines;50;3
+1084;1084;Pltx 50 Bio écarté 4 graines;50;4
+1085;1085;Pltx 60 Bio;60;1
+1086;1086;Pltx 96 Bio écarté 1 graine;96;1
+1087;1087;Pltx 96 Bio écarté 2 graines;96;2
+1088;1088;Pltx 96 Bio écarté 3 graines;96;3
+1089;1089;Pltx 96 Bio écarté 4 graines;96;4
+1090;1090;Plateaux 176;176;1
+1091;1091;Pltx 140;140;1
+1092;1092;Plateaux 176 Bio;176;1
+1093;1093;Pltx 140 Bio;140;1
+1094;1094;Pltx 240 Polystyrène Bio;240;1
+1095;1095;Plateaux 176;176;1
+1096;1096;Plateaux 240 Polystyrène;240;1
+1097;1097;Pltx 140;140;1
+1098;1098;Plateaux 176;176;1
+1099;1099;Plateaux 240 Polystyrène;240;1
+1100;1100;Pltx 140;140;1
+1101;1101;Pltx 140 repiqué;140;1
+1102;1102;Plateaux 176 Bio;176;1
+1103;1103;Pltx 140 Bio;140;1
+1104;1104;Pltx 240 Polystyrène Bio;240;1
+1105;1105;Plateaux 176;176;1
+1106;1106;Plateaux 240 Polystyrène;240;1
+1107;1107;Pltx 140;140;1
+1108;1108;Plateaux 176 Bio;176;1
+1109;1109;Pltx 140 Bio;140;1
+1110;1110;Pltx 240 Polystyrène Bio;240;1
+1111;1111;Pltx 240 Polystyrène;240;1
+1112;1112;Pltx 150;150;6
+1113;1113;Pltx 240 Polystyrène;240;6
+1114;1114;Pltx 240 STAMP plastique;240;6
+1115;1115;Pltx 60;60;6
+1116;1116;Pltx 96;96;6
+1117;1117;Plateaux 176;176;1
+1118;1118;Pltx 140;140;1
+1119;1119;Plateaux 176 Bio;176;1
+1120;1120;Pltx 140 Bio;140;1
+1121;1121;Pltx 240 Polystyrène Bio;240;1
+1122;1122;Plateaux 176;176;1
+1123;1123;Pltx 140;140;1
+1124;1124;Plateaux 176 Bio;176;1
+1125;1125;Pltx 140 Bio;140;1
+1126;1126;Pltx 240 Polystyrène Bio;240;1
+1127;1127;Plateaux 176 6G;176;6
+1128;1128;Plateaux 240 Polystyrène 6G;240;6
+1129;1129;Pltx 140 6G;140;6
+1130;1130;Plateaux 176 Bio;176;6
+1131;1131;Pltx 140 Bio;140;6
+1132;1132;Pltx 120;120;1
+1133;1133;Pltx 240 Polystyrène;240;1
+1134;1134;Pltx 240 Polystyrène Bio;240;1
+1135;1135;Pltx 150;150;1
+1136;1136;Pltx 240 Polystyrène;240;1
+1137;1137;Pltx 240 STAMP plastique;240;1
+1138;1138;Pltx 120 greffé Camelforce;120;1
+1139;1139;Pltx 120 greffé RS 841;120;1
+1140;1140;Pltx 120 écarté;120;1
+1141;1141;Pltx 120 écarté taillé;120;1
+1142;1142;Pltx 140 trous greffé Camelforce;140;1
+1143;1143;Pltx 140 trous greffé RS 841;140;1
+1144;1144;Pltx 150 écarté;150;1
+1145;1145;Pltx 240 Polystyrène écarté;240;1
+1146;1146;Pltx 240 Polystyrène écarté taillé;240;1
+1147;1147;Pltx 32 greffé Camelforce;32;1
+1148;1148;Pltx 32 greffé Camelforce taillé;32;1
+1149;1149;Pltx 32 greffé RS 841;32;1
+1150;1150;Pltx 32 greffé RS 841 taillé;32;1
+1151;1151;Pltx 32 repiqué écarté;32;1
+1152;1152;Pltx 32 repiqué écarté taillé;32;1
+1153;1153;Pltx 40 greffé Camelforce;40;1
+1154;1154;Pltx 40 greffé RS 841;40;1
+1155;1155;Pltx 40 greffé taillé Camelforce;40;1
+1156;1156;Pltx 40 greffé taillé RS 841;40;1
+1157;1157;Pltx 48;48;1
+1158;1158;Pltx 48 greffé Camelforce taillé;48;1
+1159;1159;Pltx 48 greffé RS 841 taillé;48;1
+1160;1160;Pltx 50 greffé Camelforce;50;1
+1161;1161;Pltx 50 greffé Camelforce taillé;50;1
+1162;1162;Pltx 50 greffé RS 841;50;1
+1163;1163;Pltx 50 greffé RS 841 taillé;50;1
+1164;1164;Pltx 50 repiqué écarté;50;1
+1165;1165;Pltx 50 repiqué écarté taillé;50;1
+1166;1166;Pltx 60;60;1
+1167;1167;Pltx 60 greffé Camelforce;60;1
+1168;1168;Pltx 60 greffé Camelforce taillé;60;1
+1169;1169;Pltx 60 greffé Dinero taillé;60;1
+1170;1170;Pltx 60 greffé RS 841;60;1
+1171;1171;Pltx 60 greffé RS 841 taillé;60;1
+1172;1172;Pltx 60 greffé TZ 148 taillé;60;1
+1173;1173;Pltx 60 greffé Vigus;60;1
+1174;1174;Pltx 60 taillé;60;1
+1175;1175;Pltx 600;600;1
+1176;1176;Pltx 90 greffé Camelforce;90;1
+1177;1177;Pltx 90 greffé RS841;90;1
+1178;1178;Pltx 90 greffé Sintosa;90;1
+1179;1179;Pltx 90 greffé TZ148;90;1
+1180;1180;Pltx 96;96;1
+1181;1181;Pltx 96 greffé Camelforce;96;1
+1182;1182;Pltx 96 greffé Camelforce taillé;96;1
+1183;1183;Pltx 96 greffé RS 841;96;1
+1184;1184;Pltx 96 greffé RS 841 taillé;96;1
+1185;1185;Pltx 96 taillé;96;1
+1186;1186;Pltx 96 écarté;96;1
+1187;1187;Pltx 96 écarté taillé;96;1
+1188;1188;Pltx 120 Bio greffé RS 841 écarté;120;1
+1189;1189;Pltx 120 Bio greffé Torum écarté;120;1
+1190;1190;Pltx 120 Bio écarté;120;1
+1191;1191;Pltx 120 Bio écarté taillé;120;1
+1192;1192;Pltx 140 Bio greffé Camelforce;140;1
+1193;1193;Pltx 140 Bio greffé RS 841;140;1
+1194;1194;Pltx 140 Bio greffé Torum;140;1
+1195;1195;Pltx 150 BIO écarté;150;1
+1196;1196;Pltx 240 Polystyrène Bio écarté;240;1
+1197;1197;Pltx 240 Polystyrène Bio écarté taillé;240;1
+1198;1198;Pltx 32 Bio greffé Camelforce;32;1
+1199;1199;Pltx 32 Bio greffé Camelforce taillé;32;1
+1200;1200;Pltx 32 Bio greffé RS 841;32;1
+1201;1201;Pltx 32 Bio greffé RS 841 taillé;32;1
+1202;1202;Pltx 32 Bio greffé Torum taillé;32;1
+1203;1203;Pltx 32 Bio repiqué écarté;32;1
+1204;1204;Pltx 32 Bio repiqué écarté taillé;32;1
+1205;1205;Pltx 40 Bio greffé Camelforce;40;1
+1206;1206;Pltx 40 Bio greffé RS 841;40;1
+1207;1207;Pltx 40 Bio greffé taillé Camelforce;40;1
+1208;1208;Pltx 40 Bio greffé taillé RS 841;40;1
+1209;1209;Pltx 40 Bio greffé taillé Torum;40;1
+1210;1210;Pltx 48 Bio;48;1
+1211;1211;Pltx 48 Bio greffé Camelforce taillé;48;1
+1212;1212;Pltx 48 Bio greffé RS 841 taillé;48;1
+1213;1213;Pltx 48 Bio greffé Torum taillé;48;1
+1214;1214;Pltx 50 Bio Greffé;50;1
+1215;1215;Pltx 50 Bio repiqué écarté;50;1
+1216;1216;Pltx 50 Bio repiqué écarté taillé;50;1
+1217;1217;Pltx 60 Bio;60;1
+1218;1218;Pltx 60 Bio Greffé RS 841 taillé;60;1
+1219;1219;Pltx 60 Bio Greffé Torum taillé;60;1
+1220;1220;Pltx 60 Bio greffé Camelforce;60;1
+1221;1221;Pltx 60 Bio greffé Camelforce taillé;60;1
+1222;1222;Pltx 60 Bio greffé RS 841;60;1
+1223;1223;Pltx 60 Bio greffé TZ 148 taillé;60;1
+1224;1224;Pltx 600 Bio;600;1
+1225;1225;Pltx 90 Bio greffé Camelforce;90;1
+1226;1226;Pltx 90 Bio greffé RS841;90;1
+1227;1227;Pltx 90 Bio greffé Sintosa;90;1
+1228;1228;Pltx 90 Bio greffé TZ148;90;1
+1229;1229;Pltx 96 Bio;96;1
+1230;1230;Pltx 96 Bio greffé Camelforce;96;1
+1231;1231;Pltx 96 Bio greffé Camelforce taillé;96;1
+1232;1232;Pltx 96 Bio greffé RS 841;96;1
+1233;1233;Pltx 96 Bio greffé RS 841 Taillé;96;1
+1234;1234;Pltx 96 Bio greffé Torum Taillé;96;1
+1235;1235;Pltx 96 Bio taillé;96;1
+1236;1236;Pltx 96 Bio écarté;96;1
+1237;1237;Pltx 96 Bio écarté taillé;96;1
+1238;1238;Plateaux 176;176;1
+1239;1239;Pltx 120 écarté;120;1
+1240;1240;Pltx 140;140;1
+1241;1241;Pltx 240 Polystyrène;240;1
+1242;1242;Pltx 240 Polystyrène repiqué;240;1
+1243;1243;Plateaux 176 Bio;176;1
+1244;1244;Pltx 120 Bio écarté;120;1
+1245;1245;Pltx 140 Bio;140;1
+1246;1246;Pltx 150 Bio;150;1
+1247;1247;Pltx 240 Polystyrène Bio;240;1
+1248;1248;Plateaux 176 Bio;176;3
+1249;1249;Pltx 140 Bio;140;1
+1250;1250;Pltx 240 Polystyrène Bio;240;1
+1251;1251;Plateaux 176;176;3
+1252;1252;Plateaux 240 Polystyrène;240;3
+1253;1253;Pltx 140;140;3
+1254;1254;Plateaux 176;176;1
+1255;1255;Pltx 140;140;1
+1256;1256;Pltx 18;18;1
+1257;1257;Pltx 240 Polystyrène;240;1
+1258;1258;Pltx 32;32;1
+1259;1259;Pltx 50;50;1
+1260;1260;Pltx 60;60;1
+1261;1261;Pltx 84;84;1
+1262;1262;Pltx 96;96;1
+1263;1263;Plateaux 176 Bio;176;1
+1264;1264;Pltx 140 Bio;140;1
+1265;1265;Pltx 240 Polystyrène Bio;240;1
+1266;1266;Pltx 32 Bio;32;1
+1267;1267;Pltx 50 Bio;50;1
+1268;1268;Pltx 60 Bio;60;1
+1269;1269;Pltx 84 Bio;84;1
+1270;1270;Pltx 96 Bio;96;1
+1271;1271;Plateaux 176;176;1
+1272;1272;Pltx 140;140;1
+1273;1273;Plateaux 176 Bio;176;1
+1274;1274;Pltx 140 Bio;140;1
+1275;1275;Pltx 240 Polystyrène Bio;240;1
+1276;1276;Plateaux 176;176;1
+1277;1277;Pltx 140;140;1
+1278;1278;Plateaux 176 Bio;176;1
+1279;1279;Pltx 140 Bio;140;1
+1280;1280;Pltx 240 Polystyrène Bio;240;1
+1281;1281;Plateaux 176 4G;176;4
+1282;1282;Pltx 120 4G;120;4
+1283;1283;Pltx 120 5G;120;5
+1284;1284;Pltx 120 écarté 4G;120;4
+1285;1285;Pltx 120 écarté 5G;120;5
+1286;1286;Pltx 140 4G;140;4
+1287;1287;Pltx 140 4G;140;4
+1288;1288;Pltx 150 4G;150;4
+1289;1289;Pltx 150 5G;150;5
+1290;1290;Pltx 240 Polystyrène écarté 4G;240;4
+1291;1291;Pltx 240 Polystyrène écarté 5G;240;5
+1292;1292;Pltx 75 4G;75;4
+1293;1293;Pltx 96 4 graines;96;4
+1294;1294;Plateaux 176 Bio;176;4
+1295;1295;Pltx 140 Bio;140;4
+1296;1296;Plateaux 176 10G;176;10
+1297;1297;Plateaux 176 5G;176;5
+1298;1298;Plateaux 176 8G;176;8
+1299;1299;Pltx 140 10G;140;10
+1300;1300;Pltx 140 5G;140;5
+1301;1301;Pltx 140 8G;140;8
+1302;1302;Pltx 150 écarté 5G;150;5
+1303;1303;Pltx 150 écarté taillé 10G;150;10
+1304;1304;Pltx 150 écarté taillé 5G;150;5
+1305;1305;Pltx 150 écarté taillé 8G;150;8
+1306;1306;Pltx 240 Polystyrène 5G;240;5
+1307;1307;Pltx 240 Polystyrène écarté 5G;240;5
+1308;1308;Pltx 240 Polystyrène écarté taillé 10G;240;10
+1309;1309;Pltx 240 Polystyrène écarté taillé 2G;240;2
+1310;1310;Pltx 240 Polystyrène écarté taillé 5G;240;5
+1311;1311;Pltx 240 Polystyrène écarté taillé 8G;240;8
+1312;1312;Pltx 600;600;1
+1313;1313;Plateaux 176 Bio 10G;176;10
+1314;1314;Plateaux 176 Bio 5G;176;5
+1315;1315;Plateaux 176 Bio 8G;176;8
+1316;1316;Pltx 140 Bio 10G;140;10
+1317;1317;Pltx 140 Bio 5G;140;5
+1318;1318;Pltx 140 Bio 8G;140;8
+1319;1319;Pltx 240 Polystyrène Bio écarté taillé 10G;240;10
+1320;1320;Pltx 240 Polystyrène Bio écarté taillé 5G;240;5
+1321;1321;Pltx 240 Polystyrène Bio écarté taillé 8G;240;8
+1322;1322;Pltx 600 Bio;600;1
+1323;1323;Pltx 50 repiqué;50;1
+1324;1324;Pltx 50 repiqué écarté;50;1
+1325;1325;Pltx 150;150;5
+1326;1326;Pltx 240 Polystyrène;240;5
+1327;1327;Pltx 240 STAMP plastique;240;5
+1328;1328;Pltx 60;60;5
+1329;1329;Pltx 96;96;5
+1330;1330;Pltx 150 Bio;150;1
+1331;1331;Pltx 240 Polystyrène Bio;240;5
+1332;1332;Pltx 240 STAMP plastique Bio;240;5
+1333;1333;Plateaux 176;176;4
+1334;1334;Pltx 140;140;4
+1335;1335;Pltx 150;150;1
+1336;1336;Pltx 240 Polystyrène;240;1
+1337;1337;Plateaux 176 Bio;176;4
+1338;1338;Plx 140 Bio;140;4
+1339;1339;Plateaux 176;176;1
+1340;1340;Pltx 140;140;1
+1341;1341;Plateaux 176 Bio;176;1
+1342;1342;Pltx 140 Bio;140;1
+1343;1343;Pltx 240 Polystyrène écarté;240;1
+1344;1344;Pltx 600;600;1
+1345;1345;Pltx 240 Polystyrène Bio écarté;240;1
+1346;1346;Pltx 600 Bio;600;1
+1347;1347;Pltx 120 écarté;120;1
+1348;1348;Pltx 120 écarté taillé;120;1
+1349;1349;Pltx 140 trous greffé Camelforce;140;1
+1350;1350;Pltx 140 trous greffé RS 841;140;1
+1351;1351;Pltx 150 écarté;150;1
+1352;1352;Pltx 240 Polystyrène écarté;240;1
+1353;1353;Pltx 240 Polystyrène écarté taillé;240;1
+1354;1354;Pltx 32 greffé Camelforce;32;1
+1355;1355;Pltx 32 greffé Camelforce taillé;32;1
+1356;1356;Pltx 32 greffé RS 841;32;1
+1357;1357;Pltx 32 greffé RS 841 taillé;32;1
+1358;1358;Pltx 32 repiqué écarté;32;1
+1359;1359;Pltx 32 repiqué écarté taillé;32;1
+1360;1360;Pltx 40 greffé Camelforce;40;1
+1361;1361;Pltx 40 greffé RS 841;40;1
+1362;1362;Pltx 40 greffé taillé Camelforce;40;1
+1363;1363;Pltx 40 greffé taillé RS 841;40;1
+1364;1364;Pltx 48;48;1
+1365;1365;Pltx 48 greffé Camelforce taillé;48;1
+1366;1366;Pltx 48 greffé RS 841 taillé;48;1
+1367;1367;Pltx 50 greffé Camelforce;50;1
+1368;1368;Pltx 50 greffé Camelforce taillé;50;1
+1369;1369;Pltx 50 greffé RS 841;50;1
+1370;1370;Pltx 50 greffé RS 841 taillé;50;1
+1371;1371;Pltx 50 repiqué écarté;50;1
+1372;1372;Pltx 50 repiqué écarté taillé;50;1
+1373;1373;Pltx 60;60;1
+1374;1374;Pltx 60 greffé Camelforce;60;1
+1375;1375;Pltx 60 greffé Camelforce taillé;60;1
+1376;1376;Pltx 60 greffé Dinero taillé;60;1
+1377;1377;Pltx 60 greffé RS 841;60;1
+1378;1378;Pltx 60 greffé RS 841 taillé;60;1
+1379;1379;Pltx 60 greffé TZ 148 taillé;60;1
+1380;1380;Pltx 60 taillé;60;1
+1381;1381;Pltx 600;600;1
+1382;1382;Pltx 90 greffé Camelforce;90;1
+1383;1383;Pltx 90 greffé RS841;90;1
+1384;1384;Pltx 90 greffé Sintosa;90;1
+1385;1385;Pltx 90 greffé TZ148;90;1
+1386;1386;Pltx 96;96;1
+1387;1387;Pltx 96 greffé Camelforce;96;1
+1388;1388;Pltx 96 greffé Camelforce taillé;96;1
+1389;1389;Pltx 96 greffé RS 841;96;1
+1390;1390;Pltx 96 greffé RS 841 taillé;96;1
+1391;1391;Pltx 96 taillé;96;1
+1392;1392;Pltx 96 écarté;96;1
+1393;1393;Pltx 96 écarté taillé;96;1
+1394;1394;Pltx 120 Bio greffé RS 841 écarté;120;1
+1395;1395;Pltx 120 Bio greffé Torum écarté;120;1
+1396;1396;Pltx 120 Bio écarté;120;1
+1397;1397;Pltx 120 Bio écarté taillé;120;1
+1398;1398;Pltx 140 Bio greffé Camelforce;140;1
+1399;1399;Pltx 140 Bio greffé RS 841;140;1
+1400;1400;Pltx 140 Bio greffé Torum;140;1
+1401;1401;Pltx 150 BIO écarté;150;1
+1402;1402;Pltx 240 Polystyrène Bio écarté;240;1
+1403;1403;Pltx 240 Polystyrène Bio écarté taillé;240;1
+1404;1404;Pltx 32 Bio greffé Camelforce;32;1
+1405;1405;Pltx 32 Bio greffé Camelforce taillé;32;1
+1406;1406;Pltx 32 Bio greffé RS 841;32;1
+1407;1407;Pltx 32 Bio greffé RS 841 taillé;32;1
+1408;1408;Pltx 32 Bio greffé Torum taillé;32;1
+1409;1409;Pltx 32 Bio repiqué écarté;32;1
+1410;1410;Pltx 32 Bio repiqué écarté taillé;32;1
+1411;1411;Pltx 40 Bio greffé Camelforce;40;1
+1412;1412;Pltx 40 Bio greffé RS 841;40;1
+1413;1413;Pltx 40 Bio greffé taillé Camelforce;40;1
+1414;1414;Pltx 40 Bio greffé taillé RS 841;40;1
+1415;1415;Pltx 40 Bio greffé taillé Torum;40;1
+1416;1416;Pltx 48 Bio;48;1
+1417;1417;Pltx 48 Bio greffé Camelforce taillé;48;1
+1418;1418;Pltx 48 Bio greffé RS 841 taillé;48;1
+1419;1419;Pltx 48 Bio greffé Torum taillé;48;1
+1420;1420;Pltx 50 Bio Greffé;50;1
+1421;1421;Pltx 50 Bio repiqué écarté;50;1
+1422;1422;Pltx 50 Bio repiqué écarté taillé;50;1
+1423;1423;Pltx 60 Bio;60;1
+1424;1424;Pltx 60 Bio Greffé RS 841 taillé;60;1
+1425;1425;Pltx 60 Bio Greffé Torum taillé;60;1
+1426;1426;Pltx 60 Bio greffé Camelforce;60;1
+1427;1427;Pltx 60 Bio greffé Camelforce taillé;60;1
+1428;1428;Pltx 60 Bio greffé RS 841;60;1
+1429;1429;Pltx 60 Bio greffé TZ 148 taillé;60;1
+1430;1430;Pltx 600 Bio;600;1
+1431;1431;Pltx 90 Bio greffé Camelforce;90;1
+1432;1432;Pltx 90 Bio greffé RS841;90;1
+1433;1433;Pltx 90 Bio greffé Sintosa;90;1
+1434;1434;Pltx 90 Bio greffé TZ148;90;1
+1435;1435;Pltx 96 Bio;96;1
+1436;1436;Pltx 96 Bio greffé Camelforce;96;1
+1437;1437;Pltx 96 Bio greffé Camelforce taillé;96;1
+1438;1438;Pltx 96 Bio greffé RS 841;96;1
+1439;1439;Pltx 96 Bio greffé RS 841 Taillé;96;1
+1440;1440;Pltx 96 Bio greffé Torum Taillé;96;1
+1441;1441;Pltx 96 Bio taillé;96;1
+1442;1442;Pltx 96 Bio écarté;96;1
+1443;1443;Pltx 96 Bio écarté taillé;96;1
+1444;1444;Pltx 150;150;1
+1445;1445;Pltx 240 Polystyrène;240;1
+1446;1446;Pltx 84;84;1
+1447;1447;Pltx 96;96;1
+1448;1448;Pltx 150 Bio;150;1
+1449;1449;Pltx 240 Polystyrène Bio;240;1
+1450;1450;Pltx 84;84;1
+1451;1451;Pltx 96 Bio;96;1
+1452;1452;Pltx 120 écarté;120;1
+1453;1453;Pltx 150 écarté;150;1
+1454;1454;Pltx 150 écarté taillé;150;1
+1455;1455;Pltx 240 Polystyrène écarté;240;1
+1456;1456;Pltx 32 repiqué;32;1
+1457;1457;Pltx 32 repiqué écarté;32;1
+1458;1458;Pltx 32 repiqué écarté taillé;32;1
+1459;1459;Pltx 50 repiqué;50;1
+1460;1460;Pltx 50 repiqué écarté;50;1
+1461;1461;Pltx 50 repiqué écarté taillé;50;1
+1462;1462;Pltx 60;60;1
+1463;1463;Pltx 60 écarté;60;1
+1464;1464;Pltx 96;96;1
+1465;1465;Pltx 96 écarté;96;1
+1466;1466;Pltx 96 écarté taillé;96;1
+1467;1467;Pltx 120 Bio écarté;120;1
+1468;1468;Pltx 150 Bio écarté taillé;150;1
+1469;1469;Pltx 240 Polystyrène Bio écarté;240;1
+1470;1470;Pltx 32 Bio repiqué écarté;32;1
+1471;1471;Pltx 50 Bio repiqué;50;1
+1472;1472;Pltx 50 Bio repiqué écarté;50;1
+1473;1473;Pltx 50 Bio repiqué écarté taillé;50;1
+1474;1474;Pltx 96 Bio;96;1
+1475;1475;Pltx 96 Bio écarté;96;1
+1476;1476;Pltx 96 Bio écarté taillé;96;1
+1477;1477;Plateaux 176 6G;176;6
+1478;1478;Pltx 120 6G;120;6
+1479;1479;Pltx 140 6G;140;6
+1480;1480;Pltx 150 6G;150;6
+1481;1481;Pltx 240 Polystyrène 6G;240;6
+1482;1482;Pltx 240 STAMP Plastique 6G;240;6
+1483;1483;Pltx 60 6G;60;6
+1484;1484;Pltx 96 6G;96;6
+1485;1485;Plateaux 176 Bio 6G;176;6
+1486;1486;Pltx 140 Bio 6G;140;6
+1487;1487;Pltx 240 Polystyrène Bio  6G;240;6
+1488;1488;Pltx 240 STAMP Plastique Bio 6G;240;6
+1489;1489;Pltx 96 Bio 6G;96;6
+1490;1490;Plateaux 176 6G;176;6
+1491;1491;Pltx 120 6G;120;6
+1492;1492;Pltx 140 6G;140;6
+1493;1493;Pltx 150 6G;150;6
+1494;1494;Pltx 240 Polystyrène 6G;240;6
+1495;1495;Pltx 240 STAMP Plastique 6G;240;6
+1496;1496;Pltx 60 6G;60;6
+1497;1497;Pltx 96 6G;96;6
+1498;1498;Plateaux 176 Bio 6G;176;6
+1499;1499;Pltx 140 Bio 6G;140;6
+1500;1500;Pltx 240 Polystyrène Bio  6G;240;6
+1501;1501;Pltx 240 STAMP Plastique Bio 6G;240;6
+1502;1502;Pltx 96 Bio 6G;96;6
+1503;1503;Pltx 120;120;1
+1504;1504;Pltx 50 repiqué écarté;50;1
+1505;1505;Pltx 120 greffé Brutus écarté;120;1
+1506;1506;Pltx 120 greffé Protector écarté;120;1
+1507;1507;Pltx 120 greffé Snooker écarté;120;1
+1508;1508;Pltx 120 écarté;120;1
+1509;1509;Pltx 150 écarté;150;1
+1510;1510;Pltx 168 greffé Rocal écarté;168;1
+1511;1511;Pltx 168 greffé Snooker écarté;168;1
+1512;1512;Pltx 18;18;1
+1513;1513;Pltx 18 repiqué;18;1
+1514;1514;Pltx 18 repiqué écarté (10x10);18;1
+1515;1515;Pltx 240 Polystyrène écarté;240;1
+1516;1516;Pltx 240 STAMP Plastique écarté;240;1
+1517;1517;Pltx 32 greffé Brutus écarté tuteuré;32;1
+1518;1518;Pltx 32 greffé Snooker écarté tuteuré;32;1
+1519;1519;Pltx 32 repiqué;32;1
+1520;1520;Pltx 32 repiqué écarté;32;1
+1521;1521;Pltx 48 écarté trié;48;1
+1522;1522;Pltx 50 greffé Brutus écarté tuteuré;50;1
+1523;1523;Pltx 50 greffé Snooker écarté;50;1
+1524;1524;Pltx 50 greffé Snooker écarté tuteuré;50;1
+1525;1525;Pltx 50 repiqué;50;1
+1526;1526;Pltx 50 repiqué écarté;50;1
+1527;1527;Pltx 60;60;1
+1528;1528;Pltx 600;600;1
+1529;1529;Pltx 96 écarté;96;1
+1530;1530;Pltx 120 Bio;120;1
+1531;1531;Pltx 120 Bio greffé Brutus écarté;120;1
+1532;1532;Pltx 120 Bio greffé Snooker écarté;120;1
+1533;1533;Pltx 168 Bio greffé Brutus écarté;168;1
+1534;1534;Pltx 168 Bio greffé Rocal écarté;168;1
+1535;1535;Pltx 168 Bio greffé Snooker écarté;168;1
+1536;1536;Pltx 18 Bio (10x10);18;1
+1537;1537;Pltx 18 Bio repiqué (10x10);18;1
+1538;1538;Pltx 18 Bio repiqué écarté (10x10);18;1
+1539;1539;Pltx 240 Polystyrène Bio écarté;240;1
+1540;1540;Pltx 240 STAMP Plastique écarté Bio;240;1
+1541;1541;Pltx 32 Bio greffé Brutus écarté tuteuré;32;1
+1542;1542;Pltx 32 Bio greffé Snooker écarté tuteuré;32;1
+1543;1543;Pltx 32 Bio repiqué;32;1
+1544;1544;Pltx 32 Bio repiqué écarté;32;1
+1545;1545;Pltx 50 Bio greffé Snooker;50;1
+1546;1546;Pltx 50 Bio greffé Snooker écarté tuteuré;50;1
+1547;1547;Pltx 50 Bio repiqué;50;1
+1548;1548;Pltx 50 Bio repiqué écarté;50;1
+1549;1549;Pltx 600 Bio;600;1
+1550;1550;Pltx 96 Bio;96;1
+1551;1551;Pltx 96 Bio écarté;96;1
+1552;1552;Plateaux 176;176;1
+1553;1553;Plateaux 240 Polystyrène;240;1
+1554;1554;Pltx 140;140;1
+1555;1555;Plateaux 176 1G;176;1
+1556;1556;Plateaux 176 2G;176;2
+1557;1557;Plateaux 176 3G;176;3
+1558;1558;Plateaux 176 4G;176;4
+1559;1559;Pltx 140 1G;140;1
+1560;1560;Pltx 140 2G;140;2
+1561;1561;Pltx 240 Polystyrène Arrachis;240;2
+1562;1562;Pltx 240 Polystyrène écarté taillé 1G;240;1
+1563;1563;Pltx 240 Polystyrène écarté taillé 2G;240;2
+1564;1564;Plateaux 176 Bio 1G;176;2
+1565;1565;Plateaux 176 Bio 2G;176;2
+1566;1566;Pltx 140 Bio 2G;140;2
+1567;1567;Pltx 240 Bio Arrachis;240;2
+1568;1568;Pltx 240 Polystyrène Bio écarté;240;2
+1569;1569;Plateaux 176 Bio;176;1
+1570;1570;Pltx 120 Bio écarté;120;1
+1571;1571;Pltx 120 Bio écarté taillé éclairci;120;1
+1572;1572;Pltx 120 Bio écarté éclairci;120;1
+1573;1573;Pltx 140 Bio;140;1
+1574;1574;Pltx 240 Polystyrène Bio écarté;240;1
+1575;1575;Pltx 240 Polystyrène Bio écarté taillé éclairci;240;1
+1576;1576;Pltx 240 Polystyrène Bio écarté éclairci;240;1
+1577;1577;Pltx 32 Bio repiqué;32;1
+1578;1578;Pltx 96 Bio écarté taillé éclairci;96;1
+1579;1579;Plateaux 176 Bio;176;1
+1580;1580;Pltx 120 Bio écarté;120;1
+1581;1581;Pltx 120 Bio écarté taillé éclairci;120;1
+1582;1582;Pltx 120 Bio écarté éclairci;120;1
+1583;1583;Pltx 140 Bio;140;1
+1584;1584;Pltx 240 Polystyrène Bio écarté;240;1
+1585;1585;Pltx 240 Polystyrène Bio écarté taillé éclairci;240;1
+1586;1586;Pltx 240 Polystyrène Bio écarté éclairci;240;1
+1587;1587;Pltx 32 Bio repiqué;32;1
+1588;1588;Pltx 96 Bio écarté taillé éclairci;96;1
+1589;1589;Pltx 50 écarté   1 graine;50;1
+1590;1590;Pltx 50 écarté 2 graines;50;2
+1591;1591;Pltx 50 écarté 3 graines;50;3
+1592;1592;Pltx 50 écarté 4 graines;50;4
+1593;1593;Pltx 120 écarté 1 graine;120;1
+1594;1594;Pltx 150 Bio écarté 1 graine;150;1
+1595;1595;Pltx 240 Polystyrène écarté 1 graine BIO;240;1
+1596;1596;Pltx 32 Bio écarté 1graine;32;1
+1597;1597;Pltx 32 Bio écarté 2 graines;32;2
+1598;1598;Pltx 32 Bio écarté 3 graines;32;3
+1599;1599;Pltx 32 Bio écarté 4 graines;32;4
+1600;1600;Pltx 50 Bio écarté 1 graine;50;1
+1601;1601;Pltx 50 Bio écarté 2 graines;50;2
+1602;1602;Pltx 50 Bio écarté 3 graines;50;3
+1603;1603;Pltx 50 Bio écarté 4 graines;50;4
+1604;1604;Pltx 60 Bio;60;1
+1605;1605;Pltx 120 greffé Brutus écarté;120;1
+1606;1606;Pltx 120 greffé Protector écarté;120;1
+1607;1607;Pltx 120 greffé Snooker écarté;120;1
+1608;1608;Pltx 120 écarté;120;1
+1609;1609;Pltx 150 écarté;150;1
+1610;1610;Pltx 168 greffé Rocal écarté;168;1
+1611;1611;Pltx 168 greffé Snooker écarté;168;1
+1612;1612;Pltx 18;18;1
+1613;1613;Pltx 18 repiqué;18;1
+1614;1614;Pltx 18 repiqué écarté (10x10);18;1
+1615;1615;Pltx 240 Polystyrène écarté;240;1
+1616;1616;Pltx 240 STAMP Plastique écarté;240;1
+1617;1617;Pltx 32 greffé Brutus écarté tuteuré;32;1
+1618;1618;Pltx 32 greffé Snooker écarté tuteuré;32;1
+1619;1619;Pltx 32 repiqué;32;1
+1620;1620;Pltx 32 repiqué écarté;32;1
+1621;1621;Pltx 48 écarté trié;48;1
+1622;1622;Pltx 50 greffé Brutus écarté tuteuré;50;1
+1623;1623;Pltx 50 greffé Snooker écarté;50;1
+1624;1624;Pltx 50 greffé Snooker écarté tuteuré;50;1
+1625;1625;Pltx 50 repiqué;50;1
+1626;1626;Pltx 50 repiqué écarté;50;1
+1627;1627;Pltx 60;60;1
+1628;1628;Pltx 600;600;1
+1629;1629;Pltx 96 écarté;96;1
+1630;1630;Pltx 120 Bio;120;1
+1631;1631;Pltx 120 Bio greffé Brutus écarté;120;1
+1632;1632;Pltx 120 Bio greffé Snooker écarté;120;1
+1633;1633;Pltx 168 Bio greffé Brutus écarté;168;1
+1634;1634;Pltx 168 Bio greffé Rocal écarté;168;1
+1635;1635;Pltx 168 Bio greffé Snooker écarté;168;1
+1636;1636;Pltx 18 Bio (10x10);18;1
+1637;1637;Pltx 18 Bio repiqué (10x10);18;1
+1638;1638;Pltx 18 Bio repiqué écarté (10x10);18;1
+1639;1639;Pltx 240 Polystyrène Bio écarté;240;1
+1640;1640;Pltx 240 STAMP Plastique écarté Bio;240;1
+1641;1641;Pltx 32 Bio greffé Brutus écarté tuteuré;32;1
+1642;1642;Pltx 32 Bio greffé Snooker écarté tuteuré;32;1
+1643;1643;Pltx 32 Bio repiqué;32;1
+1644;1644;Pltx 32 Bio repiqué écarté;32;1
+1645;1645;Pltx 32 Bio repiqué écarté tuteuré;32;1
+1646;1646;Pltx 48 Bio trié;48;1
+1647;1647;Pltx 50 Bio greffé Snooker;50;1
+1648;1648;Pltx 50 Bio greffé Snooker écarté tuteuré;50;1
+1649;1649;Pltx 50 Bio repiqué;50;1
+1650;1650;Pltx 50 Bio repiqué écarté;50;1
+1651;1651;Pltx 60 Bio;60;1
+1652;1652;Pltx 600 Bio;600;1
+1653;1653;Pltx 96 Bio;96;1
+1654;1654;Pltx 96 Bio écarté;96;1
+1655;1655;Pltx 32 Greffé pour porte greffe;32;1
+1656;1656;Pltx 32 Bio Greffé pour porte greffe;32;1
+1657;1657;Pltx 120 écarté;120;1
+1658;1658;Pltx 150 écarté;150;1
+1659;1659;Pltx 150 écarté taillé;150;1
+1660;1660;Pltx 240 Polystyrène écarté;240;1
+1661;1661;Pltx 32 repiqué;32;1
+1662;1662;Pltx 32 repiqué écarté;32;1
+1663;1663;Pltx 32 repiqué écarté taillé;32;1
+1664;1664;Pltx 50 repiqué;50;1
+1665;1665;Pltx 50 repiqué écarté;50;1
+1666;1666;Pltx 50 repiqué écarté taillé;50;1
+1667;1667;Pltx 60;60;1
+1668;1668;Pltx 60 écarté;60;1
+1669;1669;Pltx 96;96;1
+1670;1670;Pltx 96 écarté;96;1
+1671;1671;Pltx 96 écarté taillé;96;1
+1672;1672;Pltx 120 Bio écarté;120;1
+1673;1673;Pltx 150 Bio écarté taillé;150;1
+1674;1674;Pltx 240 Polystyrène Bio écarté;240;1
+1675;1675;Pltx 32 Bio repiqué;32;1
+1676;1676;Pltx 32 Bio repiqué écarté;32;1
+1677;1677;Pltx 32 Bio repiqué écarté taillé;32;1
+1678;1678;Pltx 50 Bio repiqué;50;1
+1679;1679;Pltx 50 Bio repiqué écarté;50;1
+1680;1680;Pltx 50 Bio repiqué écarté taillé;50;1
+1681;1681;Pltx 60 Bio écarté;60;1
+1682;1682;Pltx 96 Bio;96;1
+1683;1683;Pltx 96 Bio écarté;96;1
+1684;1684;Pltx 96 Bio écarté taillé;96;1
+1685;1685;Pltx 120 écarté;120;1
+1686;1686;Pltx 150 écarté;150;1
+1687;1687;Pltx 150 écarté taillé;150;1
+1688;1688;Pltx 240 Polystyrène écarté;240;1
+1689;1689;Pltx 32 repiqué;32;1
+1690;1690;Pltx 32 repiqué écarté;32;1
+1691;1691;Pltx 32 repiqué écarté taillé;32;1
+1692;1692;Pltx 50 repiqué;50;1
+1693;1693;Pltx 50 repiqué écarté;50;1
+1694;1694;Pltx 50 repiqué écarté taillé;50;1
+1695;1695;Pltx 60;60;1
+1696;1696;Pltx 60 écarté;60;1
+1697;1697;Pltx 96;96;1
+1698;1698;Pltx 96 écarté;96;1
+1699;1699;Pltx 96 écarté taillé;96;1
+1700;1700;Plateaux 176;176;1
+1701;1701;Plateaux 240 Polystyrène;240;1
+1702;1702;Pltx 140;140;1
+1703;1703;Pltx 150;150;1
+1704;1704;Pltx 240 Polystyrène;240;1
+1705;1705;Plateaux 176;176;1
+1706;1706;Pltx 140;140;1
+1707;1707;Plateaux 176 Bio;176;1
+1708;1708;Pltx 140 Bio;140;1
+1709;1709;Pltx 240 Polystyrène Bio;240;1
+1710;1710;Plateaux 176;176;1
+1711;1711;Pltx 140;140;1
+1712;1712;Pltx 150;150;3
+1713;1713;Pltx 240 Polystyrène;240;1
+1714;1714;Pltx 240 STAMP plastique;240;1
+1715;1715;Pltx 60;60;1
+1716;1716;Pltx 96;96;1
+1717;1717;Plateaux 176 Bio;176;1
+1718;1718;Pltx 150 Bio;150;1
+1719;1719;Pltx 240 Polystyrène Bio;240;1
+1720;1720;Pltx 240 STAMP plastique Bio;240;1
+1721;1721;Plx 140 Bio;140;1
+1722;1722;Plateaux 176;176;1
+1723;1723;Pltx 140;140;1
+1724;1724;Pltx 240 Polystyrène;240;2
+1725;1725;Plateaux 176 Bio;176;1
+1726;1726;Pltx 140 Bio;140;1
+1727;1727;Plateaux 176;176;1
+1728;1728;Pltx 140;140;1
+1729;1729;Plateaux 176 Bio;176;1
+1730;1730;Pltx 140 Bio;140;1
+1731;1731;Pltx 240 Polystyrène Bio;240;1
+1732;1732;Plateaux 176;176;1
+1733;1733;Pltx 140;140;1
+1734;1734;Plateaux 176 Bio;176;1
+1735;1735;Pltx 140 Bio;140;1
+1736;1736;Pltx 240 Polystyrène Bio;240;1
+1737;1737;Pltx 150 Bio;150;1
+1738;1738;Pltx 240 Polystyrène Bio;240;1
+1739;1739;Pltx 150;150;5
+1740;1740;Pltx 240 Polystyrène;240;5
+1741;1741;Pltx 240 STAMP plastique;240;5
+1742;1742;Pltx 60;60;5
+1743;1743;Pltx 96;96;5
+1744;1744;Plateaux 176 Bio;176;1
+1745;1745;Pltx 150 Bio;150;1
+1746;1746;Pltx 240 Polystyrène Bio;240;5
+1747;1747;Pltx 240 STAMP plastique Bio;240;5
+1748;1748;Plx 140 Bio;140;1
+1749;1749;Pltx 150;150;5
+1750;1750;Pltx 240 Polystyrène;240;1
+1751;1751;Pltx 240 STAMP plastique;240;1
+1752;1752;Pltx 60;60;1
+1753;1753;Pltx 96;96;1
+1754;1754;Pltx 150 Bio;150;1
+1755;1755;Pltx 240 Polystyrène Bio;240;1
+1756;1756;Pltx 240 STAMP plastique Bio;240;1
+1757;1757;Plateaux 176;176;1
+1758;1758;Plateaux 240 Polystyrène;240;1
+1759;1759;Pltx 140;140;1
+1760;1760;Plateaux 176 Bio;176;1
+1761;1761;Pltx 140 Bio;140;1
+1762;1762;Pltx 240 Polystyrène Bio;240;1
+1763;1763;Plateaux 176;176;1
+1764;1764;Pltx 140;140;1
+1765;1765;Plateaux 176 Bio;176;1
+1766;1766;Pltx 140 Bio;140;1
+1767;1767;Pltx 240 Polystyrène Bio;240;1
+1768;1768;Plateaux 176;176;1
+1769;1769;Pltx 140;140;1
+1770;1770;Pltx 240 Polystyrène;240;1
+1771;1771;Pltx 50 repiqué;50;2
+1772;1772;Pltx 50 repiqué écarté;50;2
+1773;1773;Plateaux 176 Bio;176;1
+1774;1774;Pltx 140 Bio;140;1
+1775;1775;Plateaux 176;176;1
+1776;1776;Pltx 140;140;1
+1777;1777;Pltx 240 Polystyrène;240;5
+1778;1778;Pltx 240 STAMP plastique;240;5
+1779;1779;Pltx 60;60;1
+1780;1780;Pltx 96;96;1
+1781;1781;Plateaux 176 Bio;176;1
+1782;1782;Pltx 150 Bio;150;1
+1783;1783;Pltx 240 Polystyrène Bio;240;5
+1784;1784;Pltx 240 STAMP plastique Bio;240;5
+1785;1785;Plx 140 Bio;140;1
+1786;1786;Pltx 120;120;1
+1787;1787;Pltx 120 greffé Beaufort écarté;120;1
+1788;1788;Pltx 120 greffé DRO 141 écarté;120;1
+1789;1789;Pltx 120 greffé Embajador écarté;120;1
+1790;1790;Pltx 120 greffé Empérador écarté;120;1
+1791;1791;Pltx 120 greffé Kratofort écarté;120;1
+1792;1792;Pltx 120 greffé Maxifort écarté;120;1
+1793;1793;Pltx 120 greffé Protector écarté;120;1
+1794;1794;Pltx 120 greffé Radar écarté;120;1
+1795;1795;Pltx 120 greffé Sanaterra écarté;120;1
+1796;1796;Pltx 15 Repiqué laine roche écarté tuteuré;15;1
+1797;1797;Pltx 15 greffé Beaufort Laine Roche écarté taillé tuteuré 2T;15;1
+1798;1798;Pltx 15 greffé Beaufort laine roche écarté taillé 2 têtes;15;1
+1799;1799;Pltx 15 greffé DRO 141 Laine Roche écarté taillé tuteuré 2T;15;1
+1800;1800;Pltx 15 greffé DRO 141 laine roche écarté taillé 2 têtes;15;1
+1801;1801;Pltx 15 greffé Embajador écarté tuteuré 1 tête;15;1
+1802;1802;Pltx 15 greffé Embajador écarté tuteuré 2 têtes;15;1
+1803;1803;Pltx 15 greffé Empérad. Laine Roche écarté taillé tuteuré 2T;15;1
+1804;1804;Pltx 15 greffé Empérador laine roche écarté taillé 2 têtes;15;1
+1805;1805;Pltx 15 greffé Kratofort Laine Roche écarté taillé tuteuré 2;15;1
+1806;1806;Pltx 15 greffé Kratofort laine roche écarté taillé 2 têtes;15;1
+1807;1807;Pltx 15 greffé Maxifort LaineRoche écarté taillé tuteuré 2T;15;1
+1808;1808;Pltx 15 greffé Maxifort laine roche écarté taillé 2 têtes;15;1
+1809;1809;Pltx 15 greffé Protector laine roche écarté taillé 2 têtes;15;1
+1810;1810;Pltx 15 greffé Protector laineRoche  écarté taillé tuteuré 2;15;1
+1811;1811;Pltx 15 greffé Sanaterra écarté taillé tuteuré 2 têtes;15;1
+1812;1812;Pltx 15 greffé Sanaterra écarté tuteuré 1 tête;15;1
+1813;1813;Pltx 150 écarté;150;1
+1814;1814;Pltx 168 greffé Embajador écarté;168;1
+1815;1815;Pltx 168 greffé Embajador écarté taillé tuteuré 1 tête;168;1
+1816;1816;Pltx 168 greffé Embajador écarté taillé tuteuré 2 têtes;168;1
+1817;1817;Pltx 168 greffé Emperador écarté taillé tuteuré 1 têtes;168;1
+1818;1818;Pltx 168 greffé Emperador écarté taillé tuteuré 2 têtes;168;1
+1819;1819;Pltx 168 greffé Empérador écarté;168;1
+1820;1820;Pltx 168 greffé Fortamino écarté;168;1
+1821;1821;Pltx 168 greffé Fortamino écarté taillé tuteuré 2 têtes;168;1
+1822;1822;Pltx 168 greffé Maxifor écarté;168;1
+1823;1823;Pltx 168 greffé Maxifort écarté taillé tuteuré 2 têtes;168;1
+1824;1824;Pltx 18 greffé Beaufort écarté taillé 2 têtes;18;1
+1825;1825;Pltx 18 greffé Beaufort écarté taillé tuteuré 2 têtes;18;1
+1826;1826;Pltx 18 greffé Beaufort écarté tuteuré 1 tête;18;1
+1827;1827;Pltx 18 greffé DRO 141 écarté taillé 2 têtes;18;1
+1828;1828;Pltx 18 greffé DRO 141 écarté taillé tuteuré 2 têtes;18;1
+1829;1829;Pltx 18 greffé DRO 141 écarté tuteuré 1 tête;18;1
+1830;1830;Pltx 18 greffé Embajador écarté taillé tuteuré 2 têtes;18;1
+1831;1831;Pltx 18 greffé Embajador écarté tuteuré 1 tête;18;1
+1832;1832;Pltx 18 greffé Empérador écarté taillé 2 têtes;18;1
+1833;1833;Pltx 18 greffé Empérador écarté taillé tuteuré 2 têtes;18;1
+1834;1834;Pltx 18 greffé Empérador écarté tuteuré 1 tête;18;1
+1835;1835;Pltx 18 greffé Kratofort écarté taillé 2 têtes;18;1
+1836;1836;Pltx 18 greffé Kratofort écarté taillé tuteuré 2 têtes;18;1
+1837;1837;Pltx 18 greffé Kratofort écarté tuteuré 1 tête;18;1
+1838;1838;Pltx 18 greffé Maxifort écarté taillé 2 têtes;18;1
+1839;1839;Pltx 18 greffé Maxifort écarté taillé tuteuré 2 têtes;18;1
+1840;1840;Pltx 18 greffé Maxifort écarté tuteuré 1 tête;18;1
+1841;1841;Pltx 18 greffé Protector écarté taillé 2 têtes;18;1
+1842;1842;Pltx 18 greffé Protector écarté taillé tuteuré 2 têtes;18;1
+1843;1843;Pltx 18 greffé Protector écarté tuteuré 1 tête;18;1
+1844;1844;Pltx 18 greffé Sanaterra écarté taillé tuteuré 2 têtes;18;1
+1845;1845;Pltx 18 greffé Sanaterra écarté tuteuré 1 tête;18;1
+1846;1846;Pltx 240 Polystyrène;240;1
+1847;1847;Pltx 240 STAMP Plastique;240;1
+1848;1848;Pltx 240 laine roche;240;1
+1849;1849;Pltx 28 laine roche repiqué écarté;28;1
+1850;1850;Pltx 28 laine roche repiqué écarté tuteuré;28;1
+1851;1851;Pltx 32 greffé Beaufort  écarté taillé tuteuré 2 têtes;32;1
+1852;1852;Pltx 32 greffé Beaufort écarté tuteuré 1 tête;32;1
+1853;1853;Pltx 32 greffé DRO 141 écarté taillé tuteuré 2 têtes;32;1
+1854;1854;Pltx 32 greffé DRO 141 écarté tuteuré 1 tête;32;1
+1855;1855;Pltx 32 greffé Embajador laine roche écarté tuteuré 2 Têtes;32;1
+1856;1856;Pltx 32 greffé Embajador écarté taillé tuteuré 2 têtes;32;1
+1857;1857;Pltx 32 greffé Embajador écarté tuteuré 1 tête;32;1
+1858;1858;Pltx 32 greffé Empérador écarté taillé tuteuré 2 têtes;32;1
+1859;1859;Pltx 32 greffé Empérador écarté tuteuré 1 tête;32;1
+1860;1860;Pltx 32 greffé Kratofort écarté taillé tuteuré 2 têtes;32;1
+1861;1861;Pltx 32 greffé Kratofort écarté tuteuré 1 tête;32;1
+1862;1862;Pltx 32 greffé Maxifort écarté taillé tuteuré 2 têtes;32;1
+1863;1863;Pltx 32 greffé Maxifort écarté tuteuré 1 tête;32;1
+1864;1864;Pltx 32 greffé Protector écarté taillé tuteuré 2 têtes;32;1
+1865;1865;Pltx 32 greffé Protector écarté tuteuré 1 tête;32;1
+1866;1866;Pltx 32 greffé Radar écarté taillé tuteuré 2 têtes;32;1
+1867;1867;Pltx 32 greffé Radar écarté tuteuré 1 tête;32;1
+1868;1868;Pltx 32 greffé Sanaterra écarté taillé tuteuré 2 têtes;32;1
+1869;1869;Pltx 32 greffé Sanaterra écarté tuteuré 1 tête;32;1
+1870;1870;Pltx 32 repiqué;32;1
+1871;1871;Pltx 32 repiqué écarté;32;1
+1872;1872;Pltx 40 repiqué écarté;40;1
+1873;1873;Pltx 48;48;1
+1874;1874;Pltx 48 repiqué;48;1
+1875;1875;Pltx 48 trié;48;1
+1876;1876;Pltx 50 greffé Beaufort écarté taillé 2 têtes;50;1
+1877;1877;Pltx 50 greffé Beaufort écarté tuteuré 1 tête;50;1
+1878;1878;Pltx 50 greffé DRO 141 écarté taillé 2 têtes;50;1
+1879;1879;Pltx 50 greffé DRO 141 écarté tuteuré 1 tête;50;1
+1880;1880;Pltx 50 greffé Embajador écarté taillé 2 têtes;50;1
+1881;1881;Pltx 50 greffé Embajador écarté tuteuré 1 tête;50;1
+1882;1882;Pltx 50 greffé Empérador écarté taillé 2 têtes;50;1
+1883;1883;Pltx 50 greffé Empérador écarté tuteuré 1 tête;50;1
+1884;1884;Pltx 50 greffé Kratofort écarté taillé 2 têtes;50;1
+1885;1885;Pltx 50 greffé Kratofort écarté tuteuré 1 tête;50;1
+1886;1886;Pltx 50 greffé Maxifort écarté taillé 2 têtes;50;1
+1887;1887;Pltx 50 greffé Maxifort écarté tuteuré 1 tête;50;1
+1888;1888;Pltx 50 greffé Protector écarté taillé 2 têtes;50;1
+1889;1889;Pltx 50 greffé Protector écarté tuteuré 1 tête;50;1
+1890;1890;Pltx 50 greffé Radar écarté taillé 2 têtes;50;1
+1891;1891;Pltx 50 greffé Radar écarté tuteuré 1 tête;50;1
+1892;1892;Pltx 50 greffé Sanaterra écarté taillé 2 têtes;50;1
+1893;1893;Pltx 50 greffé Sanaterra écarté tuteuré 1 tête;50;1
+1894;1894;Pltx 50 repiqué;50;1
+1895;1895;Pltx 50 repiqué écarté;50;1
+1896;1896;Pltx 50 repiqué écarté taillé;50;1
+1897;1897;Pltx 50 repiqué écarté tuteuré;50;1
+1898;1898;Pltx 60;60;1
+1899;1899;Pltx 60 Repiqué écarté;60;1
+1900;1900;Pltx 600;600;1
+1901;1901;Pltx 96 écarté;96;1
+1902;1902;Pltx 120 Bio;120;1
+1903;1903;Pltx 120 Bio greffé Beaufort écarté;120;1
+1904;1904;Pltx 120 Bio greffé Embajador écarté;120;1
+1905;1905;Pltx 120 Bio greffé Empérador écarté;120;1
+1906;1906;Pltx 120 Bio greffé Maxifort écarté;120;1
+1907;1907;Pltx 120 Bio greffé Protector écarté;120;1
+1908;1908;Pltx 120 Bio greffé Sanaterra écarté;120;1
+1909;1909;Pltx 150 écarté;150;1
+1910;1910;Pltx 168 Bio greffé Embajador écarté;168;1
+1911;1911;Pltx 168 Bio greffé Embajador écarté taillé tuteuré 2 têtes;168;1
+1912;1912;Pltx 168 Bio greffé Emperador écarté taillé tuteuré 2 têtes;168;1
+1913;1913;Pltx 168 Bio greffé Empérador écarté;168;1
+1914;1914;Pltx 168 Bio greffé Fortamino écarté;168;1
+1915;1915;Pltx 168 Bio greffé Fortamino écarté taillé tuteuré 2 têtes;168;1
+1916;1916;Pltx 168 Bio greffé Maxifor écarté;168;1
+1917;1917;Pltx 168 Bio greffé Maxifort écarté taillé tuteuré 2 têtes;168;1
+1918;1918;Pltx 168 Bio greffé Protector écarté;168;1
+1919;1919;Pltx 18 Bio greffé Beaufort écarté taillé 2 têtes;18;1
+1920;1920;Pltx 18 Bio greffé Beaufort écarté taillé tuteuré 2 têtes;18;1
+1921;1921;Pltx 18 Bio greffé Beaufort écarté tuteuré 1 tête;18;1
+1922;1922;Pltx 18 Bio greffé Embajador écarté taillé tuteuré 2 têtes;18;1
+1923;1923;Pltx 18 Bio greffé Empérador écarté taillé 2 têtes;18;1
+1924;1924;Pltx 18 Bio greffé Empérador écarté taillé tuteuré 2 têtes;18;1
+1925;1925;Pltx 18 Bio greffé Empérador écarté tuteuré 1 tête;18;1
+1926;1926;Pltx 18 Bio greffé Maxifort écarté taillé 2 têtes;18;1
+1927;1927;Pltx 18 Bio greffé Maxifort écarté taillé tuteuré 2 têtes;18;1
+1928;1928;Pltx 18 Bio greffé Maxifort écarté tuteuré 1 tête;18;1
+1929;1929;Pltx 18 Bio greffé Protector écarté taillé 2 têtes;18;1
+1930;1930;Pltx 18 Bio greffé Protector écarté taillé tuteuré 2 têtes;18;1
+1931;1931;Pltx 18 Bio greffé Protector écarté tuteuré 1 tête;18;1
+1932;1932;Pltx 240 Bio Greffé Embajador;240;1
+1933;1933;Pltx 240 Bio Greffé Protector;240;1
+1934;1934;Pltx 240 Polystyrène Bio;240;1
+1935;1935;Pltx 240 STAMP Plastique Bio;240;1
+1936;1936;Pltx 32 Bio greffé Beaufort  écarté taillé tuteuré 2 têtes;32;1
+1937;1937;Pltx 32 Bio greffé Beaufort écarté tuteuré 1 tête;32;1
+1938;1938;Pltx 32 Bio greffé Embajador écarté taillé tuteuré 2 têtes;32;1
+1939;1939;Pltx 32 Bio greffé Embajador écarté tuteuré 1 tête;32;1
+1940;1940;Pltx 32 Bio greffé Empérador écarté taillé tuteuré 2 têtes;32;1
+1941;1941;Pltx 32 Bio greffé Empérador écarté tuteuré 1 tête;32;1
+1942;1942;Pltx 32 Bio greffé Fortamino écarté taillé tuteuré 2 têtes;32;1
+1943;1943;Pltx 32 Bio greffé Fortamino écarté tuteuré 1 tête;32;1
+1944;1944;Pltx 32 Bio greffé Kaiser écarté taillé tuteuré 2 têtes;32;1
+1945;1945;Pltx 32 Bio greffé Kaiser écarté tuteuré 1 tête;32;1
+1946;1946;Pltx 32 Bio greffé Maxifort écarté taillé tuteuré 2 têtes;32;1
+1947;1947;Pltx 32 Bio greffé Maxifort écarté tuteuré 1 tête;32;1
+1948;1948;Pltx 32 Bio greffé Protector écarté taillé tuteuré 2 têtes;32;1
+1949;1949;Pltx 32 Bio greffé Protector écarté tuteuré 1 tête;32;1
+1950;1950;Pltx 32 Bio greffé Sanaterra écarté taillé tuteuré 2 têtes;32;1
+1951;1951;Pltx 32 Bio greffé Sanaterra écarté tuteuré 1 tête;32;1
+1952;1952;Pltx 32 Bio repiqué;32;1
+1953;1953;Pltx 32 Bio repiqué écarté;32;1
+1954;1954;Pltx 40 Bio repiqué écarté;40;1
+1955;1955;Pltx 48 Bio;48;1
+1956;1956;Pltx 48 Bio repiqué;48;1
+1957;1957;Pltx 48 Bio trié;48;1
+1958;1958;Pltx 50 Bio greffé Beaufort écarté taillé 2 têtes;50;1
+1959;1959;Pltx 50 Bio greffé Beaufort écarté tuteuré 1 tête;50;1
+1960;1960;Pltx 50 Bio greffé Embajador écarté taillé 2 têtes;50;1
+1961;1961;Pltx 50 Bio greffé Embajador écarté tuteuré 1 tête;50;1
+1962;1962;Pltx 50 Bio greffé Empérador écarté taillé 2 têtes;50;1
+1963;1963;Pltx 50 Bio greffé Empérador écarté tuteuré 1 tête;50;1
+1964;1964;Pltx 50 Bio greffé Maxifort écarté taillé 2 têtes;50;1
+1965;1965;Pltx 50 Bio greffé Maxifort écarté tuteuré 1 tête;50;1
+1966;1966;Pltx 50 Bio greffé Protector écarté taillé 2 têtes;50;1
+1967;1967;Pltx 50 Bio greffé Protector écarté tuteuré 1 tête;50;1
+1968;1968;Pltx 50 Bio greffé Sanaterra écarté taillé 2 têtes;50;1
+1969;1969;Pltx 50 Bio greffé Sanaterra écarté tuteuré 1 tête;50;1
+1970;1970;Pltx 50 Bio repiqué;50;1
+1971;1971;Pltx 50 Bio repiqué écarté;50;1
+1972;1972;Pltx 60 Bio Repiqué écarté;60;1
+1973;1973;Pltx 60 Bio écarté;60;1
+1974;1974;Pltx 600 Bio;600;1
+1975;1975;Pltx 96 Bio écarté;96;1
+1976;1976;Pltx 120;120;1
+1977;1977;Pltx 240 Polystyrène;240;1
+1978;1978;Pltx 240 Polystyrène bio;240;1
+1979;1979;Plateaux 176;176;1
+1980;1980;Pltx 140;140;1
+1981;1981;Pltx 120;120;1
+1982;1982;Pltx 150 écarté;150;4
+1983;1983;Pltx 240 Polystyrène;240;1
+1984;1984;Pltx 240 STAMP plastique;240;1
+1985;1985;Pltx 120 Bio;120;1
+1986;1986;Pltx 150 Bio;150;1
+1987;1987;Pltx 150 Bio;150;1
+1988;1988;Pltx 240 Polystyrène Bio;240;1
+1989;1989;Pltx 240 STAMP plastique Bio;240;1
+1990;1990;Pltx 150 Bio;150;1
+1991;1991;Pltx 240 Polystyrène Bio;240;1
