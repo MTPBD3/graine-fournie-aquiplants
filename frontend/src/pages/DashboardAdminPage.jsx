@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect, useCallback, useContext } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box, Grid, Paper, Typography, Chip, Divider, CircularProgress,
@@ -12,7 +12,6 @@ import {
 import EvolutionDepotsChart from '../components/EvolutionDepotsChart';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
-import MenuIcon from '@mui/icons-material/Menu';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
@@ -23,7 +22,6 @@ import GrassIcon from '@mui/icons-material/Grass';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { useApi } from '../hooks/useApi';
 import { useAuth } from '../context/AuthContext';
-import { DrawerOpenContext } from '../components/Layout';
 import { formatDate } from '../utils/formatDate';
 
 const DONUT_COLORS = ['#1B5E20', '#D4E157', '#FF8F00', '#388E3C', '#81C784', '#E53935'];
@@ -270,7 +268,6 @@ function SmartSearch({ searchMode, onModeChange, onSelect }) {
 export default function DashboardAdminPage() {
   const { user, logout } = useAuth();
   const navigate    = useNavigate();
-  const openDrawer  = useContext(DrawerOpenContext);
   const theme       = useTheme();
   const isMobile    = useMediaQuery(theme.breakpoints.down('md'));
   const handleLogout = () => { logout(); navigate('/'); };
@@ -366,13 +363,6 @@ export default function DashboardAdminPage() {
           flexWrap: 'nowrap',
         }}>
 
-          {/* Hamburger — mobile uniquement */}
-          {isMobile && (
-            <IconButton edge="start" onClick={openDrawer} sx={{ color: 'text.primary', flexShrink: 0 }}>
-              <MenuIcon />
-            </IconButton>
-          )}
-
           {/* Titre — desktop uniquement */}
           <Box sx={{ display: { xs: 'none', md: 'block' }, flex: '0 0 auto' }}>
             <Typography sx={{ fontWeight: 800, fontSize: '1rem', color: '#1B5E20', lineHeight: 1.2 }}>
@@ -410,14 +400,16 @@ export default function DashboardAdminPage() {
                 {user?.email}
               </Typography>
             )}
-            <Tooltip title="Déconnexion">
-              <Avatar
-                sx={{ width: 32, height: 32, bgcolor: '#1B5E20', fontSize: '0.8rem', cursor: 'pointer' }}
-                onClick={handleLogout}
-              >
-                {user?.email?.[0]?.toUpperCase() ?? 'U'}
-              </Avatar>
-            </Tooltip>
+            <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+              <Tooltip title="Déconnexion">
+                <Avatar
+                  sx={{ width: 32, height: 32, bgcolor: '#1B5E20', fontSize: '0.8rem', cursor: 'pointer' }}
+                  onClick={handleLogout}
+                >
+                  {user?.email?.[0]?.toUpperCase() ?? 'U'}
+                </Avatar>
+              </Tooltip>
+            </Box>
           </Box>
         </Box>
       </Box>
