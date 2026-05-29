@@ -47,6 +47,9 @@ RUN mkdir -p /var/www/html/var/cache /var/www/html/var/log \
 
 WORKDIR /var/www/html
 
+# Pré-installe les dépendances (vendor baked dans l'image, volume anonyme initialisé)
+RUN composer install --no-interaction --optimize-autoloader --no-progress
+
 EXPOSE 8000
 
 ENTRYPOINT ["/usr/local/bin/init.sh"]

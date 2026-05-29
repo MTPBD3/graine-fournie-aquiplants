@@ -44,8 +44,14 @@ Wireframes et maquettes haute fidélité disponibles sur Figma :
 ```bash
 git clone https://github.com/MTPBD3/graine-fournie-aquiplants.git
 cd graine-fournie-aquiplants
-docker compose up -d
+
+# Créer le fichier d'environnement (non versionné, contient les credentials)
+cp .env.docker .env
+
+docker compose up -d --build
 ```
+
+> **Note :** `.env` est ignoré par Git (`.gitignore`). Ne jamais commiter ce fichier.
 
 ## URLs d'accès
 
