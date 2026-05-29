@@ -26,7 +26,7 @@ class LoginSuccessListener
             $this->em,
             $user,
             'connexion',
-            'Connexion de ' . $user->getEmail(),
+            "Connexion de l'utilisateur #" . $user->getId(),
         );
     }
 }
