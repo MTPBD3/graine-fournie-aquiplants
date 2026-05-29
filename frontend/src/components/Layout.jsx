@@ -20,6 +20,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from '../context/AuthContext';
 import { useApi } from '../hooks/useApi';
 import MeteoWidget from './MeteoWidget';
+import TopbarMeteoWidget from './TopbarMeteoWidget';
 
 const SIDEBAR_WIDTH  = 248;
 const SIDEBAR_BG     = '#1B5E20';
@@ -202,15 +203,11 @@ function SidebarContent({ onNavigate }) {
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate  = useNavigate();
-  const location  = useLocation();
   const theme     = useTheme();
   const isMobile  = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleLogout = () => { logout(); navigate('/'); };
-
-  // Le dashboard gère son propre header mobile intégré
-  const dashboardActive = location.pathname.startsWith('/dashboard');
 
   return (
     <DrawerOpenContext.Provider value={() => setDrawerOpen(true)}>
@@ -244,8 +241,8 @@ export default function Layout() {
 
         <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
 
-          {/* Topbar mobile — masqué sur le dashboard (qui a son propre header mobile) */}
-          {isMobile && !dashboardActive && (
+          {/* Topbar mobile — toutes les pages */}
+          {isMobile && (
             <AppBar
               position="sticky"
               elevation={0}
@@ -259,6 +256,7 @@ export default function Layout() {
                   Graine Fournie
                 </Typography>
                 <Box sx={{ flexGrow: 1 }} />
+                <TopbarMeteoWidget />
                 <Tooltip title="Déconnexion">
                   <Avatar
                     sx={{ width: 34, height: 34, bgcolor: '#1B5E20', fontSize: '0.85rem', cursor: 'pointer' }}
