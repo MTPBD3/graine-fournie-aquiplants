@@ -29,7 +29,7 @@ services:
     build:
       context: .
       dockerfile: docker/symfony/Dockerfile
-      target: prod
+      target: dev
     container_name: gf_symfony
     restart: unless-stopped
     ports:
@@ -39,7 +39,7 @@ services:
       - /var/www/html/vendor
       - /var/www/html/var
     environment:
-      APP_ENV: prod
+      APP_ENV: dev
       APP_SECRET: ${APP_SECRET}
       DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql_db:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4"
       DATABASE_URL_MIGRATIONS: "mysql://${MYSQL_MIGRATIONS_USER}:${MYSQL_MIGRATIONS_PASSWORD}@mysql_db:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4"
@@ -59,7 +59,7 @@ services:
     container_name: gf_react
     restart: unless-stopped
     ports:
-      - "127.0.0.1:3000:3000"
+      - "0.0.0.0:3000:3000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -85,4 +85,6 @@ services:
         condition: service_healthy
 
 volumes:
+  # ATTENTION : `docker compose down -v` supprime ce volume et efface toutes les données MySQL.
+  # Faire un dump avant (voir docker/scripts/backup.sh).
   mysql_data:

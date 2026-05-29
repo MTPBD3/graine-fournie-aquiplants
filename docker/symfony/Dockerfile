@@ -49,12 +49,14 @@ WORKDIR /var/www/html
 
 EXPOSE 8000
 
-# ── Stage prod (défaut, sans Xdebug) ───────────────────────────────────────
+# ── Stage prod (sans Xdebug, sans dev-dependencies) ────────────────────────
 FROM base AS prod
+RUN composer install --no-dev --no-interaction --optimize-autoloader --no-progress
 ENTRYPOINT ["/usr/local/bin/init.sh"]
 
-# ── Stage dev (Xdebug activé) ──────────────────────────────────────────────
+# ── Stage dev (Xdebug activé, dev-dependencies incluses) ───────────────────
 FROM base AS dev
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 COPY docker/symfony/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+RUN composer install --no-interaction --optimize-autoloader --no-progress
 ENTRYPOINT ["/usr/local/bin/init.sh"]
