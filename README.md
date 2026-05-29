@@ -56,9 +56,6 @@ Get-Content docker/mysql/initdb.d/dump.sql | docker exec -i gf_mysql mysql -uroo
 docker exec -i gf_mysql mysql -uroot -proot aquiplants_db < docker/mysql/initdb.d/dump.sql
 ```
 
-> **Note :** Le dump contient les données réelles (clients, plants, UVs, espèces).
-> Il ne s'exécute **pas automatiquement** si le volume MySQL existe déjà — seul un premier démarrage sur un volume vide le charge via `docker-entrypoint-initdb.d`.
-> Sur un environnement existant, relancer la commande ci-dessus manuellement.
 
 
 ## URLs d'accès
