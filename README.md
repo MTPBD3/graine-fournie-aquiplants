@@ -64,7 +64,25 @@ docker compose up -d --build
 ## Charger les données de test
 
 ```bash
-docker exec gf_symfony php bin/console doctrine:fixtures:load --append
+docker exec gf_symfony php bin/console doctrine:fixtures:load --append --no-interaction
+```
+
+## Sauvegarder et restaurer la base de données
+
+> **Attention :** `docker compose down -v` supprime le volume `mysql_data` et **efface toutes les données**.
+> Faire un dump avant toute opération destructive.
+
+**Sauvegarder :**
+
+```bash
+bash docker/scripts/backup.sh
+# Crée un fichier backup_YYYYMMDD_HHMMSS.sql dans le répertoire courant
+```
+
+**Restaurer depuis un dump :**
+
+```bash
+docker exec -i gf_mysql mysql -uaquiplants -paquiplants aquiplants_db < backup.sql
 ```
 
 ## Comptes de test

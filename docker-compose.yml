@@ -80,4 +80,6 @@ services:
         condition: service_healthy
 
 volumes:
+  # ATTENTION : `docker compose down -v` supprime ce volume et efface toutes les données MySQL.
+  # Faire un dump avant (voir docker/scripts/backup.sh).
   mysql_data:
