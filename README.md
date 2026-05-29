@@ -62,10 +62,17 @@ docker compose up -d --build
 | API Symfony       | http://localhost:8000          | Réseau                   |
 | phpMyAdmin        | http://127.0.0.1:8080          | Localhost uniquement      |
 
-## Charger les données de test
+## Charger les données
 
 ```bash
+# 1. Migrations (schéma BDD)
+docker exec gf_symfony php bin/console doctrine:migrations:migrate --no-interaction
+
+# 2. Fixtures (comptes de test)
 docker exec gf_symfony php bin/console doctrine:fixtures:load --append --no-interaction
+
+# 3. Import CSV (données réelles : espèces, plants, UVs, clients)
+bash docker/scripts/import_data.sh
 ```
 
 ## Sauvegarder et restaurer la base de données
