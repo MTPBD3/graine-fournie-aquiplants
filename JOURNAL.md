@@ -55,3 +55,20 @@
 - Correction bugs header dashboard (responsive mobile, fusion en un seul header, sticky + SmartSearch)
 - Suppression référence sachet full-stack + fix labels Select MUI
 
+## Semaine du 11 mai 2026
+- Rédaction du document Jalon 5 : sécurité & tests
+- Analyse de sécurité : CSRF (architecture JWT stateless), hachage bcrypt, protection brute force, conformité RGPD
+- Réalisation de 2 audits de sécurité complets via Claude Code
+- Correction des failles critiques identifiées à l'audit 1
+- Génération d'un prompt consolidé pour les 13 findings medium/high de l'audit 2
+- JWT token TTL configuré à 4h (`token_ttl: 14400`) pour couvrir une journée de travail
+
+## Semaine du 25 mai 2026
+- Livraison du Jalon 5
+- Mise en place du CI/CD via GitHub Actions (jobs PHPUnit + Vite build)
+- Ajout de l'entité `Espece` + migration `Version20260428115009`
+- Mise à jour entité `Uv` : FK → Espece (NOT NULL), champs `nombrePlantParPlateaux`, `nombreGraineParMotte`
+- Mise à jour entité `Plant` : FK → Espece (nullable)
+- Endpoint `GET /api/especes/{id}/uvs` implémenté
+- Frontend : dropdown cascadant Espèce → UV dans la modal "Utiliser des graines"
+- Début Jalon 6 : analyse de la couverture PHPUnit (cible 80% — gap principal : `src/Controller/` à 0%)
