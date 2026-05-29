@@ -39,8 +39,11 @@ RUN sed -i 's/\r$//' /usr/local/bin/init.sh \
 # Code source (pour builds standalone sans volume)
 COPY backend/ /var/www/html/
 
-# Donne la propriété à www-data pour les volumes anonymes (vendor/, var/)
-RUN chown -R www-data:www-data /var/www/html
+# Crée var/ dans l'image (gitignore → absent du COPY) et fixe les droits.
+# Indispensable : Docker initialise le volume anonyme /var/www/html/var à partir
+# du contenu IMAGE de ce chemin. Sans ce mkdir, le volume est créé vide en root.
+RUN mkdir -p /var/www/html/var/cache /var/www/html/var/log \
+    && chown -R www-data:www-data /var/www/html
 
 WORKDIR /var/www/html
 

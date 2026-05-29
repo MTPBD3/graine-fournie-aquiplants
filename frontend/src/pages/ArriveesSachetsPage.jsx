@@ -14,6 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCutIcon from '@mui/icons-material/ContentCut';
+import EditIcon from '@mui/icons-material/Edit';
 import HistoryIcon from '@mui/icons-material/History';
 import { useApi, apiRequest } from '../hooks/useApi';
 import { useAuth } from '../context/AuthContext';
@@ -175,6 +176,13 @@ export default function ArriveesSachetsPage() {
   const [histoSachet,    setHistoSachet]    = useState(null);
   const [histoData,      setHistoData]      = useState([]);
   const [histoLoading,   setHistoLoading]   = useState(false);
+
+  // Modal "Modifier sachet" (ADMIN uniquement)
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editSachet,    setEditSachet]    = useState(null);
+  const [editForm,      setEditForm]      = useState({ numeroLot: '', quantiteDisponible: '', seuilAlerte: '', idClient: '', idPlant: '' });
+  const [editSaving,    setEditSaving]    = useState(false);
+  const [editError,     setEditError]     = useState('');
 
   // Mini-modals
   const [clientDialogOpen, setClientDialogOpen] = useState(false);
@@ -493,6 +501,40 @@ export default function ArriveesSachetsPage() {
     }
   };
 
+  const handleOpenEdit = (sachet) => {
+    setEditSachet(sachet);
+    setEditForm({
+      numeroLot:          sachet.numeroLot          ?? '',
+      quantiteDisponible: sachet.quantiteDisponible ?? '',
+      seuilAlerte:        sachet.seuilAlerte        ?? 0,
+      idClient:           sachet.client?.id         ?? '',
+      idPlant:            sachet.plant?.id          ?? '',
+    });
+    setEditError('');
+    setEditModalOpen(true);
+  };
+
+  const handleEditSave = async () => {
+    setEditSaving(true);
+    setEditError('');
+    try {
+      const body = {
+        numeroLot:          sanitize(String(editForm.numeroLot)),
+        quantiteDisponible: Number(editForm.quantiteDisponible),
+        seuilAlerte:        Number(editForm.seuilAlerte),
+      };
+      if (editForm.idClient) body.idClient = Number(editForm.idClient);
+      if (editForm.idPlant)  body.idPlant  = Number(editForm.idPlant);
+      await apiRequest(`/api/gf-clients/${editSachet.id}`, 'PUT', body, token);
+      setEditModalOpen(false);
+      refetch();
+    } catch (err) {
+      setEditError(err.message);
+    } finally {
+      setEditSaving(false);
+    }
+  };
+
   // Création rapide client — POST puis auto-sélection
   const handleCreateClient = async (values) => {
     const res = await apiRequest('/api/clients', 'POST', {
@@ -615,7 +657,7 @@ export default function ArriveesSachetsPage() {
                 </Typography>
               </CardContent>
               {s.statut === 'a_traiter' && (
-                <CardActions sx={{ pt: 0, px: 2, pb: 1.5 }}>
+                <CardActions sx={{ pt: 0, px: 2, pb: 1.5, flexDirection: 'column', gap: 1 }}>
                   <Button
                     fullWidth
                     variant="contained"
@@ -626,10 +668,21 @@ export default function ArriveesSachetsPage() {
                   >
                     Marquer comme rangé
                   </Button>
+                  {isAdmin && (
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      startIcon={<EditIcon />}
+                      onClick={() => handleOpenEdit(s)}
+                      sx={{ fontWeight: 600, py: 1 }}
+                    >
+                      Modifier
+                    </Button>
+                  )}
                 </CardActions>
               )}
               {s.statut === 'range' && (
-                <CardActions sx={{ pt: 0, px: 2, pb: 1.5, gap: 1 }}>
+                <CardActions sx={{ pt: 0, px: 2, pb: 1.5, gap: 1, flexWrap: 'wrap' }}>
                   <Button
                     fullWidth
                     variant="contained"
@@ -648,6 +701,17 @@ export default function ArriveesSachetsPage() {
                   >
                     Historique
                   </Button>
+                  {isAdmin && (
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      startIcon={<EditIcon />}
+                      onClick={() => handleOpenEdit(s)}
+                      sx={{ fontWeight: 600, py: 1 }}
+                    >
+                      Modifier
+                    </Button>
+                  )}
                 </CardActions>
               )}
             </Card>
@@ -683,40 +747,49 @@ export default function ArriveesSachetsPage() {
                       <Chip label={statutLabel(s)} size="small" color={statutChipColor(s)} sx={{ fontSize: '0.75rem' }} />
                     </TableCell>
                     <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                      {s.statut === 'a_traiter' && isAdmin && (
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          color="success"
-                          startIcon={<CheckIcon />}
-                          onClick={() => handleOpenRanger(s)}
-                          sx={{ fontSize: '0.75rem' }}
-                        >
-                          Marquer comme rangé
-                        </Button>
-                      )}
-                      {s.statut === 'range' && (
-                        <Box sx={{ display: 'flex', gap: 0.5 }}>
-                          <Tooltip title="Utiliser des graines">
-                            <IconButton
-                              size="small"
-                              onClick={() => handleOpenUtiliser(s)}
-                              sx={{ color: '#2E7D32' }}
-                            >
-                              <ContentCutIcon fontSize="small" />
+                      <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center', flexWrap: 'nowrap' }}>
+                        {s.statut === 'a_traiter' && isAdmin && (
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            color="success"
+                            startIcon={<CheckIcon />}
+                            onClick={() => handleOpenRanger(s)}
+                            sx={{ fontSize: '0.75rem' }}
+                          >
+                            Marquer comme rangé
+                          </Button>
+                        )}
+                        {s.statut === 'range' && (
+                          <>
+                            <Tooltip title="Utiliser des graines">
+                              <IconButton
+                                size="small"
+                                onClick={() => handleOpenUtiliser(s)}
+                                sx={{ color: '#2E7D32' }}
+                              >
+                                <ContentCutIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Voir l'historique d'utilisation">
+                              <IconButton
+                                size="small"
+                                onClick={() => handleOpenHisto(s)}
+                                color="primary"
+                              >
+                                <HistoryIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          </>
+                        )}
+                        {isAdmin && (
+                          <Tooltip title="Modifier le sachet">
+                            <IconButton size="small" onClick={() => handleOpenEdit(s)}>
+                              <EditIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
-                          <Tooltip title="Voir l'historique d'utilisation">
-                            <IconButton
-                              size="small"
-                              onClick={() => handleOpenHisto(s)}
-                              color="primary"
-                            >
-                              <HistoryIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                        </Box>
-                      )}
+                        )}
+                      </Box>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -908,6 +981,81 @@ export default function ArriveesSachetsPage() {
               </Button>
             </>
           )}
+        </DialogActions>
+      </Dialog>
+
+      {/* ── Modal modifier sachet (ADMIN) ───────────────────────────────── */}
+      <Dialog open={editModalOpen} onClose={() => setEditModalOpen(false)} maxWidth="sm" fullWidth fullScreen={isMobile}>
+        <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          Modifier le sachet
+          <IconButton onClick={() => setEditModalOpen(false)} size="small"><CloseIcon /></IconButton>
+        </DialogTitle>
+        <Divider />
+        <DialogContent sx={{ pt: 2 }}>
+          {editError && <Alert severity="error" sx={{ mb: 2 }}>{editError}</Alert>}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <TextField
+              label="Numéro de lot"
+              value={editForm.numeroLot}
+              onChange={(e) => setEditForm((f) => ({ ...f, numeroLot: e.target.value }))}
+              fullWidth size="small" required
+              slotProps={{ htmlInput: { maxLength: 50 } }}
+            />
+            <TextField
+              label="Quantité disponible"
+              type="number"
+              value={editForm.quantiteDisponible}
+              onChange={(e) => setEditForm((f) => ({ ...f, quantiteDisponible: e.target.value }))}
+              fullWidth size="small" required
+              slotProps={{ htmlInput: { min: 0, step: 1 } }}
+            />
+            <TextField
+              label="Seuil d'alerte"
+              type="number"
+              value={editForm.seuilAlerte}
+              onChange={(e) => setEditForm((f) => ({ ...f, seuilAlerte: e.target.value }))}
+              fullWidth size="small"
+              slotProps={{ htmlInput: { min: 0, step: 1 } }}
+            />
+            <FormControl fullWidth size="small">
+              <InputLabel>Client</InputLabel>
+              <Select
+                value={editForm.idClient}
+                label="Client"
+                onChange={(e) => setEditForm((f) => ({ ...f, idClient: e.target.value }))}
+              >
+                {clientsList.map((c) => (
+                  <MenuItem key={c.id} value={c.id}>{c.nom} {c.prenom}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth size="small">
+              <InputLabel>Plante</InputLabel>
+              <Select
+                value={editForm.idPlant}
+                label="Plante"
+                onChange={(e) => setEditForm((f) => ({ ...f, idPlant: e.target.value }))}
+              >
+                {plantsList.map((p) => (
+                  <MenuItem key={p.id} value={p.id}>
+                    {p.nomPlant}{p.nomEspece ? ` — ${p.nomEspece}` : ''}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+        </DialogContent>
+        <Divider />
+        <DialogActions sx={{ px: 3, py: 1.5, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 1 : 0 }}>
+          <Button onClick={() => setEditModalOpen(false)} color="inherit" fullWidth={isMobile}>Annuler</Button>
+          <Button
+            variant="contained"
+            onClick={handleEditSave}
+            disabled={editSaving || !editForm.numeroLot}
+            fullWidth={isMobile}
+          >
+            {editSaving ? <CircularProgress size={18} color="inherit" /> : 'Enregistrer'}
+          </Button>
         </DialogActions>
       </Dialog>
 

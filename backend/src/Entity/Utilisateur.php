@@ -44,7 +44,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRole(string $role): static { $this->role = $role; return $this; }
 
     // UserInterface
-    public function getRoles(): array { return [$this->role === 'admin' ? 'ROLE_ADMIN' : 'ROLE_EMPLOYE']; }
+    public function getRoles(): array { return [in_array($this->role, ['admin', 'ROLE_ADMIN'], true) ? 'ROLE_ADMIN' : 'ROLE_EMPLOYE']; }
     public function getPassword(): ?string { return $this->mdpCrypte; }
     public function getUserIdentifier(): string { return $this->email; }
     public function eraseCredentials(): void {}
