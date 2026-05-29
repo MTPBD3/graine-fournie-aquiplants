@@ -75,23 +75,6 @@ docker exec gf_symfony php bin/console doctrine:fixtures:load --append --no-inte
 bash docker/scripts/import_data.sh
 ```
 
-## Sauvegarder et restaurer la base de données
-
-> **Attention :** `docker compose down -v` supprime le volume `mysql_data` et **efface toutes les données**.
-> Faire un dump avant toute opération destructive.
-
-**Sauvegarder :**
-
-```bash
-bash docker/scripts/backup.sh
-# Crée un fichier backup_YYYYMMDD_HHMMSS.sql dans le répertoire courant
-```
-
-**Restaurer depuis un dump :**
-
-```bash
-docker exec -i gf_mysql mysql -uaquiplants -paquiplants aquiplants_db < backup.sql
-```
 
 ## Comptes de test
 
@@ -100,25 +83,6 @@ docker exec -i gf_mysql mysql -uaquiplants -paquiplants aquiplants_db < backup.s
 | Administrateur | testadmin@aquiplants.fr | admin        |
 | Employé        | testuser@aquiplants.fr  | user         |
 
-## Résolution de problèmes
-
-### Erreur de droits sur `var/` (cache / logs Symfony)
-
-Après un `git clone` suivi de `docker compose up`, si le conteneur `gf_symfony` refuse de démarrer ou retourne une erreur du type `Unable to write to the cache directory` :
-
-```bash
-docker exec gf_symfony chown -R www-data:www-data var/
-docker exec gf_symfony chmod -R ug+rwX var/
-```
-
-> **Pourquoi ça arrive ?** Le répertoire `var/` est exclu de Git (`.gitignore`). Docker crée alors le volume anonyme en `root:root`. Le script `init.sh` corrige les droits automatiquement au démarrage, mais si le premier démarrage est interrompu ou si le volume Docker persiste d'une session précédente, les permissions peuvent rester incorrectes.
-
-### Relancer depuis zéro
-
-```bash
-docker compose down -v    # supprime volumes MySQL, vendor et var
-docker compose up -d --build
-```
 
 ---
 
