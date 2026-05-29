@@ -28,6 +28,9 @@ if [ ! -f config/jwt/private.pem ]; then
     openssl pkey -in config/jwt/private.pem \
         -passin pass:"${JWT_PASSPHRASE}" \
         -out config/jwt/public.pem -pubout
+    chown -R www-data:www-data config/jwt
+    chmod 640 config/jwt/private.pem
+    chmod 644 config/jwt/public.pem
     echo "  Clés JWT générées"
 else
     echo "  Clés JWT déjà présentes"
@@ -46,4 +49,7 @@ else
 fi
 
 echo "--- [6/6] Démarrage PHP-FPM + Nginx ---"
+mkdir -p /var/www/html/var/cache /var/www/html/var/log
+chown -R www-data:www-data /var/www/html/var
+chmod -R ug+rwX /var/www/html/var
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/app.conf
