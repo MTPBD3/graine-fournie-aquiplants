@@ -44,14 +44,21 @@ Wireframes et maquettes haute fidélité disponibles sur Figma :
 ```bash
 git clone https://github.com/MTPBD3/graine-fournie-aquiplants.git
 cd graine-fournie-aquiplants
-
-# Créer le fichier d'environnement (non versionné, contient les credentials)
-cp .env.docker .env
-# Éditer .env avec les vraies valeurs si nécessaire
-
-# Démarrer l'application
+cp .env.docker.example .env
 docker compose up -d --build
+docker exec gf_symfony php bin/console doctrine:migrations:migrate --no-interaction
+docker exec gf_symfony php bin/console doctrine:fixtures:load --append --no-interaction
+
+# Charger les données réelles (clients, plants, UVs, espèces)
+# Windows PowerShell :
+Get-Content docker/mysql/initdb.d/dump.sql | docker exec -i gf_mysql mysql -uroot -proot aquiplants_db
+# Linux/Mac :
+docker exec -i gf_mysql mysql -uroot -proot aquiplants_db < docker/mysql/initdb.d/dump.sql
 ```
+
+> **Note :** Le dump contient les données réelles (clients, plants, UVs, espèces).
+> Il ne s'exécute **pas automatiquement** si le volume MySQL existe déjà — seul un premier démarrage sur un volume vide le charge via `docker-entrypoint-initdb.d`.
+> Sur un environnement existant, relancer la commande ci-dessus manuellement.
 
 
 ## URLs d'accès
@@ -61,19 +68,6 @@ docker compose up -d --build
 | Application React | http://localhost:3000          | Réseau                   |
 | API Symfony       | http://localhost:8000          | Réseau                   |
 | phpMyAdmin        | http://127.0.0.1:8080          | Localhost uniquement      |
-
-## Charger les données
-
-```bash
-# 1. Migrations (schéma BDD)
-docker exec gf_symfony php bin/console doctrine:migrations:migrate --no-interaction
-
-# 2. Fixtures (comptes de test)
-docker exec gf_symfony php bin/console doctrine:fixtures:load --append --no-interaction
-
-# 3. Import CSV (données réelles : espèces, plants, UVs, clients)
-bash docker/scripts/import_data.sh
-```
 
 
 ## Comptes de test
