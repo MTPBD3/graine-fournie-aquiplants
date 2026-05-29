@@ -82,6 +82,28 @@ docker exec gf_symfony php bin/console doctrine:fixtures:load --append
 | Administrateur | testadmin@aquiplants.fr | admin        |
 | Employé        | testuser@aquiplants.fr  | user         |
 
+## Résolution de problèmes
+
+### Erreur de droits sur `var/` (cache / logs Symfony)
+
+Après un `git clone` suivi de `docker compose up`, si le conteneur `gf_symfony` refuse de démarrer ou retourne une erreur du type `Unable to write to the cache directory` :
+
+```bash
+docker exec gf_symfony chown -R www-data:www-data var/
+docker exec gf_symfony chmod -R ug+rwX var/
+```
+
+> **Pourquoi ça arrive ?** Le répertoire `var/` est exclu de Git (`.gitignore`). Docker crée alors le volume anonyme en `root:root`. Le script `init.sh` corrige les droits automatiquement au démarrage, mais si le premier démarrage est interrompu ou si le volume Docker persiste d'une session précédente, les permissions peuvent rester incorrectes.
+
+### Relancer depuis zéro
+
+```bash
+docker compose down -v    # supprime volumes MySQL, vendor et var
+docker compose --env-file .env.docker up -d --build
+```
+
+---
+
 ## Auteur
 
 Projet individuel — Formation CDA (Concepteur Développeur d'Applications), Bachelor 3 DevOps.
