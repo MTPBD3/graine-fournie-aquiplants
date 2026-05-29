@@ -53,7 +53,6 @@ cp .env.docker .env
 docker compose up -d --build
 ```
 
-> **Note :** `.env` est ignoré par Git (`.gitignore`). Ne jamais commiter ce fichier.
 
 ## URLs d'accès
 
