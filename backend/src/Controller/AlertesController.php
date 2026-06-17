@@ -6,6 +6,7 @@ use App\Repository\HistoGfDeposeeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AlertesController extends AbstractController
 {
@@ -13,6 +14,7 @@ class AlertesController extends AbstractController
     private const DELAI_JOURS = 3;
 
     #[Route('/api/alertes', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(HistoGfDeposeeRepository $repo): JsonResponse
     {
         $limite = new \DateTime('-' . self::DELAI_JOURS . ' days');

@@ -99,6 +99,10 @@ class EmplacementController extends AbstractController
         $lettreEtagere = $data['lettreEtagere'] ?? '';
         $numeroEtage   = (int) ($data['numeroEtage'] ?? 0);
 
+        if (!in_array($lettreEtagere, self::ETAGERES, true) || !in_array($numeroEtage, self::ETAGES, true)) {
+            return $this->json(['message' => 'Emplacement invalide. Valeurs acceptées : A-D / 1-4'], 400);
+        }
+
         $e = $em->getRepository(Emplacement::class)->findOneBy([
             'lettreEtagere' => $lettreEtagere,
             'numeroEtage'   => $numeroEtage,
