@@ -6,6 +6,7 @@ use App\Repository\GfClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GfClientRepository::class)]
 #[ORM\Table(name: 'gf_client')]
@@ -20,9 +21,11 @@ class GfClient
     private string $numeroLot;
 
     #[ORM\Column(name: 'quantite_disponible', type: 'integer')]
+    #[Assert\PositiveOrZero]
     private int $quantiteDisponible;
 
     #[ORM\Column(name: 'seuil_alerte', type: 'integer')]
+    #[Assert\PositiveOrZero]
     private int $seuilAlerte;
 
     #[ORM\Column(name: 'nom_client', type: 'string', length: 150)]

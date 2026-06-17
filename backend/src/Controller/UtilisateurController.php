@@ -16,15 +16,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/api/utilisateurs')]
 class UtilisateurController extends AbstractController
 {
-    private const ROLES_AUTORISES = ['ROLE_ADMIN', 'ROLE_EMPLOYE'];
+    private const VALID_ROLES = ['ROLE_EMPLOYE', 'ROLE_ADMIN', 'employe', 'admin'];
 
     private function validatePassword(string $password): ?string
     {
-        if (strlen($password) < 10) {
-            return 'Le mot de passe doit contenir au moins 10 caractères.';
+        if (strlen($password) < 8) {
+            return 'Le mot de passe doit contenir au moins 8 caractères.';
         }
         if (!preg_match('/[A-Z]/', $password)) {
-            return 'Le mot de passe doit contenir au moins une lettre majuscule.';
+            return 'Le mot de passe doit contenir au moins une majuscule.';
         }
         if (!preg_match('/[0-9]/', $password)) {
             return 'Le mot de passe doit contenir au moins un chiffre.';
@@ -32,28 +32,27 @@ class UtilisateurController extends AbstractController
         return null;
     }
 
-    // Endpoint accessible à tout utilisateur authentifié : mise à jour de son propre profil
     #[Route('/mon-profil', methods: ['PATCH'])]
     public function monProfil(
         Request $request,
         EntityManagerInterface $em,
-        UserPasswordHasherInterface $hasher,
+        UserPasswordHasherInterface $hasher
     ): JsonResponse {
-        /** @var Utilisateur $user */
-        $user = $this->getUser();
-        $data = json_decode($request->getContent(), true);
+        $data       = json_decode($request->getContent(), true);
+        $motdepasse = $data['motdepasse'] ?? '';
 
-        $newPassword = $data['motdepasse'] ?? null;
-        if (empty($newPassword)) {
-            return $this->json(['message' => 'Mot de passe requis'], 400);
+        if ($motdepasse === '') {
+            return $this->json(['message' => 'Le mot de passe ne peut pas être vide'], 400);
         }
 
-        $error = $this->validatePassword($newPassword);
+        $error = $this->validatePassword($motdepasse);
         if ($error !== null) {
             return $this->json(['message' => $error], 422);
         }
 
-        $user->setMdpCrypte($hasher->hashPassword($user, $newPassword));
+        /** @var Utilisateur $user */
+        $user = $this->getUser();
+        $user->setMdpCrypte($hasher->hashPassword($user, $motdepasse));
         $em->flush();
 
         return $this->json(['message' => 'Mot de passe mis à jour']);
@@ -115,16 +114,15 @@ class UtilisateurController extends AbstractController
             return $this->json(['message' => $error], 422);
         }
 
-        $role = $data['role'] ?? 'ROLE_EMPLOYE';
-        if (!in_array($role, self::ROLES_AUTORISES, true)) {
-            return $this->json(['message' => 'Rôle invalide. Valeurs acceptées : ROLE_ADMIN, ROLE_EMPLOYE'], 422);
+        if (isset($data['role']) && !in_array($data['role'], self::VALID_ROLES, true)) {
+            return $this->json(['message' => 'Rôle invalide. Valeurs acceptées : ROLE_EMPLOYE, ROLE_ADMIN'], 422);
         }
 
         $u = new Utilisateur();
         $u->setNom($data['nom'] ?? '');
         $u->setPrenom($data['prenom'] ?? '');
         $u->setEmail($data['email']);
-        $u->setRole($role);
+        $u->setRole($data['role'] ?? 'ROLE_EMPLOYE');
         $u->setMdpCrypte($hasher->hashPassword($u, $data['motdepasse']));
 
         $em->persist($u);
@@ -133,7 +131,7 @@ class UtilisateurController extends AbstractController
         /** @var Utilisateur $actor */
         $actor = $this->getUser();
         $logService->log($em, $actor, 'creation_utilisateur',
-            'Utilisateur #' . $u->getId() . ' créé'
+            'Utilisateur ' . $u->getEmail() . ' créé'
         );
 
         return $this->json(['id' => $u->getId(), 'message' => 'Utilisateur créé'], 201);
@@ -155,16 +153,9 @@ class UtilisateurController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        if (isset($data['role'])) {
-            if (!in_array($data['role'], self::ROLES_AUTORISES, true)) {
-                return $this->json(['message' => 'Rôle invalide. Valeurs acceptées : ROLE_ADMIN, ROLE_EMPLOYE'], 422);
-            }
-            $u->setRole($data['role']);
+        if (isset($data['role']) && !in_array($data['role'], self::VALID_ROLES, true)) {
+            return $this->json(['message' => 'Rôle invalide. Valeurs acceptées : ROLE_EMPLOYE, ROLE_ADMIN'], 422);
         }
-
-        if (isset($data['nom']))    $u->setNom($data['nom']);
-        if (isset($data['prenom'])) $u->setPrenom($data['prenom']);
-        if (isset($data['email']))  $u->setEmail($data['email']);
 
         $newPassword = $data['motdepasse'] ?? $data['mdpCrypte'] ?? null;
         if (!empty($newPassword)) {
@@ -174,6 +165,11 @@ class UtilisateurController extends AbstractController
             }
             $u->setMdpCrypte($hasher->hashPassword($u, $newPassword));
         }
+
+        if (isset($data['nom']))    $u->setNom($data['nom']);
+        if (isset($data['prenom'])) $u->setPrenom($data['prenom']);
+        if (isset($data['email']))  $u->setEmail($data['email']);
+        if (isset($data['role']))   $u->setRole($data['role']);
 
         $em->flush();
 
@@ -189,7 +185,7 @@ class UtilisateurController extends AbstractController
             return $this->json(['message' => 'Utilisateur introuvable'], 404);
         }
 
-        $userId = $u->getId();
+        $email = $u->getEmail();
 
         /** @var Utilisateur $actor */
         $actor = $this->getUser();
@@ -198,7 +194,7 @@ class UtilisateurController extends AbstractController
         $em->flush();
 
         $logService->log($em, $actor, 'suppression_utilisateur',
-            'Utilisateur #' . $userId . ' supprimé'
+            'Utilisateur ' . $email . ' supprimé'
         );
 
         return $this->json(null, 204);

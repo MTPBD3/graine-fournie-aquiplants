@@ -25,3 +25,7 @@ services:
     App\EventListener\LoginSuccessListener:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccess }
+
+    App\Security\AuthenticationFailureHandler:
+        arguments:
+            $inner: '@lexik_jwt_authentication.handler.authentication_failure'

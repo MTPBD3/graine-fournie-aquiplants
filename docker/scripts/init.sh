@@ -34,11 +34,7 @@ else
 fi
 
 echo "--- [3/5] Migrations Doctrine ---"
-if [ -n "${DATABASE_URL_MIGRATIONS}" ]; then
-    DATABASE_URL="${DATABASE_URL_MIGRATIONS}" php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
-else
-    php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
-fi
+php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 
 echo "--- [4/5] Fixtures ---"
 USER_COUNT=$(php bin/console doctrine:query:sql "SELECT COUNT(*) as c FROM utilisateur" --no-interaction 2>/dev/null | grep -oE '[0-9]+' | head -1 || echo "0")

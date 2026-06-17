@@ -78,4 +78,18 @@ class EmplacementTest extends TestCase
         $sachet = $this->makeSachet();
         $this->assertNull($sachet->getEmplacement());
     }
+
+    public function testGetSetClientSurEmplacement(): void
+    {
+        $e = $this->makeEmplacement('C', 2);
+        $this->assertNull($e->getClient());
+
+        $c = new Client();
+        $c->setNomClient('ClientTest')->setPrenomClient('P');
+        $e->setClient($c);
+        $this->assertSame($c, $e->getClient());
+
+        $e->setClient(null);
+        $this->assertNull($e->getClient());
+    }
 }
