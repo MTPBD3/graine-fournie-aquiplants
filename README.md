@@ -25,8 +25,8 @@ AQUIPLANTS gère manuellement l'arrivée et le stockage de graines fournies par 
 | J2 | Février 2026 | Méthodologie & Conception UI/UX | ✅ Livré |
 | J3 | Mars 2026 | Modélisation base de données | ✅ Livré |
 | J4 | Avril 2026 | Architecture & Diagrammes UML | ✅ Livré |
-| J5 | Mai 2026 | Développement, Sécurité & Tests | ✅ Livré |
-| J6 | Juin 2026 | Déploiement & Livrable final | 🔄 En cours |
+| J5 | Mai 2026 | Développement, Sécurité & Tests | 🔄 En cours |
+| J6 | Juin 2026 | Déploiement & Livrable final | ⏳ À venir |
 
 
 ## Maquettes
@@ -44,18 +44,14 @@ Wireframes et maquettes haute fidélité disponibles sur Figma :
 ```bash
 git clone https://github.com/MTPBD3/graine-fournie-aquiplants.git
 cd graine-fournie-aquiplants
-cp .env.docker.example .env
+
+# Créer le fichier d'environnement (non versionné, contient les credentials)
+cp .env.docker .env
+# Éditer .env avec les vraies valeurs si nécessaire
+
+# Démarrer l'application
 docker compose up -d --build
-docker exec gf_symfony php bin/console doctrine:migrations:migrate --no-interaction
-docker exec gf_symfony php bin/console doctrine:fixtures:load --append --no-interaction
-
-# Charger les données réelles (clients, plants, UVs, espèces)
-# Windows PowerShell :
-Get-Content docker/mysql/initdb.d/dump.sql | docker exec -i gf_mysql mysql -uroot -proot aquiplants_db
-# Linux/Mac :
-docker exec -i gf_mysql mysql -uroot -proot aquiplants_db < docker/mysql/initdb.d/dump.sql
 ```
-
 
 
 ## URLs d'accès
@@ -66,6 +62,36 @@ docker exec -i gf_mysql mysql -uroot -proot aquiplants_db < docker/mysql/initdb.
 | API Symfony       | http://localhost:8000          | Réseau                   |
 | phpMyAdmin        | http://127.0.0.1:8080          | Localhost uniquement      |
 
+## Charger les données
+
+```bash
+# 1. Migrations (schéma BDD)
+docker exec gf_symfony php bin/console doctrine:migrations:migrate --no-interaction
+
+# 2. Fixtures (comptes de test)
+docker exec gf_symfony php bin/console doctrine:fixtures:load --append --no-interaction
+
+# 3. Import CSV (données réelles : espèces, plants, UVs, clients)
+bash docker/scripts/import_data.sh
+```
+
+## Sauvegarder et restaurer la base de données
+
+> **Attention :** `docker compose down -v` supprime le volume `mysql_data` et **efface toutes les données**.
+> Faire un dump avant toute opération destructive.
+
+**Sauvegarder :**
+
+```bash
+bash docker/scripts/backup.sh
+# Crée un fichier backup_YYYYMMDD_HHMMSS.sql dans le répertoire courant
+```
+
+**Restaurer depuis un dump :**
+
+```bash
+docker exec -i gf_mysql mysql -uaquiplants -paquiplants aquiplants_db < backup.sql
+```
 
 ## Comptes de test
 
@@ -74,6 +100,25 @@ docker exec -i gf_mysql mysql -uroot -proot aquiplants_db < docker/mysql/initdb.
 | Administrateur | testadmin@aquiplants.fr | admin        |
 | Employé        | testuser@aquiplants.fr  | user         |
 
+## Résolution de problèmes
+
+### Erreur de droits sur `var/` (cache / logs Symfony)
+
+Après un `git clone` suivi de `docker compose up`, si le conteneur `gf_symfony` refuse de démarrer ou retourne une erreur du type `Unable to write to the cache directory` :
+
+```bash
+docker exec gf_symfony chown -R www-data:www-data var/
+docker exec gf_symfony chmod -R ug+rwX var/
+```
+
+> **Pourquoi ça arrive ?** Le répertoire `var/` est exclu de Git (`.gitignore`). Docker crée alors le volume anonyme en `root:root`. Le script `init.sh` corrige les droits automatiquement au démarrage, mais si le premier démarrage est interrompu ou si le volume Docker persiste d'une session précédente, les permissions peuvent rester incorrectes.
+
+### Relancer depuis zéro
+
+```bash
+docker compose down -v    # supprime volumes MySQL, vendor et var
+docker compose up -d --build
+```
 
 ---
 

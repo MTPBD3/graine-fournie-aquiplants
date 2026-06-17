@@ -59,4 +59,18 @@ class UtilisateurTest extends TestCase
         $this->assertSame('Dupont', $u->getNom());
         $this->assertSame('Marie', $u->getPrenom());
     }
+
+    public function testEraseCredentialsNeJettePasException(): void
+    {
+        $u = new Utilisateur();
+        $u->eraseCredentials();
+        $this->assertTrue(true);
+    }
+
+    public function testGetMdpCrypteRetourneValeurStockee(): void
+    {
+        $u = new Utilisateur();
+        $u->setMdpCrypte('$2y$hash_dummy');
+        $this->assertSame('$2y$hash_dummy', $u->getMdpCrypte());
+    }
 }

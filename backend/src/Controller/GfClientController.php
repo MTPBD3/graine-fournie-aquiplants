@@ -292,8 +292,20 @@ class GfClientController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         if (isset($data['numeroLot']))          $g->setNumeroLot($data['numeroLot']);
-        if (isset($data['quantiteDisponible'])) $g->setQuantiteDisponible($data['quantiteDisponible']);
-        if (isset($data['seuilAlerte']))        $g->setSeuilAlerte($data['seuilAlerte']);
+        if (isset($data['quantiteDisponible'])) {
+            $q = $data['quantiteDisponible'];
+            if (!is_int($q) || $q < 0) {
+                return $this->json(['message' => 'La quantité disponible doit être un entier positif ou nul'], 400);
+            }
+            $g->setQuantiteDisponible($q);
+        }
+        if (isset($data['seuilAlerte'])) {
+            $s = $data['seuilAlerte'];
+            if (!is_int($s) || $s < 0) {
+                return $this->json(['message' => 'Le seuil d\'alerte doit être un entier positif ou nul'], 400);
+            }
+            $g->setSeuilAlerte($s);
+        }
         if (isset($data['nomClient']))          $g->setNomClient($data['nomClient']);
 
         if (isset($data['idClient'])) {
