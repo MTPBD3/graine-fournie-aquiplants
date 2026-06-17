@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\HistoGfDeposeeRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class StatistiquesController extends AbstractController
 {
     #[Route('/api/statistiques', methods: ['GET'])]
-    public function index(HistoGfDeposeeRepository $repo, EntityManagerInterface $em): JsonResponse
+    public function index(HistoGfDeposeeRepository $repo): JsonResponse
     {
         $all = $repo->findAll();
 
@@ -25,16 +24,18 @@ class StatistiquesController extends AbstractController
             }
         }
 
-        // Évolution mensuelle — requête SQL groupée par mois (format YYYY-MM)
-        $conn = $em->getConnection();
-        $sql  = "SELECT DATE_FORMAT(date_reception, '%Y-%m') as mois, COUNT(*) as total
-                 FROM histo_gf_deposee
-                 GROUP BY mois
-                 ORDER BY mois ASC";
-        $evolutionMensuelle = array_map(
-            fn($row) => ['mois' => $row['mois'], 'total' => (int) $row['total']],
-            $conn->executeQuery($sql)->fetchAllAssociative()
-        );
+        // Évolution mensuelle — groupé en PHP (compatibilité SQLite + MySQL)
+        $evolByMois = [];
+        foreach ($all as $h) {
+            $mois = $h->getDateReception()->format('Y-m');
+            $evolByMois[$mois] = ($evolByMois[$mois] ?? 0) + 1;
+        }
+        ksort($evolByMois);
+        $evolutionMensuelle = array_values(array_map(
+            fn($mois, $total) => ['mois' => $mois, 'total' => (int) $total],
+            array_keys($evolByMois),
+            $evolByMois
+        ));
 
         // Indicateurs agrégés via PHP (entrees/sorties pour les 12 derniers mois)
         $moisMap = [];
@@ -86,7 +87,7 @@ class StatistiquesController extends AbstractController
     }
 
     #[Route('/api/stats/depots', methods: ['GET'])]
-    public function depots(Request $request, EntityManagerInterface $em): JsonResponse
+    public function depots(Request $request, HistoGfDeposeeRepository $repo): JsonResponse
     {
         $periode = $request->query->get('periode', '1M');
 
@@ -96,19 +97,23 @@ class StatistiquesController extends AbstractController
             default => 1,
         };
 
-        $start = (new \DateTimeImmutable())->modify("-{$months} month")->format('Y-m-d');
+        $start = (new \DateTimeImmutable())->modify("-{$months} month");
 
-        $rows = $em->getConnection()->executeQuery(
-            "SELECT DATE_FORMAT(date_reception, '%Y-%m-%d') AS date, COUNT(*) AS total
-             FROM histo_gf_deposee
-             WHERE date_reception >= :start
-             GROUP BY date
-             ORDER BY date ASC",
-            ['start' => $start]
-        )->fetchAllAssociative();
+        $byDate = [];
+        foreach ($repo->findAll() as $h) {
+            if ($h->getDateReception() >= $start) {
+                $date = $h->getDateReception()->format('Y-m-d');
+                $byDate[$date] = ($byDate[$date] ?? 0) + 1;
+            }
+        }
+        ksort($byDate);
 
         return $this->json(
-            array_map(fn($r) => ['date' => $r['date'], 'total' => (int) $r['total']], $rows)
+            array_values(array_map(
+                fn($date, $total) => ['date' => $date, 'total' => (int) $total],
+                array_keys($byDate),
+                $byDate
+            ))
         );
     }
 }

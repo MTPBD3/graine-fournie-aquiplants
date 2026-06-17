@@ -40,7 +40,7 @@ services:
       - /var/www/html/vendor
       - /var/www/html/var
     environment:
-      APP_ENV: dev
+      APP_ENV: ${APP_ENV:-prod}
       APP_SECRET: ${APP_SECRET}
       DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql_db:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4"
       DATABASE_URL_MIGRATIONS: "mysql://${MYSQL_MIGRATIONS_USER}:${MYSQL_MIGRATIONS_PASSWORD}@mysql_db:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4"
