@@ -61,10 +61,21 @@ class HistoGfDeposeeController extends AbstractController
             return $this->json(['message' => 'GfClient introuvable'], 400);
         }
 
+        try {
+            $date = new \DateTime($data['dateReception'] ?? 'now');
+        } catch (\Exception $e) {
+            return $this->json(['message' => 'Format de date invalide (attendu: Y-m-d)'], 400);
+        }
+
+        $statut = $data['statut'] ?? 'a_traiter';
+        if (!in_array($statut, ['a_traiter', 'range'], true)) {
+            return $this->json(['message' => 'Statut invalide. Valeurs acceptées : a_traiter, range'], 422);
+        }
+
         $h = new HistoGfDeposee();
         $h->setQuantiteDeposee($data['quantiteDeposee'] ?? 0);
-        $h->setDateReception(new \DateTime($data['dateReception'] ?? 'now'));
-        $h->setStatut($data['statut'] ?? 'a_traiter');
+        $h->setDateReception($date);
+        $h->setStatut($statut);
         $h->setNote($data['note'] ?? null);
         $h->setGfClient($gfClient);
 
@@ -85,7 +96,12 @@ class HistoGfDeposeeController extends AbstractController
         $data        = json_decode($request->getContent(), true);
         $statutAvant = $h->getStatut();
 
-        if (isset($data['statut']))          $h->setStatut($data['statut']);
+        if (isset($data['statut'])) {
+            if (!in_array($data['statut'], ['a_traiter', 'range'], true)) {
+                return $this->json(['message' => 'Statut invalide. Valeurs acceptées : a_traiter, range'], 422);
+            }
+            $h->setStatut($data['statut']);
+        }
         if (isset($data['quantiteDeposee'])) $h->setQuantiteDeposee($data['quantiteDeposee']);
         if (isset($data['note']))            $h->setNote($data['note']);
         if (isset($data['dateReception']))   $h->setDateReception(new \DateTime($data['dateReception']));

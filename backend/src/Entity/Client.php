@@ -6,6 +6,7 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 #[ORM\Table(name: 'client')]
@@ -17,9 +18,12 @@ class Client
     private ?int $idClient = null;
 
     #[ORM\Column(name: 'nom_client', type: 'string', length: 150)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 150)]
     private string $nomClient;
 
     #[ORM\Column(name: 'prenom_client', type: 'string', length: 150, nullable: true)]
+    #[Assert\Length(max: 150)]
     private ?string $prenomClient = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: GfClient::class)]
