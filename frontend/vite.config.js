@@ -13,6 +13,10 @@ export default defineConfig({
     host: true,
     port: 3000,
     historyApiFallback: true,
+    watch: {
+      usePolling: true,
+      interval: 300,
+    },
     proxy: {
       '/api': {
         target: 'http://symfony_app:8000',
