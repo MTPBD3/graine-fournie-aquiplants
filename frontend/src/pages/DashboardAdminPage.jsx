@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import {
   Box, Grid, Paper, Typography, Chip, Divider, CircularProgress,
@@ -110,155 +111,183 @@ function Empty({ text = 'Aucune donnée disponible' }) {
 }
 
 // ── Barre de recherche intelligente Client / Graine ───────────────────────────
-function SmartSearch({ searchMode, onModeChange, onSelect }) {
+function SmartSearch({ searchMode, onModeChange, onSelect, sachets = [] }) {
   const { token } = useAuth();
-  const [query, setQuery]     = useState('');
+  const navigate  = useNavigate();
+  const [query,   setQuery]   = useState('');
   const [results, setResults] = useState([]);
-  const [open, setOpen]       = useState(false);
-  const containerRef          = useRef(null);
-  const debounceRef           = useRef(null);
+  const [pos,     setPos]     = useState({ top: 0, left: 0, width: 0 });
+  const [open,    setOpen]    = useState(false);
+  const wrapRef     = useRef(null);
+  const dropRef     = useRef(null);
+  const debounceRef = useRef(null);
 
-  const placeholder = searchMode === 'client'
-    ? 'Rechercher par client...'
-    : 'Rechercher par numéro de lot / nom du plant';
-
-  // Fermer la liste au clic en dehors
+  // Fermer au clic en dehors — exclure le Portal (dropRef) qui est hors de wrapRef dans le DOM
   useEffect(() => {
-    const handler = (e) => {
-      if (containerRef.current && !containerRef.current.contains(e.target)) setOpen(false);
+    const onDown = (e) => {
+      const inWrap = wrapRef.current?.contains(e.target);
+      const inDrop = dropRef.current?.contains(e.target);
+      if (!inWrap && !inDrop) setOpen(false);
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
   }, []);
 
   const handleInput = useCallback((value) => {
     setQuery(value);
     clearTimeout(debounceRef.current);
-    if (value.length < 2) { setResults([]); setOpen(false); return; }
+    if (value.trim().length < 2) { setResults([]); setOpen(false); return; }
     debounceRef.current = setTimeout(async () => {
-      const endpoint = searchMode === 'client'
+      const url = searchMode === 'client'
         ? `${API_BASE}/api/clients?search=${encodeURIComponent(value)}`
         : `${API_BASE}/api/gf-clients?search=${encodeURIComponent(value)}`;
       try {
-        const res = await fetch(endpoint, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setResults(Array.isArray(data) ? data : []);
-          setOpen(true);
+        const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) return;
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : [];
+        setResults(list);
+        if (wrapRef.current) {
+          const r = wrapRef.current.getBoundingClientRect();
+          setPos({ top: r.bottom + 4, left: r.left, width: r.width || 320 });
         }
-      } catch { /* ignore */ }
+        setOpen(list.length > 0);
+      } catch { /* réseau */ }
     }, 300);
   }, [searchMode, token]);
 
+  const clear = useCallback(() => {
+    setQuery(''); setResults([]); setOpen(false); onSelect('');
+  }, [onSelect]);
+
   const handleSelect = (item) => {
     const label = searchMode === 'client'
-      ? `${item.prenomClient ?? ''} ${item.nomClient ?? ''}`.trim()
-      : `${item.numeroLot ?? ''} · ${item.plant?.nomPlant ?? ''}`.trim();
+      ? [item.prenom, item.nom].filter(Boolean).join(' ')
+      : item._plantNom ?? '';
     setQuery(label);
     setOpen(false);
     onSelect(label);
+    if (searchMode === 'client') {
+      const rangés = sachets.filter(s => s.client?.id === item.id && s.emplacement !== null);
+      if (rangés.length > 0) navigate('/gestion-stocks');
+    } else {
+      if (item._enStock > 0) navigate('/gestion-stocks');
+    }
   };
 
-  const handleClear = () => {
-    setQuery('');
-    setResults([]);
-    setOpen(false);
-    onSelect('');
-  };
-
-  const handleModeChange = (mode) => {
-    onModeChange(mode);
-    handleClear();
-  };
+  // Enrichir les résultats selon le mode
+  const enriched = useMemo(() => {
+    if (searchMode === 'client') {
+      return results.map(client => {
+        const rangés = sachets.filter(s => s.client?.id === client.id && s.emplacement !== null);
+        const empl   = [...new Set(rangés.map(s => s.emplacement?.code).filter(Boolean))];
+        return { ...client, _ranges: rangés.length, _emplacements: empl };
+      });
+    }
+    // Mode graine : grouper par plant et compter les sachets en stock
+    const map = {};
+    results.forEach(sachet => {
+      const plantId = sachet.plant?.id;
+      if (!plantId) return;
+      if (!map[plantId]) {
+        map[plantId] = {
+          _plantId: plantId,
+          _plantNom: sachet.plant?.nomPlant ?? '',
+          _sachets: [],
+        };
+      }
+      map[plantId]._sachets.push(sachet);
+    });
+    return Object.values(map).map(group => {
+      const enStock = group._sachets.filter(s => s.emplacement !== null);
+      const empl    = [...new Set(enStock.map(s => s.emplacement?.code).filter(Boolean))];
+      return {
+        ...group,
+        _enStock: enStock.length,
+        _emplacements: empl,
+        _lots: group._sachets.map(s => s.numeroLot),
+      };
+    });
+  }, [results, sachets, searchMode]);
 
   return (
-    <Box ref={containerRef} sx={{ position: 'relative', flex: 1, maxWidth: { xs: '100%', md: 420 }, minWidth: 0 }}>
+    <Box ref={wrapRef} sx={{ position: 'relative', flex: 1, maxWidth: { xs: '100%', md: 420 }, minWidth: 0 }}>
+
+      {/* Barre */}
       <Box sx={{ display: 'flex', alignItems: 'stretch' }}>
 
         {/* Toggle Client / Graine */}
-        <Box sx={{
-          display: 'flex',
-          border: '1px solid rgba(0,0,0,0.12)',
-          borderRight: 'none',
-          borderRadius: '8px 0 0 8px',
-          overflow: 'hidden',
-          flexShrink: 0,
-        }}>
+        <Box sx={{ display: 'flex', border: '1px solid rgba(0,0,0,0.12)', borderRight: 'none', borderRadius: '8px 0 0 8px', overflow: 'hidden', flexShrink: 0 }}>
           {[['client', 'Client'], ['graine', 'Graine']].map(([val, lbl], idx) => (
-            <Box
-              key={val}
-              onClick={() => handleModeChange(val)}
-              sx={{
-                px: 1.5, display: 'flex', alignItems: 'center',
-                cursor: 'pointer', fontSize: '0.75rem', fontWeight: 600,
-                bgcolor: searchMode === val ? '#1B5E20' : '#fff',
-                color: searchMode === val ? '#fff' : 'text.secondary',
-                transition: 'background 0.15s',
-                userSelect: 'none',
-                borderRight: idx === 0 ? '1px solid rgba(0,0,0,0.12)' : 'none',
-              }}
-            >
-              {lbl}
-            </Box>
+            <Box key={val} onClick={() => { onModeChange(val); clear(); }} sx={{
+              px: 1.5, display: 'flex', alignItems: 'center', cursor: 'pointer',
+              fontSize: '0.75rem', fontWeight: 600,
+              bgcolor: searchMode === val ? '#1B5E20' : '#fff',
+              color:   searchMode === val ? '#fff'     : 'text.secondary',
+              transition: 'background 0.15s', userSelect: 'none',
+              borderRight: idx === 0 ? '1px solid rgba(0,0,0,0.12)' : 'none',
+            }}>{lbl}</Box>
           ))}
         </Box>
 
-        {/* Champ de saisie */}
-        <Box sx={{
-          display: 'flex', alignItems: 'center',
-          bgcolor: '#F7FAF3', border: '1px solid rgba(0,0,0,0.12)',
-          borderRadius: '0 8px 8px 0', px: 1.5, py: 0.5, flex: 1,
-        }}>
+        {/* Champ */}
+        <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: '#F7FAF3', border: '1px solid rgba(0,0,0,0.12)', borderRadius: '0 8px 8px 0', px: 1.5, py: 0.5, flex: 1 }}>
           <SearchIcon sx={{ color: 'text.disabled', fontSize: 18, mr: 1, flexShrink: 0 }} />
           <InputBase
-            placeholder={placeholder}
+            placeholder={searchMode === 'client' ? 'Rechercher par client…' : 'Rechercher par lot / plante…'}
             value={query}
             onChange={e => handleInput(e.target.value)}
             sx={{ fontSize: '0.875rem', flex: 1 }}
           />
-          {query && (
-            <IconButton size="small" onClick={handleClear} sx={{ p: 0.25, ml: 0.5 }}>
-              <CloseIcon sx={{ fontSize: 14 }} />
-            </IconButton>
-          )}
+          {query && <IconButton size="small" onClick={clear} sx={{ p: 0.25, ml: 0.5 }}><CloseIcon sx={{ fontSize: 14 }} /></IconButton>}
         </Box>
       </Box>
 
-      {/* Liste déroulante */}
-      {open && (
-        <Paper elevation={6} sx={{
-          position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 1400,
-          mt: 0.5, borderRadius: '8px', overflow: 'hidden',
-          maxHeight: 220, overflowY: 'auto',
+      {/* Dropdown — rendu sur document.body via Portal (évite tout problème de z-index/overflow) */}
+      {open && createPortal(
+        <div ref={dropRef} style={{
+          position: 'fixed',
+          top: pos.top || 80,
+          left: pos.left || 100,
+          width: pos.width || 320,
+          zIndex: 9999,
+          background: '#fff',
+          borderRadius: 8,
+          boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+          maxHeight: 280,
+          overflowY: 'auto',
         }}>
-          {results.length === 0 ? (
-            <Typography sx={{ px: 2, py: 1.5, fontSize: '0.85rem', color: 'text.secondary' }}>
-              Aucun résultat
-            </Typography>
-          ) : (
-            results.map((item, i) => {
-              const label = searchMode === 'client'
-                ? `${item.prenomClient ?? ''} ${item.nomClient ?? ''}`.trim()
-                : `${item.numeroLot ?? ''} · ${item.plant?.nomPlant ?? ''}`;
-              return (
-                <Box
-                  key={item.idGfClient ?? item.idClient ?? i}
-                  onMouseDown={e => e.preventDefault()}
-                  onClick={() => handleSelect(item)}
-                  sx={{
-                    px: 2, py: 1.25, cursor: 'pointer', fontSize: '0.85rem',
-                    '&:hover': { bgcolor: '#F7FAF3' },
-                    borderBottom: i < results.length - 1 ? '1px solid rgba(0,0,0,0.06)' : 'none',
-                  }}
-                >
-                  {label}
-                </Box>
-              );
-            })
-          )}
-        </Paper>
+          {enriched.map((item, i) => {
+            const isClient = searchMode === 'client';
+            const label = isClient
+              ? [item.prenom, item.nom].filter(Boolean).join(' ')
+              : item._plantNom;
+            const sub = isClient
+              ? (item._ranges > 0
+                  ? `${item._ranges} sachet${item._ranges > 1 ? 's' : ''} en stock${item._emplacements.length ? ' · ' + item._emplacements.join(', ') : ''}`
+                  : '0 sachet en stock')
+              : (item._enStock > 0
+                  ? `${item._enStock} sachet${item._enStock > 1 ? 's' : ''} en stock${item._emplacements.length ? ' · ' + item._emplacements.join(', ') : ''}${item._lots.length > 1 ? ' · ' + item._lots.join(', ') : ''}`
+                  : '0 sachet en stock');
+            return (
+              <div
+                key={item.id ?? item._plantId ?? i}
+                onPointerDown={e => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSelect(item);
+                }}
+                style={{ padding: '10px 16px', cursor: 'pointer', borderBottom: i < enriched.length - 1 ? '1px solid #f0f0f0' : 'none' }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#F7FAF3'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#fff'; }}
+              >
+                <div style={{ fontSize: 14, fontWeight: 600, color: '#111' }}>{label}</div>
+                {sub && <div style={{ fontSize: 12, color: isClient ? (item._ranges > 0 ? '#2E7D32' : '#999') : (item._enStock > 0 ? '#2E7D32' : '#999'), marginTop: 2 }}>{sub}</div>}
+              </div>
+            );
+          })}
+        </div>,
+        document.body
       )}
     </Box>
   );
@@ -378,6 +407,7 @@ export default function DashboardAdminPage() {
             searchMode={searchMode}
             onModeChange={v => { setSearchMode(v); setSearchQuery(''); }}
             onSelect={label => setSearchQuery(label)}
+            sachets={Array.isArray(sachets) ? sachets : []}
           />
 
           {/* Droite : cloche + engrenage + date + email + avatar */}
