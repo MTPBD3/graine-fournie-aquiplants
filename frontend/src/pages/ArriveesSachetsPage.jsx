@@ -6,7 +6,7 @@ import {
   Stepper, Step, StepLabel, Divider, IconButton, CircularProgress,
   Card, CardContent, CardActions, useMediaQuery, useTheme, Alert,
   Select, InputLabel, FormControl, FormHelperText, Tooltip, Snackbar,
-  Autocomplete,
+  Autocomplete, ListSubheader,
 } from '@mui/material';
 import { sanitize } from '../utils/sanitize';
 import { formatDate } from '../utils/formatDate';
@@ -20,6 +20,7 @@ import { useApi, apiRequest } from '../hooks/useApi';
 import { useAuth } from '../context/AuthContext';
 
 const DRAFT_KEY = 'gf_sachet_draft';
+
 
 const emptyForm = {
   idClient: '',
@@ -185,9 +186,13 @@ export default function ArriveesSachetsPage() {
   const [editError,     setEditError]     = useState('');
 
   // Mini-modals
-  const [clientDialogOpen, setClientDialogOpen] = useState(false);
-  const [plantDialogOpen,  setPlantDialogOpen]  = useState(false);
-  const [uvDialogOpen,     setUvDialogOpen]     = useState(false);
+  const [clientDialogOpen,  setClientDialogOpen]  = useState(false);
+  const [plantDialogOpen,   setPlantDialogOpen]   = useState(false);
+  const [uvDialogOpen,      setUvDialogOpen]      = useState(false);
+
+  // Recherche dans les combos
+  const [clientSearch, setClientSearch] = useState('');
+  const [plantSearch,  setPlantSearch]  = useState('');
 
   // Persistance du brouillon formulaire
   useEffect(() => {
@@ -748,18 +753,6 @@ export default function ArriveesSachetsPage() {
                     </TableCell>
                     <TableCell sx={{ whiteSpace: 'nowrap' }}>
                       <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center', flexWrap: 'nowrap' }}>
-                        {s.statut === 'a_traiter' && isAdmin && (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            color="success"
-                            startIcon={<CheckIcon />}
-                            onClick={() => handleOpenRanger(s)}
-                            sx={{ fontSize: '0.75rem' }}
-                          >
-                            Marquer comme rangé
-                          </Button>
-                        )}
                         {s.statut === 'range' && (
                           <>
                             <Tooltip title="Utiliser des graines">
@@ -822,7 +815,7 @@ export default function ArriveesSachetsPage() {
           {step === 0 ? (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
 
-              {/* Select Client + bouton "+" */}
+              {/* Select Client avec recherche intégrée + bouton "+" */}
               <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
                 <FormControl fullWidth size="small" required error={!!formErrors.idClient}>
                   <InputLabel id="select-client-label">Client</InputLabel>
@@ -832,17 +825,28 @@ export default function ArriveesSachetsPage() {
                     value={form.idClient}
                     label="Client"
                     onChange={handleChange}
+                    onClose={() => setClientSearch('')}
+                    MenuProps={{ autoFocus: false }}
                   >
-                    {clientsList.length === 0 && (
-                      <MenuItem disabled value="">
-                        <em>Aucun client — créez-en un via +</em>
-                      </MenuItem>
+                    <ListSubheader sx={{ pt: 1, pb: 0.5, lineHeight: 'normal' }}>
+                      <TextField
+                        size="small"
+                        placeholder="Rechercher..."
+                        fullWidth
+                        value={clientSearch}
+                        onChange={(e) => setClientSearch(e.target.value)}
+                        onKeyDown={(e) => e.stopPropagation()}
+                        slotProps={{ htmlInput: { sx: { py: 0.75 } } }}
+                      />
+                    </ListSubheader>
+                    {clientsList
+                      .filter((c) => `${c.nom} ${c.prenom}`.toLowerCase().includes(clientSearch.toLowerCase()))
+                      .map((c) => (
+                        <MenuItem key={c.id} value={c.id}>{c.nom} {c.prenom}</MenuItem>
+                      ))}
+                    {clientsList.filter((c) => `${c.nom} ${c.prenom}`.toLowerCase().includes(clientSearch.toLowerCase())).length === 0 && (
+                      <MenuItem disabled><em>Aucun résultat</em></MenuItem>
                     )}
-                    {clientsList.map((c) => (
-                      <MenuItem key={c.id} value={c.id}>
-                        {c.nom} {c.prenom}
-                      </MenuItem>
-                    ))}
                   </Select>
                   {formErrors.idClient && <FormHelperText>{formErrors.idClient}</FormHelperText>}
                 </FormControl>
@@ -850,22 +854,14 @@ export default function ArriveesSachetsPage() {
                   <IconButton
                     color="primary"
                     onClick={() => setClientDialogOpen(true)}
-                    sx={{
-                      mt: 0.25,
-                      border: '1px solid',
-                      borderColor: 'primary.main',
-                      borderRadius: 1,
-                      width: 40,
-                      height: 40,
-                      flexShrink: 0,
-                    }}
+                    sx={{ mt: 0.25, border: '1px solid', borderColor: 'primary.main', borderRadius: 1, width: 40, height: 40, flexShrink: 0 }}
                   >
                     <AddIcon fontSize="small" />
                   </IconButton>
                 </Tooltip>
               </Box>
 
-              {/* Select Plante + bouton "+" */}
+              {/* Select Plante avec recherche intégrée + bouton "+" */}
               <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
                 <FormControl fullWidth size="small" required error={!!formErrors.idPlant}>
                   <InputLabel id="select-plant-label">Plante / espèce</InputLabel>
@@ -875,17 +871,31 @@ export default function ArriveesSachetsPage() {
                     value={form.idPlant}
                     label="Plante / espèce"
                     onChange={handleChange}
+                    onClose={() => setPlantSearch('')}
+                    MenuProps={{ autoFocus: false }}
                   >
-                    {plantsList.length === 0 && (
-                      <MenuItem disabled value="">
-                        <em>Aucune plante — créez-en une via +</em>
-                      </MenuItem>
+                    <MenuItem disableRipple sx={{ p: 1, '&:hover': { bgcolor: 'transparent' }, '&.Mui-focusVisible': { bgcolor: 'transparent' } }}>
+                      <TextField
+                        size="small"
+                        placeholder="Rechercher..."
+                        fullWidth
+                        autoFocus
+                        value={plantSearch}
+                        onChange={(e) => setPlantSearch(e.target.value)}
+                        onKeyDown={(e) => e.stopPropagation()}
+                        slotProps={{ htmlInput: { sx: { py: 0.75 } } }}
+                      />
+                    </MenuItem>
+                    {plantsList
+                      .filter((p) => `${p.nomPlant} ${p.nomEspece ?? ''}`.toLowerCase().includes(plantSearch.toLowerCase()))
+                      .map((p) => (
+                        <MenuItem key={p.id} value={p.id}>
+                          {p.nomPlant}{p.nomEspece ? ` — ${p.nomEspece}` : ''}
+                        </MenuItem>
+                      ))}
+                    {plantsList.filter((p) => `${p.nomPlant} ${p.nomEspece ?? ''}`.toLowerCase().includes(plantSearch.toLowerCase())).length === 0 && (
+                      <MenuItem disabled><em>Aucun résultat</em></MenuItem>
                     )}
-                    {plantsList.map((p) => (
-                      <MenuItem key={p.id} value={p.id}>
-                        {p.nomPlant}{p.nomEspece ? ` — ${p.nomEspece}` : ''}
-                      </MenuItem>
-                    ))}
                   </Select>
                   {formErrors.idPlant && <FormHelperText>{formErrors.idPlant}</FormHelperText>}
                 </FormControl>
@@ -893,15 +903,7 @@ export default function ArriveesSachetsPage() {
                   <IconButton
                     color="primary"
                     onClick={() => setPlantDialogOpen(true)}
-                    sx={{
-                      mt: 0.25,
-                      border: '1px solid',
-                      borderColor: 'primary.main',
-                      borderRadius: 1,
-                      width: 40,
-                      height: 40,
-                      flexShrink: 0,
-                    }}
+                    sx={{ mt: 0.25, border: '1px solid', borderColor: 'primary.main', borderRadius: 1, width: 40, height: 40, flexShrink: 0 }}
                   >
                     <AddIcon fontSize="small" />
                   </IconButton>
