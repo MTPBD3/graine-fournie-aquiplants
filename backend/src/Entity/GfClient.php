@@ -6,10 +6,13 @@ use App\Repository\GfClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GfClientRepository::class)]
 #[ORM\Table(name: 'gf_client')]
+#[ORM\UniqueConstraint(name: 'uq_numero_lot', columns: ['numero_lot'])]
+#[UniqueEntity(fields: ['numeroLot'], message: 'Ce numéro de lot existe déjà.')]
 class GfClient
 {
     #[ORM\Id]

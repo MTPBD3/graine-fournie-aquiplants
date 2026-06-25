@@ -51,6 +51,10 @@ class GfClientController extends AbstractController
                 'nomEspece' => $g->getPlant()->getEspece()?->getNomEspece() ?? '',
                 'idEspece'  => $g->getPlant()->getEspece()?->getIdEspece(),
             ],
+            'emplacement' => $g->getEmplacement() ? [
+                'id'   => $g->getEmplacement()->getIdEmplacement(),
+                'code' => $g->getEmplacement()->getLettreEtagere() . '-' . $g->getEmplacement()->getNumeroEtage(),
+            ] : null,
         ];
     }
 
@@ -61,7 +65,8 @@ class GfClientController extends AbstractController
 
         if ($search !== '') {
             $items = $repo->createQueryBuilder('g')
-                ->where('g.numeroLot LIKE :s OR g.nomClient LIKE :s')
+                ->join('g.plant', 'p')
+                ->where('g.numeroLot LIKE :s OR g.nomClient LIKE :s OR p.nomPlant LIKE :s')
                 ->setParameter('s', '%' . $search . '%')
                 ->getQuery()
                 ->getResult();
@@ -226,7 +231,7 @@ class GfClientController extends AbstractController
     }
 
     #[Route('', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $em, LogService $logService): JsonResponse
+    public function create(Request $request, GfClientRepository $repo, EntityManagerInterface $em, LogService $logService): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -255,6 +260,10 @@ class GfClientController extends AbstractController
         }
         if (!$plant) {
             return $this->json(['message' => "Plant introuvable (idPlant=$idPlant)"], 400);
+        }
+
+        if ($repo->findOneBy(['numeroLot' => $numeroLot])) {
+            return $this->json(['message' => 'Ce numéro de lot existe déjà.'], 409);
         }
 
         try {
@@ -291,7 +300,14 @@ class GfClientController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        if (isset($data['numeroLot']))          $g->setNumeroLot($data['numeroLot']);
+        if (isset($data['numeroLot'])) {
+            $newLot = trim($data['numeroLot']);
+            $existing = $repo->findOneBy(['numeroLot' => $newLot]);
+            if ($existing && $existing->getIdGfClient() !== $g->getIdGfClient()) {
+                return $this->json(['message' => 'Ce numéro de lot existe déjà.'], 409);
+            }
+            $g->setNumeroLot($newLot);
+        }
         if (isset($data['quantiteDisponible'])) {
             $q = $data['quantiteDisponible'];
             if (!is_int($q) || $q < 0) {
