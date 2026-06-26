@@ -72,3 +72,18 @@
 - Endpoint `GET /api/especes/{id}/uvs` implémenté
 - Frontend : dropdown cascadant Espèce → UV dans la modal "Utiliser des graines"
 - Début Jalon 6 : analyse de la couverture PHPUnit (cible 80% — gap principal : `src/Controller/` à 0%)
+
+## Semaine du 8 juin 2026
+- Correction des CVE react-router : `npm audit fix` (0 vulnérabilités restantes)
+- Résolution du conflit Git sur `main` (`git stash` / `pull --rebase` / `push`)
+
+## Semaine du 19 juin 2026
+- Ajout des boutons de recherche dans la modal "Ajouter un sachet" : layout `[Dropdown] [🔍] [+]`
+- Création du composant réutilisable `SearchDialog` (filtrage client-side en temps réel)
+- Correction bug affichage `null` sur les noms clients (`prenom_client` nullable) via `.filter(Boolean).join(' ')`
+
+## Semaine du 25 juin 2026
+- Livraison du Jalon 6
+- Génération du document consolidé PDF/DOCX (7 chapitres couvrant les 6 sprints)
+- Création et push du tag Git `v1.0` — "Version finale 1.0 - Livrable Jalon 6"
+- Couverture PHPUnit atteinte : 80%+
