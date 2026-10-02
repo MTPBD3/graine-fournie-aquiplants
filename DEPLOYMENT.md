@@ -67,7 +67,7 @@ Pas de rebuild/push nécessaire pour ce fix : juste éditer `docker-compose.prod
 
 ### 4. JWT_PASSPHRASE / APP_SECRET absents en prod + rotation de secrets exposés
 
-**Constat** : `docker exec gf_symfony printenv` ne montrait ni `JWT_PASSPHRASE` ni `APP_SECRET` — Symfony utilisait donc `APP_SECRET=changeme_in_ci` et `JWT_PASSPHRASE=changeme_in_ci` (valeurs par défaut de `backend/.env`), des secrets faibles et prévisibles. Par ailleurs, le mot de passe MySQL (`***REDACTED-ROTATED-SECRET***`) et deux tokens Docker Hub avaient transité en clair dans une session de debug.
+**Constat** : `docker exec gf_symfony printenv` ne montrait ni `JWT_PASSPHRASE` ni `APP_SECRET` — Symfony utilisait donc `APP_SECRET=changeme_in_ci` et `JWT_PASSPHRASE=changeme_in_ci` (valeurs par défaut de `backend/.env`), des secrets faibles et prévisibles. Par ailleurs, un mot de passe MySQL et deux tokens Docker Hub avaient transité en clair dans une session de debug (tous rotatés/révoqués depuis, valeurs non reproduites ici).
 
 **Fix** :
 - `APP_SECRET` et `JWT_PASSPHRASE` ajoutés à `docker-compose.prod.yml` (service `symfony`) et générés avec `openssl rand -hex 32` / `openssl rand -hex 24`.
