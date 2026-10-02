@@ -120,6 +120,10 @@ docker compose down -v    # supprime volumes MySQL, vendor et var
 docker compose up -d --build
 ```
 
+## Déploiement production
+
+Voir [DEPLOYMENT.md](DEPLOYMENT.md) : infrastructure VPS, procédure de déploiement d'une nouvelle image, et historique des correctifs de mise en production.
+
 ---
 
 ## Auteur
