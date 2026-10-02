@@ -1,0 +1,57 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: gf_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks: [gf_net]
+
+  symfony:
+    image: mtpbd3/symfony:latest
+    container_name: gf_symfony
+    restart: unless-stopped
+    environment:
+      APP_ENV: prod
+      APP_SECRET: ${APP_SECRET}
+      JWT_PASSPHRASE: ${JWT_PASSPHRASE}
+      DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}?serverVersion=8.0&charset=utf8mb4"
+    depends_on: [mysql]
+    networks: [gf_net]
+
+  # VITE_API_URL="" : le front appelle des chemins relatifs (/api/...),
+  # routés par nginx vers le service symfony. Ne PAS mettre une IP/URL en dur
+  # ici : la valeur est lue par le serveur de dev Vite au démarrage du
+  # conteneur (voir docker/react/Dockerfile, CMD npm run dev), elle n'est
+  # jamais compilée dans l'image mtpbd3/react:latest. C'est ce fichier,
+  # pas l'image Docker Hub, qui fixe le comportement de VITE_API_URL en prod.
+  react:
+    image: mtpbd3/react:latest
+    container_name: gf_react
+    environment:
+      VITE_API_URL: ""
+    restart: unless-stopped
+    depends_on: [symfony]
+    networks: [gf_net]
+
+  nginx:
+    image: nginx:alpine
+    container_name: gf_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on: [react, symfony]
+    networks: [gf_net]
+
+volumes:
+  mysql_data:
+
+networks:
+  gf_net:

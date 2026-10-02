@@ -5,8 +5,14 @@ cd /var/www/html
 
 echo "--- [1/5] Attente de MySQL ---"
 until php -r "
+\$url = parse_url(getenv('DATABASE_URL'));
 try {
-    new PDO('mysql:host=mysql_db;port=3306;dbname=aquiplants_db', 'aquiplants', 'aquiplants', [PDO::ATTR_TIMEOUT => 3]);
+    new PDO(
+        sprintf('mysql:host=%s;port=%d;dbname=%s', \$url['host'], \$url['port'] ?? 3306, ltrim(\$url['path'], '/')),
+        \$url['user'],
+        \$url['pass'],
+        [PDO::ATTR_TIMEOUT => 3]
+    );
     exit(0);
 } catch (Exception \$e) {
     exit(1);
@@ -34,15 +40,19 @@ else
 fi
 
 echo "--- [3/5] Migrations Doctrine ---"
-php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+DATABASE_URL="${DATABASE_URL_MIGRATIONS:-$DATABASE_URL}" php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 
 echo "--- [4/5] Fixtures ---"
-USER_COUNT=$(php bin/console doctrine:query:sql "SELECT COUNT(*) as c FROM utilisateur" --no-interaction 2>/dev/null | grep -oE '[0-9]+' | head -1 || echo "0")
-if [ "${USER_COUNT}" = "0" ]; then
-    php bin/console doctrine:fixtures:load --no-interaction
-    echo "  Fixtures chargées"
+if [ "${APP_ENV}" = "prod" ]; then
+    echo "  APP_ENV=prod, fixtures ignorées"
 else
-    echo "  Fixtures déjà présentes (${USER_COUNT} utilisateurs)"
+    USER_COUNT=$(php bin/console doctrine:query:sql "SELECT COUNT(*) as c FROM utilisateur" --no-interaction 2>/dev/null | grep -oE '[0-9]+' | head -1 || echo "0")
+    if [ "${USER_COUNT}" = "0" ]; then
+        php bin/console doctrine:fixtures:load --no-interaction
+        echo "  Fixtures chargées"
+    else
+        echo "  Fixtures déjà présentes (${USER_COUNT} utilisateurs)"
+    fi
 fi
 
 echo "--- [5/5] Démarrage PHP-FPM + Nginx ---"
