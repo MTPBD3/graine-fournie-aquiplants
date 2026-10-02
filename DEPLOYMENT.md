@@ -65,7 +65,13 @@ Pas de rebuild/push nécessaire pour ce fix : juste éditer `docker-compose.prod
 
 **Fix** : `init.sh` saute désormais entièrement l'étape fixtures quand `APP_ENV=prod`. Nécessite un rebuild + push de l'image `mtpbd3/symfony:latest`.
 
-## Points connus non corrigés (hors scope de cette session)
+### 4. JWT_PASSPHRASE / APP_SECRET absents en prod + rotation de secrets exposés
 
-- `JWT_PASSPHRASE` et `APP_SECRET` ne sont pas définis dans l'environnement du service `symfony` en prod (vérifié via `docker exec gf_symfony printenv`) — les clés JWT sont donc générées avec une passphrase vide. À corriger avant d'aller plus loin en prod : ajouter ces variables dans `.env.prod` et dans `docker-compose.prod.yml`.
-- Les mots de passe MySQL utilisés en prod sont identiques à ceux vus dans les logs lors de cette session ; il est recommandé de les faire tourner (rotate) puisqu'ils ont transité en clair dans une conversation.
+**Constat** : `docker exec gf_symfony printenv` ne montrait ni `JWT_PASSPHRASE` ni `APP_SECRET` — Symfony utilisait donc `APP_SECRET=changeme_in_ci` et `JWT_PASSPHRASE=changeme_in_ci` (valeurs par défaut de `backend/.env`), des secrets faibles et prévisibles. Par ailleurs, le mot de passe MySQL (`***REDACTED-ROTATED-SECRET***`) et deux tokens Docker Hub avaient transité en clair dans une session de debug.
+
+**Fix** :
+- `APP_SECRET` et `JWT_PASSPHRASE` ajoutés à `docker-compose.prod.yml` (service `symfony`) et générés avec `openssl rand -hex 32` / `openssl rand -hex 24`.
+- Mot de passe `root` et mot de passe de l'utilisateur applicatif (`gf_user`) MySQL changés en base via `ALTER USER` (le volume `mysql_data` étant déjà initialisé, changer `MYSQL_ROOT_PASSWORD`/`MYSQL_PASSWORD` dans `.env.prod` seul n'aurait eu aucun effet — ces variables ne sont lues par l'image MySQL qu'à la création initiale du volume).
+- `.env.prod` régénéré sur le VPS avec les nouvelles valeurs (fichier non commité, cf. `.env.prod.example` pour le gabarit).
+- Les deux tokens Docker Hub exposés (`dckr_pat_...`) doivent être révoqués manuellement sur hub.docker.com (Account Settings → Security → Personal access tokens) — action hors de portée des outils disponibles pour cette session.
+- Vérifié de bout en bout après rotation : connexion MySQL OK, génération des clés JWT OK, `POST /api/login` renvoie un vrai token JWT signé avec la nouvelle passphrase, `GET /api/me` avec ce token renvoie 200. Testé avec un utilisateur temporaire créé puis supprimé après vérification (aucune donnée de test laissée en base).
