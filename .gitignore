@@ -6,6 +6,11 @@ frontend/dist/
 .env.docker
 .env
 .env.prod
+
+# Données réelles clients (RGPD) — ne doivent jamais être versionnées.
+# Voir README.md pour se procurer ces fichiers hors Git.
+docker/data/*.csv
+docker/mysql/initdb.d/dump.sql
 backup_*.sql
 .claude/
 .vscode/

@@ -71,9 +71,11 @@ docker exec gf_symfony php bin/console doctrine:migrations:migrate --no-interact
 # 2. Fixtures (comptes de test)
 docker exec gf_symfony php bin/console doctrine:fixtures:load --append --no-interaction
 
-# 3. Import CSV (données réelles : espèces, plants, UVs, clients)
+# 3. Import CSV (catalogue espèces/plants/UV + clients)
 bash docker/scripts/import_data.sh
 ```
+
+> **RGPD** : `docker/data/*.csv` contient de vraies données clients (noms réels) et n'est **pas versionné** (voir `.gitignore`). Demander ces fichiers en interne et les placer dans `docker/data/` avant de lancer le script — ils ne sont plus dans l'historique Git.
 
 ## Sauvegarder et restaurer la base de données
 
