@@ -56,6 +56,7 @@ services:
     build:
       context: .
       dockerfile: docker/react/Dockerfile
+      target: dev
     container_name: gf_react
     restart: unless-stopped
     ports:

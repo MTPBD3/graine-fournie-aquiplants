@@ -24,17 +24,14 @@ services:
     depends_on: [mysql]
     networks: [gf_net]
 
-  # VITE_API_URL="" : le front appelle des chemins relatifs (/api/...),
-  # routés par nginx vers le service symfony. Ne PAS mettre une IP/URL en dur
-  # ici : la valeur est lue par le serveur de dev Vite au démarrage du
-  # conteneur (voir docker/react/Dockerfile, CMD npm run dev), elle n'est
-  # jamais compilée dans l'image mtpbd3/react:latest. C'est ce fichier,
-  # pas l'image Docker Hub, qui fixe le comportement de VITE_API_URL en prod.
+  # Build statique (Vite build + nginx), stage "prod" de docker/react/Dockerfile.
+  # VITE_API_URL="" est compilé en dur dans le bundle au build (--build-arg) :
+  # le front appelle des chemins relatifs (/api/...), routés par le nginx
+  # externe vers le service symfony. Ne PAS mettre une IP/domaine en dur :
+  # ça resterait valide même si un nom de domaine est ajouté plus tard.
   react:
     image: mtpbd3/react:latest
     container_name: gf_react
-    environment:
-      VITE_API_URL: ""
     restart: unless-stopped
     depends_on: [symfony]
     networks: [gf_net]
