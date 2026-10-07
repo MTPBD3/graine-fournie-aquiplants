@@ -2,6 +2,14 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
+    # nginx (gf_nginx) est le seul point d'entrée, sur le réseau Docker privé
+    # gf_net (non routable depuis internet) : on peut donc faire confiance
+    # aux en-têtes X-Forwarded-* qu'il transmet, pour que Symfony sache que
+    # la requête d'origine était bien en HTTPS (sinon : redirections en
+    # boucle, cookies "secure" jamais posés, liens générés en http://).
+    trusted_proxies: '10.0.0.0/8,172.16.0.0/12,192.168.0.0/16'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
+
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
