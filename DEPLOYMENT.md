@@ -24,18 +24,25 @@ scp docker-compose.prod.yml nginx.conf ubuntu@46.105.29.41:/opt/graine-fournie-p
 
 ## Déployer une nouvelle version d'une image
 
-```bash
-# build + push depuis la machine de dev
-docker build -f docker/symfony/Dockerfile -t mtpbd3/symfony:latest .
-docker push mtpbd3/symfony:latest
+**1. Publier l'image** : automatique. Chaque merge dans `main` déclenche la CI (`.github/workflows/ci.yml`), qui, si les tests backend et frontend passent, construit et pousse `mtpbd3/symfony:latest` et `mtpbd3/react:latest` sur Docker Hub (job `deploy`). Vérifier qu'il est vert avec `gh run list -b main -w CI -L 1`.
 
-# sur le VPS : tirer et redémarrer uniquement le service concerné
-cd /opt/graine-fournie-prod
-docker compose -f docker-compose.prod.yml --env-file .env.prod pull symfony
-docker compose -f docker-compose.prod.yml --env-file .env.prod up -d symfony
+En secours seulement (CI indisponible), depuis la machine de dev :
+```bash
+docker build -f docker/symfony/Dockerfile -t mtpbd3/symfony:latest .
+docker build -f docker/react/Dockerfile --target prod -t mtpbd3/react:latest .
+docker push mtpbd3/symfony:latest && docker push mtpbd3/react:latest
 ```
 
-Idem pour `react` en remplaçant `symfony` par `react`.
+**2. Mettre à jour le serveur** (le serveur ne tire jamais les images tout seul) :
+```bash
+ssh ubuntu@46.105.29.41
+cd /opt/graine-fournie-prod
+sudo docker compose -f docker-compose.prod.yml --env-file .env.prod pull symfony react
+sudo docker compose -f docker-compose.prod.yml --env-file .env.prod up -d symfony react
+sudo docker image prune -f   # supprime les anciennes images devenues inutiles
+```
+
+Seuls les services dont l'image a changé sont recréés ; la base MySQL n'est pas touchée.
 
 ## Historique des fixes
 
@@ -158,3 +165,11 @@ Un certificat Let's Encrypt dure 90 jours. `/opt/graine-fournie-prod/renew-cert.
 | `certbot renew --dry-run` | succès |
 
 **Note sur `Strict-Transport-Security`** : volontairement réglé à `max-age=300` (5 minutes) pour l'instant, le temps de confirmer que tout fonctionne durablement sans accroc. Une fois validé sur quelques jours, augmenter cette valeur (ex. `max-age=31536000` = 1 an) pour que les navigateurs refusent définitivement de repasser en HTTP sur ce domaine.
+
+### 6. Jeton JWT à 4 h et suppression du double encodage HTML (2026-10-14)
+
+**JWT** : `token_ttl` passé de 3600 à 14400 secondes (`backend/config/packages/lexik_jwt_authentication.yaml`) pour couvrir une demi-journée de travail sans reconnexion. Contrepartie : un jeton volé reste utilisable jusqu'à 4 h (pas de révocation possible avec des JWT sans état).
+
+**`sanitize()` → `trimText()`** : le frontend encodait le HTML (`'` → `&#x27;`, `&` → `&amp;`…) *avant* d'envoyer les saisies à l'API. Comme React échappe déjà tout ce qu'il affiche, le texte était encodé deux fois : `O'Brien` était enregistré `O&#x27;Brien` et s'affichait ainsi à l'écran, et un email contenant une apostrophe devenait impossible à utiliser pour se connecter. La fonction ne fait plus que retirer les espaces en début et fin (`frontend/src/utils/trimText.js`). La protection XSS repose sur l'échappement automatique de React à l'affichage (aucun `dangerouslySetInnerHTML` dans le projet). Tests ajoutés : `trimText.test.jsx` (apostrophe conservée, balise `<script>` affichée comme du texte) et `ClientControllerTest::testCreateConserveApostropheEtCaracteresSpeciauxSansEncodage`.
+
+**Données déjà enregistrées** : vérifié en lecture seule le 2026-10-14, aucune valeur encodée en production (tables `client`, `gf_client`, `plant`, `uv`, `gf_histo_client`, `utilisateur`, `log`). À revérifier après le déploiement du nouveau frontend, puisque l'ancien continue d'encoder jusque-là.

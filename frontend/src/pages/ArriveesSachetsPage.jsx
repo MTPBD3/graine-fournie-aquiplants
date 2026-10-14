@@ -8,7 +8,7 @@ import {
   Select, InputLabel, FormControl, FormHelperText, Tooltip, Snackbar,
   Autocomplete, ListSubheader,
 } from '@mui/material';
-import { sanitize } from '../utils/sanitize';
+import { trimText } from '../utils/trimText';
 import { formatDate } from '../utils/formatDate';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
@@ -324,10 +324,10 @@ export default function ArriveesSachetsPage() {
       await apiRequest('/api/gf-clients', 'POST', {
         idClient: Number(form.idClient),
         idPlant: Number(form.idPlant),
-        numeroLot: sanitize(form.numeroLot),
+        numeroLot: trimText(form.numeroLot),
         quantiteDisponible: Number(form.quantiteDisponible) || 0,
         seuilAlerte: 0,
-        nomClient: sanitize(selectedClient?.nom ?? ''),
+        nomClient: trimText(selectedClient?.nom ?? ''),
       }, token);
       localStorage.removeItem(DRAFT_KEY);
       setModalOpen(false);
@@ -524,7 +524,7 @@ export default function ArriveesSachetsPage() {
     setEditError('');
     try {
       const body = {
-        numeroLot:          sanitize(String(editForm.numeroLot)),
+        numeroLot:          trimText(String(editForm.numeroLot)),
         quantiteDisponible: Number(editForm.quantiteDisponible),
         seuilAlerte:        Number(editForm.seuilAlerte),
       };
@@ -543,8 +543,8 @@ export default function ArriveesSachetsPage() {
   // Création rapide client — POST puis auto-sélection
   const handleCreateClient = async (values) => {
     const res = await apiRequest('/api/clients', 'POST', {
-      nom: sanitize(values.nom),
-      prenom: sanitize(values.prenom),
+      nom: trimText(values.nom),
+      prenom: trimText(values.prenom),
     }, token);
     await refetchClients();
     setForm((f) => ({ ...f, idClient: res.id }));
@@ -552,7 +552,7 @@ export default function ArriveesSachetsPage() {
 
   // Création rapide plante — POST puis auto-sélection
   const handleCreatePlant = async (values) => {
-    const payload = { nomPlant: sanitize(values.nomPlant) };
+    const payload = { nomPlant: trimText(values.nomPlant) };
     if (values.idEspece) payload.idEspece = Number(values.idEspece);
     const res = await apiRequest('/api/plants', 'POST', payload, token);
     await refetchPlants();
@@ -562,7 +562,7 @@ export default function ArriveesSachetsPage() {
   // Création rapide UV — POST puis rafraîchissement cascade + auto-sélection
   const handleCreateUv = async (values) => {
     const res = await apiRequest('/api/uvs', 'POST', {
-      nomUv: sanitize(values.nomUv),
+      nomUv: trimText(values.nomUv),
       nombreGraineParMotte:   Number(values.nombreGraineParMotte),
       nombrePlantParPlateaux: Number(values.nombrePlantParPlateaux),
       idEspece: Number(utilisForm.idEspece),

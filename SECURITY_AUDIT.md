@@ -4,6 +4,8 @@
 **Périmètre** : Backend Symfony 7 · Frontend React 19 · Infra Docker Compose
 **Auditeur** : Claude Sonnet 4.6 (analyse statique du code source)
 
+> **Mise à jour 2026-10-14** : la durée de validité du jeton JWT est désormais de **4 heures** (`token_ttl: 14400`). Les mentions d'une heure ci-dessous décrivent l'état au moment de cet audit. Voir `DEPLOYMENT.md`.
+
 ---
 
 ## Résumé exécutif
