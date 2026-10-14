@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import { useApi, apiRequest } from '../hooks/useApi';
 import { useAuth } from '../context/AuthContext';
-import { sanitize } from '../utils/sanitize';
+import { trimText } from '../utils/trimText';
 import { formatDate } from '../utils/formatDate';
 
 // ── Couleurs et labels des actions de log ─────────────────────────────────────
@@ -78,7 +78,7 @@ function OngletUtilisateurs({ token, isMobile }) {
     setSaving(true);
     setSaveError('');
     try {
-      const body = { email: sanitize(form.email), prenom: sanitize(form.prenom), nom: sanitize(form.nom), role: form.role };
+      const body = { email: trimText(form.email), prenom: trimText(form.prenom), nom: trimText(form.nom), role: form.role };
       if (form.motdepasse) body.motdepasse = form.motdepasse.trim();
       if (editTarget) {
         await apiRequest(`/api/utilisateurs/${editTarget.id}`, 'PUT', body, token);

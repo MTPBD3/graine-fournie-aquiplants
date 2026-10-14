@@ -89,6 +89,23 @@ class ClientControllerTest extends ApiTestCase
         $this->scheduleDelete('client', 'id_client', $data['id']);
     }
 
+    public function testCreateConserveApostropheEtCaracteresSpeciauxSansEncodage(): void
+    {
+        $this->browser->request(
+            'POST', '/api/clients', [], [],
+            $this->jsonHeaders($this->employeToken),
+            json_encode(['nom' => "O'Brien & Fils <SARL>", 'prenom' => "Zoé \"Jo\""])
+        );
+        $this->assertResponseStatusCodeSame(201);
+        $id = json_decode($this->browser->getResponse()->getContent(), true)['id'];
+        $this->scheduleDelete('client', 'id_client', $id);
+
+        $this->browser->request('GET', "/api/clients/$id", [], [], $this->jsonHeaders($this->employeToken));
+        $data = json_decode($this->browser->getResponse()->getContent(), true);
+        $this->assertSame("O'Brien & Fils <SARL>", $data['nom']);
+        $this->assertSame("Zoé \"Jo\"", $data['prenom']);
+    }
+
     // ── PUT update ────────────────────────────────────────────────────────────
 
     public function testUpdateIntrouvableRetourne404(): void

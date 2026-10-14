@@ -5,6 +5,8 @@
 **Périmètre** : Symfony 7.4.12 / React 19 / Docker Compose — post-correction des 16 failles de l'audit V1  
 **Environnement** : `APP_ENV=prod`, conteneurs `gf_symfony`, `gf_react`, `gf_mysql`, `gf_phpmyadmin`
 
+> **Mise à jour 2026-10-14** : la durée de validité du jeton JWT est désormais de **4 heures** (`token_ttl: 14400`). Les mentions d'une heure ci-dessous décrivent l'état au moment de cet audit. Voir `DEPLOYMENT.md`.
+
 ---
 
 ## Section A — Vérification des corrections du premier audit
