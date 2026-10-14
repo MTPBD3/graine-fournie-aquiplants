@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
 import { apiRequest } from '../hooks/useApi';
-import { sanitize } from '../utils/sanitize';
 
 export default function ParametresPage() {
   const { user, token } = useAuth();
