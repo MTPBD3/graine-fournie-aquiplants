@@ -71,7 +71,7 @@ services:
 
   # ── phpMyAdmin (accès local uniquement) ──────────────────────────────────
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.2.1
+    image: phpmyadmin/phpmyadmin:5.2.3
     container_name: gf_phpmyadmin
     restart: unless-stopped
     ports:
