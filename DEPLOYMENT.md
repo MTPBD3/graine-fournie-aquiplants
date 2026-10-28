@@ -39,8 +39,12 @@ ssh ubuntu@46.105.29.41
 cd /opt/graine-fournie-prod
 sudo docker compose -f docker-compose.prod.yml --env-file .env.prod pull symfony react
 sudo docker compose -f docker-compose.prod.yml --env-file .env.prod up -d symfony react
+sudo docker exec gf_nginx nginx -s reload   # OBLIGATOIRE, sinon 502 (voir ci-dessous)
+curl -sI https://graine-fournie.online/ | head -1   # doit répondre 200
 sudo docker image prune -f   # supprime les anciennes images devenues inutiles
 ```
+
+**Pourquoi recharger nginx** : nginx résout les noms `symfony` et `react` en adresses IP une seule fois, à son démarrage. Recréer ces conteneurs leur donne de nouvelles adresses sur le réseau Docker ; sans `nginx -s reload`, nginx continue d'envoyer le trafic vers les anciennes et tout le site répond 502 (constaté le 2026-10-28, environ une minute de coupure).
 
 Seuls les services dont l'image a changé sont recréés ; la base MySQL n'est pas touchée.
 
