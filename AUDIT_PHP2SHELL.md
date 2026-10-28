@@ -57,6 +57,7 @@ sudo chmod 600 backups/*.sql
 # 2. Mise à jour (--env-file obligatoire : sans lui, APP_SECRET, JWT_PASSPHRASE et DATABASE_URL seraient vides)
 sudo docker compose -f docker-compose.prod.yml --env-file .env.prod pull symfony react
 sudo docker compose -f docker-compose.prod.yml --env-file .env.prod up -d symfony react
+sudo docker exec gf_nginx nginx -s reload   # obligatoire : nginx garde les anciennes IP des conteneurs recréés → 502
 
 # 3. Vérifications
 sudo docker exec gf_symfony php -v          # attendu : PHP 8.2.35
@@ -74,3 +75,11 @@ docker ps --format '{{.Names}} {{.Ports}}'           # gf_phpmyadmin ne doit pas
 sudo ufw deny 8080/tcp; sudo ufw deny 3306/tcp       # si besoin
 ```
 Attention : Docker contourne UFW pour les ports publiés ; le contrôle fiable est l'absence de `ports:` publics (cas de `docker-compose.prod.yml`). Exploitation active depuis le 21/10 : consulter les logs nginx/FPM pour des requêtes inhabituelles avant et après la mise à jour.
+
+## Déploiement effectué le 28/10/2026
+
+- Secret `DOCKERHUB_TOKEN` renouvelé ; PR #49 mergée dans `main` (CI verte), job `Deploy (Docker Hub)` vert : `mtpbd3/symfony:latest` et `mtpbd3/react:latest` publiées à 22:37 UTC. Image vérifiée avant déploiement : PHP 8.2.35. Back-merge `main` → `develop` (PR #51).
+- Sauvegarde préalable : `/opt/graine-fournie-prod/backups/avant-php2shell-2026-10-28.sql` (mysqldump complet, droits 600, non versionné).
+- `pull` + `up -d symfony react` : MySQL non redémarré, migrations déjà à jour.
+- **Incident** : site en 502 pendant environ une minute (22:39:50 → 22:40:30 UTC). Cause : nginx avait gardé les anciennes adresses IP des conteneurs recréés. Corrigé par `nginx -s reload` ; étape ajoutée aux commandes ci-dessus et à `DEPLOYMENT.md`.
+- Vérifications en production : `php -v` et `php-fpm -v` → **8.2.35** ; page d'accueil 200, API sans jeton 401, connexion admin 200. **La production n'est plus vulnérable à PHP2Shell.**
